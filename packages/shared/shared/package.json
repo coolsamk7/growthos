@@ -1,0 +1,23 @@
+{
+    "name": "@growthos/shared",
+    "version": "0.1.0",
+    "private": true,
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.mjs",
+            "default": "./dist/index.js"
+        }
+    },
+    "scripts": {
+        "dev": "yarn build --watch",
+        "build": "tsup",
+        "clean": "rimraf ./dist"
+    },
+    "dependencies": {
+        "@casl/ability": "^6.7.3"
+    },
+    "devDependencies": {
+        "@swc/core": "^1.14.0"
+    }
+}

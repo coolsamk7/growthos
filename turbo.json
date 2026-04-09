@@ -1,0 +1,22 @@
+{
+    "$schema": "https://turborepo.com/schema.json",
+    "globalDependencies": ["**/.env.*local"],
+    "tasks": {
+        "dev": {
+            "cache": false,
+            "persistent": true,
+            "env": ["PORT", "HOST"]
+        },
+        "build": {
+            "dependsOn": ["^build"],
+            "outputs": ["dist/**", "build/**"]
+        },
+        "lint": {},
+        "test": {},
+        "test:e2e": {},
+        "clean": {
+            "cache": false,
+            "persistent": false
+        }
+    }
+}
