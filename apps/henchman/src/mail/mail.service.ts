@@ -50,6 +50,32 @@ export class MailService {
         } );
     }
 
+    async sendPasswordResetOtpEmail( email: string, code: string ) {
+        const subject = 'Password Reset Verification Code';
+        const text = `Your password reset verification code is ${ code }. It expires in 10 minutes.`;
+        const html = this.getPasswordResetOtpTemplate( code );
+        await this.transporter.sendMail( {
+            from: this.from,
+            to: email,
+            subject,
+            text,
+            html,
+        } );
+    }
+
+    async sendPasswordChangeNotification( email: string, firstName: string ) {
+        const subject = 'Password Changed Successfully';
+        const text = `Hello ${ firstName }, your password has been changed successfully. If you did not make this change, please contact support immediately.`;
+        const html = this.getPasswordChangeNotificationTemplate( firstName );
+        await this.transporter.sendMail( {
+            from: this.from,
+            to: email,
+            subject,
+            text,
+            html,
+        } );
+    }
+
     private getEmailBaseTemplate( content: string ): string {
         return `
 <!DOCTYPE html>
@@ -128,6 +154,53 @@ export class MailService {
             </p>
             <p style="color: #999999; font-size: 14px; line-height: 1.6; margin-top: 30px;">
                 If you didn't request this code, please ignore this email.
+            </p>
+        `;
+        return this.getEmailBaseTemplate( content );
+    }
+
+    private getPasswordResetOtpTemplate( code: string ): string {
+        const content = `
+            <h2 style="color: #333333; margin-top: 0;">Password Reset Request</h2>
+            <p style="color: #666666; font-size: 16px; line-height: 1.6;">
+                We received a request to reset your password. Use the following code to proceed:
+            </p>
+            <div style="text-align: center; margin: 30px 0;">
+                <div style="display: inline-block; padding: 20px 40px; background-color: #FEF3C7; border-radius: 8px; border: 2px dashed #F59E0B;">
+                    <span style="font-size: 32px; font-weight: bold; color: #F59E0B; letter-spacing: 8px;">${ code }</span>
+                </div>
+            </div>
+            <p style="color: #666666; font-size: 16px; line-height: 1.6;">
+                This code will expire in <strong>10 minutes</strong>.
+            </p>
+            <p style="color: #DC2626; font-size: 14px; line-height: 1.6; margin-top: 30px; padding: 15px; background-color: #FEE2E2; border-radius: 5px;">
+                <strong>Security Notice:</strong> If you didn't request a password reset, please ignore this email and ensure your account is secure.
+            </p>
+        `;
+        return this.getEmailBaseTemplate( content );
+    }
+
+    private getPasswordChangeNotificationTemplate( firstName: string ): string {
+        const content = `
+            <h2 style="color: #333333; margin-top: 0;">Password Changed Successfully ✓</h2>
+            <p style="color: #666666; font-size: 16px; line-height: 1.6;">
+                Hello ${ firstName },
+            </p>
+            <p style="color: #666666; font-size: 16px; line-height: 1.6;">
+                This is a confirmation that your password has been changed successfully.
+            </p>
+            <div style="margin: 30px 0; padding: 20px; background-color: #D1FAE5; border-radius: 8px; border-left: 4px solid #10B981;">
+                <p style="margin: 0; color: #065F46; font-size: 16px;">
+                    <strong>✓ Your account is secure</strong><br/>
+                    Your password was updated on ${ new Date().toLocaleString( 'en-US', { dateStyle: 'long', timeStyle: 'short' } ) }
+                </p>
+            </div>
+            <p style="color: #DC2626; font-size: 14px; line-height: 1.6; margin-top: 30px; padding: 15px; background-color: #FEE2E2; border-radius: 5px;">
+                <strong>Didn't make this change?</strong><br/>
+                If you did not change your password, please contact our support team immediately to secure your account.
+            </p>
+            <p style="color: #666666; font-size: 14px; line-height: 1.6; margin-top: 30px;">
+                Thank you for keeping your account secure.
             </p>
         `;
         return this.getEmailBaseTemplate( content );

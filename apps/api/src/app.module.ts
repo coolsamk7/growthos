@@ -3,7 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { databaseConfig, jwtConfig, loggerConfig, queueConfig, redisConfig } from './config';
+import { databaseConfig, jwtConfig, loggerConfig, otpConfig, queueConfig, redisConfig } from './config';
 import { LoggerModule } from 'nestjs-pino';
 import { AuthModule } from './modules/auth';
 import { QueueModule } from './modules/queue'; 
@@ -11,12 +11,15 @@ import { BullModule } from '@nestjs/bullmq'
 import { BullBoardModule } from '@bull-board/nestjs'
 import { ExpressAdapter } from '@bull-board/express';
 import { BullMQAdapter } from '@bull-board/api/bullMQAdapter';
+import { JwtStrategy } from './strategies';
+import { APP_GUARD } from '@nestjs/core';
+import { AppAuthGuard } from './guards/app.guard';
 
 @Module( {
     imports: [
         ConfigModule.forRoot( {
             isGlobal: true,
-            load: [ databaseConfig, loggerConfig, jwtConfig, queueConfig, redisConfig ],
+            load: [ databaseConfig, loggerConfig, jwtConfig, otpConfig, queueConfig, redisConfig ],
         } ),
         LoggerModule.forRootAsync( {
             imports: [ ConfigModule ],
@@ -64,6 +67,12 @@ import { BullMQAdapter } from '@bull-board/api/bullMQAdapter';
         AuthModule,
         QueueModule
     ],
-    providers: []
+    providers: [
+        JwtStrategy,
+        {
+            provide: APP_GUARD,
+            useClass: AppAuthGuard,
+        },
+    ]
 } )
 export class AppModule {}

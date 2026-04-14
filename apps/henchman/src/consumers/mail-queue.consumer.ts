@@ -32,6 +32,12 @@ export class MailQueueConsumer implements OnModuleInit, OnModuleDestroy {
                         case 'sendOTP':
                             await this.mailService.sendOtpEmail( data.email, data.code || data.otp );
                             break;
+                        case 'sendPasswordResetOTP':
+                            await this.mailService.sendPasswordResetOtpEmail( data.email, data.code || data.otp );
+                            break;
+                        case 'sendPasswordChangeNotification':
+                            await this.mailService.sendPasswordChangeNotification( data.email, data.firstName );
+                            break;
                         default:
                             this.logger.warn( `Unknown job name: ${ jobName }` );
                     }

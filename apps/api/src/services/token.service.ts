@@ -31,8 +31,11 @@ export class TokenService {
     }
 
     async generateRefreshToken<P extends TokenClaims = TokenClaims>( payload: P ) {
-        // Revoke all the existing tokens
-        await this.datasource.manager.softDelete( RefreshTokenEntity, { deletedAt: IsNull() } );
+        // Revoke all the existing tokens for this user
+        await this.datasource.manager.softDelete( RefreshTokenEntity, { 
+            userId: payload.id,
+            deletedAt: IsNull() 
+        } );
 
         const token = await this.jwtService.signAsync(
             { id: payload.id },
