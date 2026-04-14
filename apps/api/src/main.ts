@@ -9,6 +9,7 @@ import { AppModule } from './app.module';
 import { setupSwagger } from './utils/setup-swagger.util';
 import { apiReference } from '@scalar/nestjs-api-reference';
 import { updateGlobalConfig } from 'nestjs-paginate';
+import basicAuth from 'express-basic-auth';
 
 updateGlobalConfig( {
     defaultLimit: 20,
@@ -22,6 +23,13 @@ async function bootstrap() {
     app.useLogger( logger );
 
     app.enableShutdownHooks();
+    app.use(
+        '/admin/queues',
+        basicAuth( {
+          users: { admin: 'password' },
+          challenge: true,
+         } ),
+    );
 
     app.use( json( { limit: '50mb' } ) );
     app.use( urlencoded( { extended: true, limit: '50mb' } ) );
@@ -29,6 +37,7 @@ async function bootstrap() {
     app.enableVersioning( {
         type: VersioningType.URI,
     } );
+
 
     setupSwagger( app );
     app.use(
@@ -45,6 +54,7 @@ async function bootstrap() {
 
     await app.listen( PORT, HOST, () => {
         logger.log( `Application started listening at http://${HOST}:${PORT}` );
+        logger.log( `Bull Board available at http://${HOST}:${PORT}/admin/queues` );
     } );
 }
 bootstrap();
