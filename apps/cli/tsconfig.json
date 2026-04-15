@@ -1,0 +1,6 @@
+{
+    "extends": "@growthos/tsconfig/nestjs.json",
+    "compilerOptions": {
+        "outDir": "dist"
+    }
+}
