@@ -29,7 +29,7 @@ export class UserEntity extends IdTimestamppedEntity {
     @Column( {
         type: 'enum',
         enum: UserRole,
-        default: UserRole.APPLICATION_USER,
+        default: UserRole.USER,
     } )
     role: UserRole
 }

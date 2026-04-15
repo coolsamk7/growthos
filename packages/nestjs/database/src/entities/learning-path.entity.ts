@@ -1,21 +1,41 @@
-import { Entity, Column, Index } from 'typeorm'
-import { IdTimestamppedEntity } from './id-timestampped.entity.js'
+import { Entity, Column, Index, ManyToOne, JoinColumn } from 'typeorm';
+import { IdTimestamppedEntity } from './id-timestampped.entity.js';
+import { UserEntity } from './user.entity.js';
+import { LearningPathStatus } from '@growthos/nestjs-shared';
 
 @Entity( 'learning_paths' )
 export class LearningPathEntity extends IdTimestamppedEntity {
     @Column( { type: 'varchar' } )
+    title: string;
+
+    @Column( { type: 'text', nullable: true } )
+    description?: string;
+
+    @Column( { type: 'jsonb', default: [] } )
+    content: any[];
+
+    @Column( {
+        type: 'enum',
+        enum: LearningPathStatus,
+        default: LearningPathStatus.DRAFT,
+    } )
     @Index()
-    title: string
+    status: LearningPathStatus;
 
     @Column( { type: 'varchar', nullable: true } )
-    description?: string
+    thumbnail?: string;
 
-    @Column( { type: 'boolean', default: true } )
-    isPublic: boolean
+    @Column( { type: 'int', default: 0 } )
+    estimatedHours: number;
 
-    @Column( { type: 'varchar', nullable: true, name: 'created_by' } )
-    createdBy?: string
+    @Column( { type: 'varchar', array: true, default: [] } )
+    tags: string[];
 
-    @Column( { type: 'varchar', name: 'master_learning_path_id', nullable: true } )
-    masterLearningPathId: string
+    @ManyToOne( () => UserEntity, { nullable: false } )
+    @JoinColumn( { name: 'createdBy' } )
+    creator: UserEntity;
+
+    @Column( { type: 'uuid' } )
+    @Index()
+    createdBy: string;
 }

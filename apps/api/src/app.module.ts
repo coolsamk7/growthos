@@ -6,6 +6,20 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { databaseConfig, jwtConfig, loggerConfig, otpConfig, queueConfig, redisConfig } from './config';
 import { LoggerModule } from 'nestjs-pino';
 import { AuthModule } from './modules/auth';
+import { LearningPathModule } from './modules/learning-path';
+import { TagsModule } from './modules/tags';
+import { MasterProblemsModule } from './modules/master-problems';
+import { MasterTopicsModule } from './modules/master-topics';
+import { MasterLearningPathsModule } from './modules/master-learning-paths';
+import { UserLearningPathsModule } from './modules/user-learning-paths';
+import { UserTopicsModule } from './modules/user-topics';
+import { UserProblemsModule } from './modules/user-problems';
+import { GoalsModule } from './modules/goals';
+import { NotesModule } from './modules/notes';
+import { ResourcesModule } from './modules/resources';
+import { StreaksModule } from './modules/streaks';
+import { StudySessionsModule } from './modules/study-sessions';
+import { ProblemAttemptsModule } from './modules/problem-attempts';
 import { QueueModule } from './modules/queue'; 
 import { BullModule } from '@nestjs/bullmq'
 import { BullBoardModule } from '@bull-board/nestjs'
@@ -65,6 +79,20 @@ import { AppAuthGuard } from './guards/app.guard';
             adapter: BullMQAdapter,
         } ),
         AuthModule,
+        LearningPathModule,
+        TagsModule,
+        MasterProblemsModule,
+        MasterTopicsModule,
+        MasterLearningPathsModule,
+        UserLearningPathsModule,
+        UserTopicsModule,
+        UserProblemsModule,
+        GoalsModule,
+        NotesModule,
+        ResourcesModule,
+        StreaksModule,
+        StudySessionsModule,
+        ProblemAttemptsModule,
         QueueModule
     ],
     providers: [

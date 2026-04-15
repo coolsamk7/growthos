@@ -2,22 +2,25 @@ import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm'
 import { IdTimestamppedEntity } from './id-timestampped.entity.js'
 import { MasterLearningPathEntity } from './master-learning-path.entity.js'
 
-@Entity( 'master_modules' )
-@Index( [ 'masterLearningPathId', 'order' ] )
-export class MasterModuleEntity extends IdTimestamppedEntity {
+@Entity( 'master_topics' )
+@Index( [ 'masterLearningPathId', 'orderIndex' ] )
+export class MasterTopicEntity extends IdTimestamppedEntity {
     @Column( { name: 'master_learning_path_id', type: 'varchar' } )
     masterLearningPathId: string
 
     @ManyToOne( () => MasterLearningPathEntity )
     @JoinColumn( { name: 'master_learning_path_id' } )
-    learningPath: MasterLearningPathEntity
+    masterLearningPath: MasterLearningPathEntity
 
     @Column( { type: 'varchar' } )
-    title: string
+    name: string
 
-    @Column( { type: 'varchar', nullable: true } )
+    @Column( { type: 'text', nullable: true } )
     description?: string
 
-    @Column( { type: 'integer' } )
-    order: number
+    @Column( { type: 'integer', default: 0, name: 'order_index' } )
+    orderIndex: number
+
+    @Column( { type: 'boolean', default: true, name: 'is_published' } )
+    isPublished: boolean
 }
