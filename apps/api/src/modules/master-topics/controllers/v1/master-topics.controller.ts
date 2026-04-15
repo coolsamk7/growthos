@@ -21,6 +21,7 @@ export class MasterTopicsController {
     @HttpCode( HttpStatus.CREATED )
     @UseGuards( AbilitiesGuard )
     @CheckAbilities( { action: Action.CREATE, subject: Subject.MASTER_TOPIC } )
+    @ApiBody( { schema: CreateMasterTopicRequest } )
     async create( @Body() createDto: Static<typeof CreateMasterTopicRequest> ) {
         const topic = this.dataSource.manager.create( MasterTopicEntity, {
             ...createDto,
@@ -102,6 +103,7 @@ export class MasterTopicsController {
     @UseGuards( AbilitiesGuard )
     @CheckAbilities( { action: Action.UPDATE, subject: Subject.MASTER_TOPIC } )
     @ApiParam( { name: 'id', type: String } )
+    @ApiBody( { schema: UpdateMasterTopicRequest } )
     async update(
         @Param( 'id' ) id: string,
         @Body() updateDto: Static<typeof UpdateMasterTopicRequest>

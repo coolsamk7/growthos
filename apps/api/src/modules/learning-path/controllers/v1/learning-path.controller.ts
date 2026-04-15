@@ -27,6 +27,7 @@ export class LearningPathController {
     @HttpCode( HttpStatus.CREATED )
     @UseGuards( AbilitiesGuard )
     @CheckAbilities( { action: Action.CREATE, subject: Subject.LEARNING_PATH } )
+    @ApiBody( { schema: CreateLearningPathRequest as any } )
     async create( 
         @Body() createDto: Static<typeof CreateLearningPathRequest>,
         @AuthenticatedUser() currentUser: any
@@ -127,6 +128,7 @@ export class LearningPathController {
     @UseGuards( AbilitiesGuard )
     @CheckAbilities( { action: Action.UPDATE, subject: Subject.LEARNING_PATH } )
     @ApiParam( { name: 'id', type: String } )
+    @ApiBody( { schema: UpdateLearningPathRequest as any } )
     async update(
         @Param( 'id' ) id: string,
         @Body() updateDto: Static<typeof UpdateLearningPathRequest>,

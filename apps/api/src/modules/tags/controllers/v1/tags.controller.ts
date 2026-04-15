@@ -20,6 +20,7 @@ export class TagsController {
     @HttpCode( HttpStatus.CREATED )
     @UseGuards( AbilitiesGuard )
     @CheckAbilities( { action: Action.CREATE, subject: Subject.TAG } )
+    @ApiBody( { schema: CreateTagRequest } )
     async create( @Body() createDto: Static<typeof CreateTagRequest> ) {
         const existing = await this.dataSource.manager.findOne( TagEntity, {
             where: { name: createDto.name }
@@ -91,6 +92,7 @@ export class TagsController {
     @UseGuards( AbilitiesGuard )
     @CheckAbilities( { action: Action.UPDATE, subject: Subject.TAG } )
     @ApiParam( { name: 'id', type: String } )
+    @ApiBody( { schema: UpdateTagRequest } )
     async update(
         @Param( 'id' ) id: string,
         @Body() updateDto: Static<typeof UpdateTagRequest>

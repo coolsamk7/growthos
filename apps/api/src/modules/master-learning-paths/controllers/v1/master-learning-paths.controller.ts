@@ -21,6 +21,7 @@ export class MasterLearningPathsController {
     @HttpCode( HttpStatus.CREATED )
     @UseGuards( AbilitiesGuard )
     @CheckAbilities( { action: Action.CREATE, subject: Subject.MASTER_LEARNING_PATH } )
+    @ApiBody( { schema: CreateMasterLearningPathRequest } )
     async create( @Body() createDto: Static<typeof CreateMasterLearningPathRequest> ) {
         const path = this.dataSource.manager.create( MasterLearningPathEntity, {
             ...createDto,
@@ -96,6 +97,7 @@ export class MasterLearningPathsController {
     @UseGuards( AbilitiesGuard )
     @CheckAbilities( { action: Action.UPDATE, subject: Subject.MASTER_LEARNING_PATH } )
     @ApiParam( { name: 'id', type: String } )
+    @ApiBody( { schema: UpdateMasterLearningPathRequest } )
     async update(
         @Param( 'id' ) id: string,
         @Body() updateDto: Static<typeof UpdateMasterLearningPathRequest>
