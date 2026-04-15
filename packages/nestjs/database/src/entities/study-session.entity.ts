@@ -1,11 +1,12 @@
-import { Entity, Column, ManyToOne, JoinColumn, Index } from 'typeorm'
+import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm'
 import { IdTimestamppedEntity } from './id-timestampped.entity.js'
 import { UserEntity } from './user.entity.js'
-import { ItemEntity } from './item.entity.js'
+import { UserLearningPathEntity } from './user-learning-path.entity.js'
+import { UserTopicEntity } from './user-topic.entity.js'
 
 @Entity( 'study_sessions' )
-@Index( [ 'userId', 'date' ] )
-@Index( [ 'itemId' ] )
+@Index( [ 'userId', 'sessionDate' ] )
+@Index( [ 'userLearningPathId' ] )
 export class StudySessionEntity extends IdTimestamppedEntity {
     @Column( { name: 'user_id', type: 'varchar' } )
     userId: string
@@ -14,20 +15,27 @@ export class StudySessionEntity extends IdTimestamppedEntity {
     @JoinColumn( { name: 'user_id' } )
     user: UserEntity
 
-    @Column( { name: 'item_id', type: 'varchar', nullable: true } )
-    itemId?: string
+    @Column( { name: 'user_learning_path_id', type: 'varchar', nullable: true } )
+    userLearningPathId?: string
 
-    @ManyToOne( () => ItemEntity )
-    @JoinColumn( { name: 'item_id' } )
-    item?: ItemEntity
+    @ManyToOne( () => UserLearningPathEntity )
+    @JoinColumn( { name: 'user_learning_path_id' } )
+    userLearningPath?: UserLearningPathEntity
 
-    @Column( { type: 'integer' } )
-    duration: number
+    @Column( { name: 'user_topic_id', type: 'varchar', nullable: true } )
+    userTopicId?: string
 
-    @Column( { type: 'varchar', nullable: true } )
+    @ManyToOne( () => UserTopicEntity )
+    @JoinColumn( { name: 'user_topic_id' } )
+    userTopic?: UserTopicEntity
+
+    @Column( { type: 'integer', name: 'duration_minutes' } )
+    durationMinutes: number
+
+    @Column( { type: 'text', nullable: true } )
     notes?: string
 
-    @Column( { type: 'timestamptz' } )
+    @Column( { type: 'date', name: 'session_date' } )
     @Index()
-    date: Date
+    sessionDate: Date
 }

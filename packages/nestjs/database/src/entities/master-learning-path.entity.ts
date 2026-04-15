@@ -4,11 +4,14 @@ import { IdTimestamppedEntity } from './id-timestampped.entity.js'
 @Entity( 'master_learning_paths' )
 export class MasterLearningPathEntity extends IdTimestamppedEntity {
     @Column( { type: 'varchar' } )
-    title: string
+    name: string
 
-    @Column( { type: 'varchar', nullable: true } )
+    @Column( { type: 'text', nullable: true } )
     description?: string
 
-    @Column( { type: 'boolean', default: true } )
-    isActive: boolean
+    @Column( { type: 'boolean', default: true, name: 'is_published' } )
+    isPublished: boolean
+
+    @Column( { type: 'integer', default: 0, name: 'adoption_count' } )
+    adoptionCount: number
 }

@@ -12,13 +12,6 @@ export class UserEntity extends IdTimestamppedEntity {
     @Column( { type: 'varchar' } )
     password: string
 
-    @BeforeInsert()
-    async hashPassword() {
-        if ( this.password && !/^\$2[abyx]\$/.test( this.password ) ) {
-            this.password = await bcrypt.hash( this.password, 12 )
-        }
-    }
-
     @Column( { type: 'varchar', nullable: true } )
     firstName?: string
 
@@ -36,7 +29,7 @@ export class UserEntity extends IdTimestamppedEntity {
     @Column( {
         type: 'enum',
         enum: UserRole,
-        default: UserRole.APPLICATION_USER,
+        default: UserRole.USER,
     } )
     role: UserRole
 }

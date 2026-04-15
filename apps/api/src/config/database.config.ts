@@ -13,5 +13,12 @@ export const databaseConfig = registerAs( 'database.config', (): TypeOrmModuleOp
         password: env.DATABASE_PASSWORD,
         autoLoadEntities: true,
         synchronize: true,
+        logging: false,
+        maxQueryExecutionTime: 1000,
+        extra: {
+            max: 10,
+            idleTimeoutMillis: 30000,
+            connectionTimeoutMillis: 2000,
+        },
     };
 } );

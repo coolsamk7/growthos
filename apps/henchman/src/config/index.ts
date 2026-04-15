@@ -1,2 +1,3 @@
 export * from './mail.config';
-export * from './kafka.config';
+export * from './queue.config';
+export * from './logger.config';

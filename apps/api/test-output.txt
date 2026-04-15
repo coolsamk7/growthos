@@ -1,0 +1,1675 @@
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+
+ RUN  v2.1.9 /home/sameer/projects/growthos/apps/api
+
+ ✓ src/modules/queue/mail-queue-producer.service.spec.ts > MailQueueProducerService > addToMailQueue > should add a job to mail queue
+ ✓ src/modules/queue/mail-queue-producer.service.spec.ts > MailQueueProducerService > addToMailQueue > should add job with custom options
+ ✓ src/modules/queue/mail-queue-producer.service.spec.ts > MailQueueProducerService > addToMailQueue > should merge custom options with default options
+ ✓ src/modules/queue/mail-queue-producer.service.spec.ts > MailQueueProducerService > addBulkToMailQueue > should add multiple jobs to mail queue
+ ✓ src/modules/queue/mail-queue-producer.service.spec.ts > MailQueueProducerService > addBulkToMailQueue > should add bulk jobs with custom options
+ ✓ src/modules/queue/mail-queue-producer.service.spec.ts > MailQueueProducerService > pauseMailQueue > should pause the mail queue
+ ✓ src/modules/queue/mail-queue-producer.service.spec.ts > MailQueueProducerService > resumeMailQueue > should resume the mail queue
+ ✓ src/modules/queue/mail-queue-producer.service.spec.ts > MailQueueProducerService > getMailJob > should retrieve a job by id
+ ✓ src/modules/queue/mail-queue-producer.service.spec.ts > MailQueueProducerService > getMailJob > should return null if job not found
+ ✓ src/modules/queue/mail-queue-producer.service.spec.ts > MailQueueProducerService > getMailJobs > should retrieve jobs by type
+ ✓ src/modules/queue/mail-queue-producer.service.spec.ts > MailQueueProducerService > getMailJobs > should retrieve jobs for multiple types
+ ✓ src/modules/queue/mail-queue-producer.service.spec.ts > MailQueueProducerService > getMailJobs > should return empty array if no jobs found
+ ✓ src/services/token.service.spec.ts > TokenService > generateTokenPair > should generate both access and refresh tokens
+ ✓ src/services/token.service.spec.ts > TokenService > generateTokenPair > should revoke all existing tokens before generating new refresh token
+ ✓ src/services/token.service.spec.ts > TokenService > generateTokenPair > should store new refresh token in database
+ ✓ src/services/token.service.spec.ts > TokenService > generateAccessToken > should generate access token
+ ✓ src/services/token.service.spec.ts > TokenService > generateAccessToken > should include all payload fields in access token
+ ✓ src/services/token.service.spec.ts > TokenService > generateRefreshToken > should generate refresh token with 24 weeks expiration
+ ✓ src/services/token.service.spec.ts > TokenService > generateRefreshToken > should only include user id in refresh token payload
+ ✓ src/services/token.service.spec.ts > TokenService > generateRefreshToken > should save new refresh token entity
+ ✓ src/services/token.service.spec.ts > TokenService > generateRefreshToken > should revoke existing tokens for same user
+ × src/modules/master-problems/controllers/v1/master-problems.controller.spec.ts > MasterProblemsController > create > should create a master problem successfully
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/master-problems/controllers/v1/master-problems.controller.spec.ts > MasterProblemsController > findAll > should retrieve all master problems with pagination
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/master-problems/controllers/v1/master-problems.controller.spec.ts > MasterProblemsController > findAll > should filter by difficulty when provided
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/master-problems/controllers/v1/master-problems.controller.spec.ts > MasterProblemsController > findAll > should filter by isPublished when provided
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/master-problems/controllers/v1/master-problems.controller.spec.ts > MasterProblemsController > findOne > should retrieve a single problem by id
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/master-problems/controllers/v1/master-problems.controller.spec.ts > MasterProblemsController > findOne > should throw NotFoundException if not found
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/master-problems/controllers/v1/master-problems.controller.spec.ts > MasterProblemsController > update > should update a problem successfully
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/master-problems/controllers/v1/master-problems.controller.spec.ts > MasterProblemsController > delete > should soft delete a problem successfully
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/master-topics/controllers/v1/master-topics.controller.spec.ts > MasterTopicsController > create > should create a master topic successfully
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/master-topics/controllers/v1/master-topics.controller.spec.ts > MasterTopicsController > create > should set isPublished to true by default
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/master-topics/controllers/v1/master-topics.controller.spec.ts > MasterTopicsController > create > should set orderIndex to 0 if not provided
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/master-topics/controllers/v1/master-topics.controller.spec.ts > MasterTopicsController > findAll > should retrieve all master topics without filters for admin
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/master-topics/controllers/v1/master-topics.controller.spec.ts > MasterTopicsController > findAll > should filter by isPublished=true for regular users
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/master-topics/controllers/v1/master-topics.controller.spec.ts > MasterTopicsController > findAll > should filter by masterLearningPathId when provided
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/master-topics/controllers/v1/master-topics.controller.spec.ts > MasterTopicsController > findAll > should filter by isPublished query parameter for admin
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/master-topics/controllers/v1/master-topics.controller.spec.ts > MasterTopicsController > findAll > should apply both masterLearningPathId and isPublished filters
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/master-topics/controllers/v1/master-topics.controller.spec.ts > MasterTopicsController > findAll > should order by orderIndex ascending then createdAt descending
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/master-topics/controllers/v1/master-topics.controller.spec.ts > MasterTopicsController > findAll > should use default pagination values
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/master-topics/controllers/v1/master-topics.controller.spec.ts > MasterTopicsController > findOne > should retrieve a single master topic by id
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/master-topics/controllers/v1/master-topics.controller.spec.ts > MasterTopicsController > findOne > should throw NotFoundException if topic not found
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/master-topics/controllers/v1/master-topics.controller.spec.ts > MasterTopicsController > findOne > should throw NotFoundException if user is regular and topic is not published
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/master-topics/controllers/v1/master-topics.controller.spec.ts > MasterTopicsController > findOne > should allow admin to retrieve unpublished topics
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/master-topics/controllers/v1/master-topics.controller.spec.ts > MasterTopicsController > findOne > should allow user to retrieve published topics
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/master-topics/controllers/v1/master-topics.controller.spec.ts > MasterTopicsController > update > should update a master topic successfully
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/master-topics/controllers/v1/master-topics.controller.spec.ts > MasterTopicsController > update > should throw NotFoundException if topic not found
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/master-topics/controllers/v1/master-topics.controller.spec.ts > MasterTopicsController > delete > should soft delete a master topic successfully
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/master-topics/controllers/v1/master-topics.controller.spec.ts > MasterTopicsController > delete > should throw NotFoundException if topic not found
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/goals/controllers/v1/goals.controller.spec.ts > GoalsController > create > should create a goal successfully
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/goals/controllers/v1/goals.controller.spec.ts > GoalsController > create > should include userId when creating a goal
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/goals/controllers/v1/goals.controller.spec.ts > GoalsController > findAll > should retrieve all goals with pagination for user
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/goals/controllers/v1/goals.controller.spec.ts > GoalsController > findAll > should use default pagination values
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/goals/controllers/v1/goals.controller.spec.ts > GoalsController > findAll > should filter goals by userId for regular users
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/goals/controllers/v1/goals.controller.spec.ts > GoalsController > findAll > should return empty list when no goals found
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/goals/controllers/v1/goals.controller.spec.ts > GoalsController > findAll > should handle pagination correctly
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/goals/controllers/v1/goals.controller.spec.ts > GoalsController > findOne > should retrieve a single goal by id
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/goals/controllers/v1/goals.controller.spec.ts > GoalsController > findOne > should throw NotFoundException if goal not found
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/goals/controllers/v1/goals.controller.spec.ts > GoalsController > findOne > should filter by userId for regular users
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/goals/controllers/v1/goals.controller.spec.ts > GoalsController > findOne > should retrieve any goal without userId filter for admin
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/goals/controllers/v1/goals.controller.spec.ts > GoalsController > update > should update a goal successfully
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/goals/controllers/v1/goals.controller.spec.ts > GoalsController > update > should throw NotFoundException if goal not found
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/goals/controllers/v1/goals.controller.spec.ts > GoalsController > update > should filter by userId for regular users
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/goals/controllers/v1/goals.controller.spec.ts > GoalsController > update > should merge update data with existing goal
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/goals/controllers/v1/goals.controller.spec.ts > GoalsController > delete > should soft delete a goal successfully
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/goals/controllers/v1/goals.controller.spec.ts > GoalsController > delete > should throw NotFoundException if goal not found
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/goals/controllers/v1/goals.controller.spec.ts > GoalsController > delete > should filter by userId for regular users
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/goals/controllers/v1/goals.controller.spec.ts > GoalsController > delete > should use soft delete instead of hard delete
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/learning-path/controllers/v1/learning-path.controller.spec.ts > LearningPathController > create > should create a learning path successfully
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/learning-path/controllers/v1/learning-path.controller.spec.ts > LearningPathController > findAll > should retrieve all learning paths with pagination
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/learning-path/controllers/v1/learning-path.controller.spec.ts > LearningPathController > findAll > should filter by userId for regular users
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/learning-path/controllers/v1/learning-path.controller.spec.ts > LearningPathController > findOne > should retrieve a single learning path by id
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/learning-path/controllers/v1/learning-path.controller.spec.ts > LearningPathController > findOne > should throw NotFoundException if not found
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/learning-path/controllers/v1/learning-path.controller.spec.ts > LearningPathController > update > should update a learning path successfully
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/learning-path/controllers/v1/learning-path.controller.spec.ts > LearningPathController > update > should throw NotFoundException if not found
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/learning-path/controllers/v1/learning-path.controller.spec.ts > LearningPathController > delete > should soft delete a learning path successfully
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/learning-path/controllers/v1/learning-path.controller.spec.ts > LearningPathController > delete > should throw NotFoundException if not found
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/master-learning-paths/controllers/v1/master-learning-paths.controller.spec.ts > MasterLearningPathsController > create > should create a master learning path successfully
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/master-learning-paths/controllers/v1/master-learning-paths.controller.spec.ts > MasterLearningPathsController > create > should set isPublished to true by default
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/master-learning-paths/controllers/v1/master-learning-paths.controller.spec.ts > MasterLearningPathsController > findAll > should retrieve all master learning paths
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/master-learning-paths/controllers/v1/master-learning-paths.controller.spec.ts > MasterLearningPathsController > findAll > should filter by isPublished when provided
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/master-learning-paths/controllers/v1/master-learning-paths.controller.spec.ts > MasterLearningPathsController > findOne > should retrieve a single path by id
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/master-learning-paths/controllers/v1/master-learning-paths.controller.spec.ts > MasterLearningPathsController > findOne > should throw NotFoundException if not found
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/master-learning-paths/controllers/v1/master-learning-paths.controller.spec.ts > MasterLearningPathsController > update > should update a learning path successfully
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/master-learning-paths/controllers/v1/master-learning-paths.controller.spec.ts > MasterLearningPathsController > delete > should soft delete a learning path successfully
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/tags/controllers/v1/tags.controller.spec.ts > TagsController > create > should create a tag successfully
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/tags/controllers/v1/tags.controller.spec.ts > TagsController > findAll > should retrieve all tags with pagination
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/tags/controllers/v1/tags.controller.spec.ts > TagsController > findAll > should use default pagination values
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/tags/controllers/v1/tags.controller.spec.ts > TagsController > findOne > should retrieve a single tag by id
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/tags/controllers/v1/tags.controller.spec.ts > TagsController > findOne > should throw NotFoundException if not found
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/tags/controllers/v1/tags.controller.spec.ts > TagsController > update > should update a tag successfully
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/tags/controllers/v1/tags.controller.spec.ts > TagsController > update > should throw NotFoundException if tag to update not found
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/tags/controllers/v1/tags.controller.spec.ts > TagsController > delete > should soft delete a tag successfully
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/tags/controllers/v1/tags.controller.spec.ts > TagsController > delete > should throw NotFoundException if tag to delete not found
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/user-problems/controllers/v1/user-problems.controller.spec.ts > UserProblemsController > create > should create user problem successfully
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/user-problems/controllers/v1/user-problems.controller.spec.ts > UserProblemsController > findAll > should retrieve all user problems
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/user-problems/controllers/v1/user-problems.controller.spec.ts > UserProblemsController > findAll > should filter by status when provided
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/user-problems/controllers/v1/user-problems.controller.spec.ts > UserProblemsController > findOne > should retrieve a single user problem
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/user-problems/controllers/v1/user-problems.controller.spec.ts > UserProblemsController > findOne > should throw NotFoundException if not found
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/user-problems/controllers/v1/user-problems.controller.spec.ts > UserProblemsController > update > should update user problem successfully
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/user-problems/controllers/v1/user-problems.controller.spec.ts > UserProblemsController > delete > should soft delete user problem successfully
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/user-topics/controllers/v1/user-topics.controller.spec.ts > UserTopicsController > create > should create user topic successfully
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/user-topics/controllers/v1/user-topics.controller.spec.ts > UserTopicsController > findAll > should retrieve all user topics
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/user-topics/controllers/v1/user-topics.controller.spec.ts > UserTopicsController > findAll > should filter by status when provided
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/user-topics/controllers/v1/user-topics.controller.spec.ts > UserTopicsController > findOne > should retrieve a single user topic
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/user-topics/controllers/v1/user-topics.controller.spec.ts > UserTopicsController > findOne > should throw NotFoundException if not found
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/user-topics/controllers/v1/user-topics.controller.spec.ts > UserTopicsController > update > should update user topic successfully
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/user-topics/controllers/v1/user-topics.controller.spec.ts > UserTopicsController > delete > should soft delete user topic successfully
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/user-learning-paths/controllers/v1/user-learning-paths.controller.spec.ts > UserLearningPathsController > create > should create user learning path successfully
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/user-learning-paths/controllers/v1/user-learning-paths.controller.spec.ts > UserLearningPathsController > findAll > should retrieve all user learning paths
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/user-learning-paths/controllers/v1/user-learning-paths.controller.spec.ts > UserLearningPathsController > findOne > should retrieve a single user learning path
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/user-learning-paths/controllers/v1/user-learning-paths.controller.spec.ts > UserLearningPathsController > findOne > should throw NotFoundException if not found
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/user-learning-paths/controllers/v1/user-learning-paths.controller.spec.ts > UserLearningPathsController > update > should update user learning path successfully
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/user-learning-paths/controllers/v1/user-learning-paths.controller.spec.ts > UserLearningPathsController > delete > should soft delete user learning path successfully
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/streaks/controllers/v1/streaks.controller.spec.ts > StreaksController > create > should create a streak successfully
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/streaks/controllers/v1/streaks.controller.spec.ts > StreaksController > findAll > should retrieve all streaks with pagination
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/streaks/controllers/v1/streaks.controller.spec.ts > StreaksController > findOne > should retrieve a single streak by id
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/streaks/controllers/v1/streaks.controller.spec.ts > StreaksController > findOne > should throw NotFoundException if not found
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/streaks/controllers/v1/streaks.controller.spec.ts > StreaksController > update > should update a streak successfully
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/streaks/controllers/v1/streaks.controller.spec.ts > StreaksController > delete > should soft delete a streak successfully
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/study-sessions/controllers/v1/study-sessions.controller.spec.ts > StudySessionsController > create > should create a study session successfully
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/study-sessions/controllers/v1/study-sessions.controller.spec.ts > StudySessionsController > findAll > should retrieve all study sessions with pagination
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/study-sessions/controllers/v1/study-sessions.controller.spec.ts > StudySessionsController > findOne > should retrieve a single session by id
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/study-sessions/controllers/v1/study-sessions.controller.spec.ts > StudySessionsController > findOne > should throw NotFoundException if not found
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/study-sessions/controllers/v1/study-sessions.controller.spec.ts > StudySessionsController > update > should update a study session successfully
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/study-sessions/controllers/v1/study-sessions.controller.spec.ts > StudySessionsController > delete > should soft delete a study session successfully
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/problem-attempts/controllers/v1/problem-attempts.controller.spec.ts > ProblemAttemptsController > create > should create a problem attempt successfully
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/problem-attempts/controllers/v1/problem-attempts.controller.spec.ts > ProblemAttemptsController > findAll > should retrieve all attempts with pagination
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/problem-attempts/controllers/v1/problem-attempts.controller.spec.ts > ProblemAttemptsController > findOne > should retrieve a single attempt by id
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/problem-attempts/controllers/v1/problem-attempts.controller.spec.ts > ProblemAttemptsController > findOne > should throw NotFoundException if not found
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/problem-attempts/controllers/v1/problem-attempts.controller.spec.ts > ProblemAttemptsController > update > should update an attempt successfully
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/problem-attempts/controllers/v1/problem-attempts.controller.spec.ts > ProblemAttemptsController > delete > should soft delete an attempt successfully
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/notes/controllers/v1/notes.controller.spec.ts > NotesController > create > should create a note successfully
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/notes/controllers/v1/notes.controller.spec.ts > NotesController > findAll > should retrieve all notes with pagination
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/notes/controllers/v1/notes.controller.spec.ts > NotesController > findOne > should retrieve a single note by id
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/notes/controllers/v1/notes.controller.spec.ts > NotesController > findOne > should throw NotFoundException if not found
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/notes/controllers/v1/notes.controller.spec.ts > NotesController > update > should update a note successfully
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/notes/controllers/v1/notes.controller.spec.ts > NotesController > delete > should soft delete a note successfully
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ ✓ src/modules/queue/queue.service.spec.ts > QueueService > addMailJob > should add a mail job
+ ✓ src/modules/queue/queue.service.spec.ts > QueueService > addMailJob > should add mail job with options
+ ✓ src/modules/queue/queue.service.spec.ts > QueueService > getMailQueueInfo > should return queue statistics
+ ✓ src/modules/queue/queue.service.spec.ts > QueueService > getMailQueueInfo > should return zero counts for empty queue
+ ✓ src/modules/queue/queue.service.spec.ts > QueueService > removeMailJob > should remove a mail job by id
+ ✓ src/modules/queue/queue.service.spec.ts > QueueService > removeMailJob > should handle non-existent job gracefully
+ ✓ src/modules/queue/queue.service.spec.ts > QueueService > cleanMailQueue > should drain all jobs from queue
+ × src/modules/resources/controllers/v1/resources.controller.spec.ts > ResourcesController > create > should create a resource successfully
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/resources/controllers/v1/resources.controller.spec.ts > ResourcesController > findAll > should retrieve all resources with pagination
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/resources/controllers/v1/resources.controller.spec.ts > ResourcesController > findOne > should retrieve a single resource by id
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/resources/controllers/v1/resources.controller.spec.ts > ResourcesController > findOne > should throw NotFoundException if not found
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/resources/controllers/v1/resources.controller.spec.ts > ResourcesController > update > should update a resource successfully
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ × src/modules/resources/controllers/v1/resources.controller.spec.ts > ResourcesController > delete > should soft delete a resource successfully
+   → Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+
+⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/modules/auth/controllers/v1/auth.controller.spec.ts [ src/modules/auth/controllers/v1/auth.controller.spec.ts ]
+Error: Transform failed with 1 error:
+/home/sameer/projects/growthos/apps/api/src/modules/auth/controllers/v1/auth.controller.spec.ts:25:14: ERROR: "await" can only be used inside an "async" function
+  Plugin: vite:esbuild
+  File: /home/sameer/projects/growthos/apps/api/src/modules/auth/controllers/v1/auth.controller.spec.ts:25:14
+  
+  "await" can only be used inside an "async" function
+  23 |      firstName: 'John',
+  24 |      lastName: 'Doe',
+  25 |      password: await bcrypt.hash('password123', 12),
+     |                ^
+  26 |      role: 'USER',
+  27 |      status: 'ACTIVE',
+  
+ ❯ failureErrorWithLog ../../node_modules/vite/node_modules/esbuild/lib/main.js:1472:15
+ ❯ ../../node_modules/vite/node_modules/esbuild/lib/main.js:755:50
+ ❯ responseCallbacks.<computed> ../../node_modules/vite/node_modules/esbuild/lib/main.js:622:9
+ ❯ handleIncomingPacket ../../node_modules/vite/node_modules/esbuild/lib/main.js:677:12
+ ❯ Socket.readFromStdout ../../node_modules/vite/node_modules/esbuild/lib/main.js:600:7
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+Serialized Error: { __vitest_rollup_error__: { plugin: 'vite:esbuild', id: '/home/sameer/projects/growthos/apps/api/src/modules/auth/controllers/v1/auth.controller.spec.ts', loc: { column: 14, file: '/home/sameer/projects/growthos/apps/api/src/modules/auth/controllers/v1/auth.controller.spec.ts', length: 5, line: 25, lineText: '    password: await bcrypt.hash(\'password123\', 12),', namespace: '', suggestion: '' }, frame: '\n"await" can only be used inside an "async" function\n23 |      firstName: \'John\',\n24 |      lastName: \'Doe\',\n25 |      password: await bcrypt.hash(\'password123\', 12),\n   |                ^\n26 |      role: \'USER\',\n27 |      status: \'ACTIVE\',\n' } }
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/123]⎯
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 122 ⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/modules/goals/controllers/v1/goals.controller.spec.ts > GoalsController > create > should create a goal successfully
+ FAIL  src/modules/goals/controllers/v1/goals.controller.spec.ts > GoalsController > create > should include userId when creating a goal
+ FAIL  src/modules/goals/controllers/v1/goals.controller.spec.ts > GoalsController > findAll > should retrieve all goals with pagination for user
+ FAIL  src/modules/goals/controllers/v1/goals.controller.spec.ts > GoalsController > findAll > should use default pagination values
+ FAIL  src/modules/goals/controllers/v1/goals.controller.spec.ts > GoalsController > findAll > should filter goals by userId for regular users
+ FAIL  src/modules/goals/controllers/v1/goals.controller.spec.ts > GoalsController > findAll > should return empty list when no goals found
+ FAIL  src/modules/goals/controllers/v1/goals.controller.spec.ts > GoalsController > findAll > should handle pagination correctly
+ FAIL  src/modules/goals/controllers/v1/goals.controller.spec.ts > GoalsController > findOne > should retrieve a single goal by id
+ FAIL  src/modules/goals/controllers/v1/goals.controller.spec.ts > GoalsController > findOne > should throw NotFoundException if goal not found
+ FAIL  src/modules/goals/controllers/v1/goals.controller.spec.ts > GoalsController > findOne > should filter by userId for regular users
+ FAIL  src/modules/goals/controllers/v1/goals.controller.spec.ts > GoalsController > findOne > should retrieve any goal without userId filter for admin
+ FAIL  src/modules/goals/controllers/v1/goals.controller.spec.ts > GoalsController > update > should update a goal successfully
+ FAIL  src/modules/goals/controllers/v1/goals.controller.spec.ts > GoalsController > update > should throw NotFoundException if goal not found
+ FAIL  src/modules/goals/controllers/v1/goals.controller.spec.ts > GoalsController > update > should filter by userId for regular users
+ FAIL  src/modules/goals/controllers/v1/goals.controller.spec.ts > GoalsController > update > should merge update data with existing goal
+ FAIL  src/modules/goals/controllers/v1/goals.controller.spec.ts > GoalsController > delete > should soft delete a goal successfully
+ FAIL  src/modules/goals/controllers/v1/goals.controller.spec.ts > GoalsController > delete > should throw NotFoundException if goal not found
+ FAIL  src/modules/goals/controllers/v1/goals.controller.spec.ts > GoalsController > delete > should filter by userId for regular users
+ FAIL  src/modules/goals/controllers/v1/goals.controller.spec.ts > GoalsController > delete > should use soft delete instead of hard delete
+ FAIL  src/modules/learning-path/controllers/v1/learning-path.controller.spec.ts > LearningPathController > create > should create a learning path successfully
+ FAIL  src/modules/learning-path/controllers/v1/learning-path.controller.spec.ts > LearningPathController > findAll > should retrieve all learning paths with pagination
+ FAIL  src/modules/learning-path/controllers/v1/learning-path.controller.spec.ts > LearningPathController > findAll > should filter by userId for regular users
+ FAIL  src/modules/learning-path/controllers/v1/learning-path.controller.spec.ts > LearningPathController > findOne > should retrieve a single learning path by id
+ FAIL  src/modules/learning-path/controllers/v1/learning-path.controller.spec.ts > LearningPathController > findOne > should throw NotFoundException if not found
+ FAIL  src/modules/learning-path/controllers/v1/learning-path.controller.spec.ts > LearningPathController > update > should update a learning path successfully
+ FAIL  src/modules/learning-path/controllers/v1/learning-path.controller.spec.ts > LearningPathController > update > should throw NotFoundException if not found
+ FAIL  src/modules/learning-path/controllers/v1/learning-path.controller.spec.ts > LearningPathController > delete > should soft delete a learning path successfully
+ FAIL  src/modules/learning-path/controllers/v1/learning-path.controller.spec.ts > LearningPathController > delete > should throw NotFoundException if not found
+ FAIL  src/modules/master-learning-paths/controllers/v1/master-learning-paths.controller.spec.ts > MasterLearningPathsController > create > should create a master learning path successfully
+ FAIL  src/modules/master-learning-paths/controllers/v1/master-learning-paths.controller.spec.ts > MasterLearningPathsController > create > should set isPublished to true by default
+ FAIL  src/modules/master-learning-paths/controllers/v1/master-learning-paths.controller.spec.ts > MasterLearningPathsController > findAll > should retrieve all master learning paths
+ FAIL  src/modules/master-learning-paths/controllers/v1/master-learning-paths.controller.spec.ts > MasterLearningPathsController > findAll > should filter by isPublished when provided
+ FAIL  src/modules/master-learning-paths/controllers/v1/master-learning-paths.controller.spec.ts > MasterLearningPathsController > findOne > should retrieve a single path by id
+ FAIL  src/modules/master-learning-paths/controllers/v1/master-learning-paths.controller.spec.ts > MasterLearningPathsController > findOne > should throw NotFoundException if not found
+ FAIL  src/modules/master-learning-paths/controllers/v1/master-learning-paths.controller.spec.ts > MasterLearningPathsController > update > should update a learning path successfully
+ FAIL  src/modules/master-learning-paths/controllers/v1/master-learning-paths.controller.spec.ts > MasterLearningPathsController > delete > should soft delete a learning path successfully
+ FAIL  src/modules/master-problems/controllers/v1/master-problems.controller.spec.ts > MasterProblemsController > create > should create a master problem successfully
+ FAIL  src/modules/master-problems/controllers/v1/master-problems.controller.spec.ts > MasterProblemsController > findAll > should retrieve all master problems with pagination
+ FAIL  src/modules/master-problems/controllers/v1/master-problems.controller.spec.ts > MasterProblemsController > findAll > should filter by difficulty when provided
+ FAIL  src/modules/master-problems/controllers/v1/master-problems.controller.spec.ts > MasterProblemsController > findAll > should filter by isPublished when provided
+ FAIL  src/modules/master-problems/controllers/v1/master-problems.controller.spec.ts > MasterProblemsController > findOne > should retrieve a single problem by id
+ FAIL  src/modules/master-problems/controllers/v1/master-problems.controller.spec.ts > MasterProblemsController > findOne > should throw NotFoundException if not found
+ FAIL  src/modules/master-problems/controllers/v1/master-problems.controller.spec.ts > MasterProblemsController > update > should update a problem successfully
+ FAIL  src/modules/master-problems/controllers/v1/master-problems.controller.spec.ts > MasterProblemsController > delete > should soft delete a problem successfully
+ FAIL  src/modules/master-topics/controllers/v1/master-topics.controller.spec.ts > MasterTopicsController > create > should create a master topic successfully
+ FAIL  src/modules/master-topics/controllers/v1/master-topics.controller.spec.ts > MasterTopicsController > create > should set isPublished to true by default
+ FAIL  src/modules/master-topics/controllers/v1/master-topics.controller.spec.ts > MasterTopicsController > create > should set orderIndex to 0 if not provided
+ FAIL  src/modules/master-topics/controllers/v1/master-topics.controller.spec.ts > MasterTopicsController > findAll > should retrieve all master topics without filters for admin
+ FAIL  src/modules/master-topics/controllers/v1/master-topics.controller.spec.ts > MasterTopicsController > findAll > should filter by isPublished=true for regular users
+ FAIL  src/modules/master-topics/controllers/v1/master-topics.controller.spec.ts > MasterTopicsController > findAll > should filter by masterLearningPathId when provided
+ FAIL  src/modules/master-topics/controllers/v1/master-topics.controller.spec.ts > MasterTopicsController > findAll > should filter by isPublished query parameter for admin
+ FAIL  src/modules/master-topics/controllers/v1/master-topics.controller.spec.ts > MasterTopicsController > findAll > should apply both masterLearningPathId and isPublished filters
+ FAIL  src/modules/master-topics/controllers/v1/master-topics.controller.spec.ts > MasterTopicsController > findAll > should order by orderIndex ascending then createdAt descending
+ FAIL  src/modules/master-topics/controllers/v1/master-topics.controller.spec.ts > MasterTopicsController > findAll > should use default pagination values
+ FAIL  src/modules/master-topics/controllers/v1/master-topics.controller.spec.ts > MasterTopicsController > findOne > should retrieve a single master topic by id
+ FAIL  src/modules/master-topics/controllers/v1/master-topics.controller.spec.ts > MasterTopicsController > findOne > should throw NotFoundException if topic not found
+ FAIL  src/modules/master-topics/controllers/v1/master-topics.controller.spec.ts > MasterTopicsController > findOne > should throw NotFoundException if user is regular and topic is not published
+ FAIL  src/modules/master-topics/controllers/v1/master-topics.controller.spec.ts > MasterTopicsController > findOne > should allow admin to retrieve unpublished topics
+ FAIL  src/modules/master-topics/controllers/v1/master-topics.controller.spec.ts > MasterTopicsController > findOne > should allow user to retrieve published topics
+ FAIL  src/modules/master-topics/controllers/v1/master-topics.controller.spec.ts > MasterTopicsController > update > should update a master topic successfully
+ FAIL  src/modules/master-topics/controllers/v1/master-topics.controller.spec.ts > MasterTopicsController > update > should throw NotFoundException if topic not found
+ FAIL  src/modules/master-topics/controllers/v1/master-topics.controller.spec.ts > MasterTopicsController > delete > should soft delete a master topic successfully
+ FAIL  src/modules/master-topics/controllers/v1/master-topics.controller.spec.ts > MasterTopicsController > delete > should throw NotFoundException if topic not found
+ FAIL  src/modules/notes/controllers/v1/notes.controller.spec.ts > NotesController > create > should create a note successfully
+ FAIL  src/modules/notes/controllers/v1/notes.controller.spec.ts > NotesController > findAll > should retrieve all notes with pagination
+ FAIL  src/modules/notes/controllers/v1/notes.controller.spec.ts > NotesController > findOne > should retrieve a single note by id
+ FAIL  src/modules/notes/controllers/v1/notes.controller.spec.ts > NotesController > findOne > should throw NotFoundException if not found
+ FAIL  src/modules/notes/controllers/v1/notes.controller.spec.ts > NotesController > update > should update a note successfully
+ FAIL  src/modules/notes/controllers/v1/notes.controller.spec.ts > NotesController > delete > should soft delete a note successfully
+ FAIL  src/modules/problem-attempts/controllers/v1/problem-attempts.controller.spec.ts > ProblemAttemptsController > create > should create a problem attempt successfully
+ FAIL  src/modules/problem-attempts/controllers/v1/problem-attempts.controller.spec.ts > ProblemAttemptsController > findAll > should retrieve all attempts with pagination
+ FAIL  src/modules/problem-attempts/controllers/v1/problem-attempts.controller.spec.ts > ProblemAttemptsController > findOne > should retrieve a single attempt by id
+ FAIL  src/modules/problem-attempts/controllers/v1/problem-attempts.controller.spec.ts > ProblemAttemptsController > findOne > should throw NotFoundException if not found
+ FAIL  src/modules/problem-attempts/controllers/v1/problem-attempts.controller.spec.ts > ProblemAttemptsController > update > should update an attempt successfully
+ FAIL  src/modules/problem-attempts/controllers/v1/problem-attempts.controller.spec.ts > ProblemAttemptsController > delete > should soft delete an attempt successfully
+ FAIL  src/modules/resources/controllers/v1/resources.controller.spec.ts > ResourcesController > create > should create a resource successfully
+ FAIL  src/modules/resources/controllers/v1/resources.controller.spec.ts > ResourcesController > findAll > should retrieve all resources with pagination
+ FAIL  src/modules/resources/controllers/v1/resources.controller.spec.ts > ResourcesController > findOne > should retrieve a single resource by id
+ FAIL  src/modules/resources/controllers/v1/resources.controller.spec.ts > ResourcesController > findOne > should throw NotFoundException if not found
+ FAIL  src/modules/resources/controllers/v1/resources.controller.spec.ts > ResourcesController > update > should update a resource successfully
+ FAIL  src/modules/resources/controllers/v1/resources.controller.spec.ts > ResourcesController > delete > should soft delete a resource successfully
+ FAIL  src/modules/streaks/controllers/v1/streaks.controller.spec.ts > StreaksController > create > should create a streak successfully
+ FAIL  src/modules/streaks/controllers/v1/streaks.controller.spec.ts > StreaksController > findAll > should retrieve all streaks with pagination
+ FAIL  src/modules/streaks/controllers/v1/streaks.controller.spec.ts > StreaksController > findOne > should retrieve a single streak by id
+ FAIL  src/modules/streaks/controllers/v1/streaks.controller.spec.ts > StreaksController > findOne > should throw NotFoundException if not found
+ FAIL  src/modules/streaks/controllers/v1/streaks.controller.spec.ts > StreaksController > update > should update a streak successfully
+ FAIL  src/modules/streaks/controllers/v1/streaks.controller.spec.ts > StreaksController > delete > should soft delete a streak successfully
+ FAIL  src/modules/study-sessions/controllers/v1/study-sessions.controller.spec.ts > StudySessionsController > create > should create a study session successfully
+ FAIL  src/modules/study-sessions/controllers/v1/study-sessions.controller.spec.ts > StudySessionsController > findAll > should retrieve all study sessions with pagination
+ FAIL  src/modules/study-sessions/controllers/v1/study-sessions.controller.spec.ts > StudySessionsController > findOne > should retrieve a single session by id
+ FAIL  src/modules/study-sessions/controllers/v1/study-sessions.controller.spec.ts > StudySessionsController > findOne > should throw NotFoundException if not found
+ FAIL  src/modules/study-sessions/controllers/v1/study-sessions.controller.spec.ts > StudySessionsController > update > should update a study session successfully
+ FAIL  src/modules/study-sessions/controllers/v1/study-sessions.controller.spec.ts > StudySessionsController > delete > should soft delete a study session successfully
+ FAIL  src/modules/tags/controllers/v1/tags.controller.spec.ts > TagsController > create > should create a tag successfully
+ FAIL  src/modules/tags/controllers/v1/tags.controller.spec.ts > TagsController > findAll > should retrieve all tags with pagination
+ FAIL  src/modules/tags/controllers/v1/tags.controller.spec.ts > TagsController > findAll > should use default pagination values
+ FAIL  src/modules/tags/controllers/v1/tags.controller.spec.ts > TagsController > findOne > should retrieve a single tag by id
+ FAIL  src/modules/tags/controllers/v1/tags.controller.spec.ts > TagsController > findOne > should throw NotFoundException if not found
+ FAIL  src/modules/tags/controllers/v1/tags.controller.spec.ts > TagsController > update > should update a tag successfully
+ FAIL  src/modules/tags/controllers/v1/tags.controller.spec.ts > TagsController > update > should throw NotFoundException if tag to update not found
+ FAIL  src/modules/tags/controllers/v1/tags.controller.spec.ts > TagsController > delete > should soft delete a tag successfully
+ FAIL  src/modules/tags/controllers/v1/tags.controller.spec.ts > TagsController > delete > should throw NotFoundException if tag to delete not found
+ FAIL  src/modules/user-learning-paths/controllers/v1/user-learning-paths.controller.spec.ts > UserLearningPathsController > create > should create user learning path successfully
+ FAIL  src/modules/user-learning-paths/controllers/v1/user-learning-paths.controller.spec.ts > UserLearningPathsController > findAll > should retrieve all user learning paths
+ FAIL  src/modules/user-learning-paths/controllers/v1/user-learning-paths.controller.spec.ts > UserLearningPathsController > findOne > should retrieve a single user learning path
+ FAIL  src/modules/user-learning-paths/controllers/v1/user-learning-paths.controller.spec.ts > UserLearningPathsController > findOne > should throw NotFoundException if not found
+ FAIL  src/modules/user-learning-paths/controllers/v1/user-learning-paths.controller.spec.ts > UserLearningPathsController > update > should update user learning path successfully
+ FAIL  src/modules/user-learning-paths/controllers/v1/user-learning-paths.controller.spec.ts > UserLearningPathsController > delete > should soft delete user learning path successfully
+ FAIL  src/modules/user-problems/controllers/v1/user-problems.controller.spec.ts > UserProblemsController > create > should create user problem successfully
+ FAIL  src/modules/user-problems/controllers/v1/user-problems.controller.spec.ts > UserProblemsController > findAll > should retrieve all user problems
+ FAIL  src/modules/user-problems/controllers/v1/user-problems.controller.spec.ts > UserProblemsController > findAll > should filter by status when provided
+ FAIL  src/modules/user-problems/controllers/v1/user-problems.controller.spec.ts > UserProblemsController > findOne > should retrieve a single user problem
+ FAIL  src/modules/user-problems/controllers/v1/user-problems.controller.spec.ts > UserProblemsController > findOne > should throw NotFoundException if not found
+ FAIL  src/modules/user-problems/controllers/v1/user-problems.controller.spec.ts > UserProblemsController > update > should update user problem successfully
+ FAIL  src/modules/user-problems/controllers/v1/user-problems.controller.spec.ts > UserProblemsController > delete > should soft delete user problem successfully
+ FAIL  src/modules/user-topics/controllers/v1/user-topics.controller.spec.ts > UserTopicsController > create > should create user topic successfully
+ FAIL  src/modules/user-topics/controllers/v1/user-topics.controller.spec.ts > UserTopicsController > findAll > should retrieve all user topics
+ FAIL  src/modules/user-topics/controllers/v1/user-topics.controller.spec.ts > UserTopicsController > findAll > should filter by status when provided
+ FAIL  src/modules/user-topics/controllers/v1/user-topics.controller.spec.ts > UserTopicsController > findOne > should retrieve a single user topic
+ FAIL  src/modules/user-topics/controllers/v1/user-topics.controller.spec.ts > UserTopicsController > findOne > should throw NotFoundException if not found
+ FAIL  src/modules/user-topics/controllers/v1/user-topics.controller.spec.ts > UserTopicsController > update > should update user topic successfully
+ FAIL  src/modules/user-topics/controllers/v1/user-topics.controller.spec.ts > UserTopicsController > delete > should soft delete user topic successfully
+Error: Nest can't resolve dependencies of the AbilitiesGuard (Reflector, ?). Please make sure that the argument CaslAbilityFactory at index [1] is available in the RootTestModule module.
+
+Potential solutions:
+- Is RootTestModule a valid NestJS module?
+- If CaslAbilityFactory is a provider, is it part of the current RootTestModule?
+- If CaslAbilityFactory is exported from a separate @Module, is that module imported within RootTestModule?
+  @Module({
+    imports: [ /* the Module containing CaslAbilityFactory */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+ ❯ TestingInjector.lookupComponentInParentModules ../../node_modules/@nestjs/core/injector/injector.js:290:19
+ ❯ TestingInjector.resolveComponentWrapper ../../node_modules/@nestjs/testing/testing-injector.js:19:45
+ ❯ resolveParam ../../node_modules/@nestjs/core/injector/injector.js:140:38
+ ❯ TestingInjector.resolveConstructorParams ../../node_modules/@nestjs/core/injector/injector.js:169:27
+ ❯ TestingInjector.loadInstance ../../node_modules/@nestjs/core/injector/injector.js:75:13
+ ❯ TestingInjector.loadInjectable ../../node_modules/@nestjs/core/injector/injector.js:99:9
+ ❯ ../../node_modules/@nestjs/core/injector/instance-loader.js:80:13
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+Serialized Error: { context: { index: 1, dependencies: [ 'Function<Reflector>', 'Function<CaslAbilityFactory>' ], name: 'Function<CaslAbilityFactory>' }, metadata: { id: '8cadf4c22092411464739' }, moduleRef: { id: 'd5103716474018cadf4c2' }, what: 'Function<what>' }
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/123]⎯
+
+ Test Files  15 failed | 3 passed (18)
+      Tests  122 failed | 28 passed (150)
+   Start at  12:50:19
+   Duration  2.95s (transform 760ms, setup 0ms, collect 13.01s, tests 527ms, environment 3ms, prepare 1.36s)
+

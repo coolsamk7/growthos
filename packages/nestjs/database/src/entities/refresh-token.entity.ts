@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, RelationId } from 'typeorm';
+import { Column, Entity, ManyToOne, JoinColumn } from 'typeorm';
 import { IdTimestamppedEntity } from './id-timestampped.entity.js';
 import { UserEntity } from './user.entity.js';
 
@@ -7,11 +7,12 @@ export class RefreshTokenEntity extends IdTimestamppedEntity {
     @Column( 'text', { nullable: false } )
     token: string;
 
-    @RelationId( 'user' )
+    @Column( { type: 'varchar', name: 'user_id' } )
     userId: string;
 
     // Relations
 
     @ManyToOne( () => UserEntity )
+    @JoinColumn( { name: 'user_id' } )
     user: UserEntity;
 }
