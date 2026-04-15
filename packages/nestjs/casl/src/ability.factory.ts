@@ -31,17 +31,15 @@ export class AbilityFactory {
                 can( Action.READ, Subject.USER_PROBLEM )
 
                 // Can manage their own user data
-                if ( userId ) {
-                    can( Action.MANAGE, Subject.USER_LEARNING_PATH, { userId } )
-                    can( Action.MANAGE, Subject.USER_TOPIC, { userId } )
-                    can( Action.MANAGE, Subject.USER_PROBLEM, { userId } )
-                    can( Action.MANAGE, Subject.PROBLEM_ATTEMPT, { userId } )
-                    can( Action.MANAGE, Subject.STUDY_SESSION, { userId } )
-                    can( Action.MANAGE, Subject.STREAK, { userId } )
-                    can( Action.MANAGE, Subject.GOAL, { userId } )
-                    can( Action.MANAGE, Subject.NOTE, { userId } )
-                    can( Action.MANAGE, Subject.RESOURCE, { userId } )
-                }
+                can( Action.MANAGE, Subject.USER_LEARNING_PATH )
+                can( Action.MANAGE, Subject.USER_TOPIC )
+                can( Action.MANAGE, Subject.USER_PROBLEM )
+                can( Action.MANAGE, Subject.PROBLEM_ATTEMPT )
+                can( Action.MANAGE, Subject.STUDY_SESSION )
+                can( Action.MANAGE, Subject.STREAK )
+                can( Action.MANAGE, Subject.GOAL )
+                can( Action.MANAGE, Subject.NOTE )
+                can( Action.MANAGE, Subject.RESOURCE )
                 break
 
             case UserRole.USER:
@@ -53,21 +51,19 @@ export class AbilityFactory {
                 can( Action.READ, Subject.TAG )
 
                 // Users can only manage their own data
-                if ( userId ) {
-                    can( Action.MANAGE, Subject.USER_LEARNING_PATH, { userId } )
-                    can( Action.MANAGE, Subject.USER_TOPIC, { userId } )
-                    can( Action.MANAGE, Subject.USER_PROBLEM, { userId } )
-                    can( Action.MANAGE, Subject.PROBLEM_ATTEMPT, { userId } )
-                    can( Action.MANAGE, Subject.STUDY_SESSION, { userId } )
-                    can( Action.MANAGE, Subject.STREAK, { userId } )
-                    can( Action.MANAGE, Subject.GOAL, { userId } )
-                    can( Action.MANAGE, Subject.NOTE, { userId } )
-                    can( Action.MANAGE, Subject.RESOURCE, { userId } )
-                    
-                    // Can update their own profile
-                    can( Action.UPDATE, Subject.USER, { id: userId } )
-                    can( Action.READ, Subject.USER, { id: userId } )
-                }
+                can( Action.MANAGE, Subject.USER_LEARNING_PATH )
+                can( Action.MANAGE, Subject.USER_TOPIC )
+                can( Action.MANAGE, Subject.USER_PROBLEM )
+                can( Action.MANAGE, Subject.PROBLEM_ATTEMPT )
+                can( Action.MANAGE, Subject.STUDY_SESSION )
+                can( Action.MANAGE, Subject.STREAK )
+                can( Action.MANAGE, Subject.GOAL )
+                can( Action.MANAGE, Subject.NOTE )
+                can( Action.MANAGE, Subject.RESOURCE )
+                
+                // Can update their own profile
+                can( Action.UPDATE, Subject.USER )
+                can( Action.READ, Subject.USER )
 
                 // Cannot delete their own account (requires admin)
                 cannot( Action.DELETE, Subject.USER )
