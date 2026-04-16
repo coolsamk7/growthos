@@ -7,7 +7,7 @@ import { StreakEntity } from '@growthos/nestjs-database/entities';
 import { MockAbilitiesGuard } from '../../../../../test-helpers/guards.mock';
 import { AbilitiesGuard } from '@growthos/nestjs-casl';
 
-describe('StreaksController', () => {
+describe( 'StreaksController', () => {
   let controller: StreaksController;
   let dataSource: DataSource;
 
@@ -26,9 +26,9 @@ describe('StreaksController', () => {
     role: 'USER',
   };
 
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      controllers: [StreaksController],
+  beforeEach( async () => {
+    const module: TestingModule = await Test.createTestingModule( {
+      controllers: [ StreaksController ],
       providers: [
         {
           provide: DataSource,
@@ -43,102 +43,102 @@ describe('StreaksController', () => {
           },
         },
       ],
-    })
-      .overrideGuard(AbilitiesGuard)
-      .useClass(MockAbilitiesGuard)
+    } )
+      .overrideGuard( AbilitiesGuard )
+      .useClass( MockAbilitiesGuard )
       .compile();
 
-    controller = module.get<StreaksController>(StreaksController);
-    dataSource = module.get<DataSource>(DataSource);
-  });
+    controller = module.get<StreaksController>( StreaksController );
+    dataSource = module.get<DataSource>( DataSource );
+  } );
 
-  afterEach(() => {
+  afterEach( () => {
     vi.clearAllMocks();
-  });
+  } );
 
-  describe('create', () => {
-    it('should create a streak successfully', async () => {
+  describe( 'create', () => {
+    it( 'should create a streak successfully', async () => {
       const createDto = {
         count: 15,
         startDate: new Date(),
       };
 
-      vi.mocked(dataSource.manager.create).mockReturnValueOnce(mockStreak);
-      vi.mocked(dataSource.manager.save).mockResolvedValueOnce(mockStreak);
+      vi.mocked( dataSource.manager.create ).mockReturnValueOnce( mockStreak );
+      vi.mocked( dataSource.manager.save ).mockResolvedValueOnce( mockStreak );
 
-      const result = await controller.create(createDto, mockUser);
+      const result = await controller.create( createDto, mockUser );
 
-      expect(result.message).toBe('Streak created successfully');
-      expect(dataSource.manager.create).toHaveBeenCalledWith(
+      expect( result.message ).toBe( 'Streak created successfully' );
+      expect( dataSource.manager.create ).toHaveBeenCalledWith(
         StreakEntity,
-        expect.objectContaining({
+        expect.objectContaining( {
           userId: mockUser.id,
-        })
+        } )
       );
-    });
-  });
+    } );
+  } );
 
-  describe('findAll', () => {
-    it('should retrieve all streaks with pagination', async () => {
-      const streaks = [mockStreak];
+  describe( 'findAll', () => {
+    it( 'should retrieve all streaks with pagination', async () => {
+      const streaks = [ mockStreak ];
 
-      vi.mocked(dataSource.manager.findAndCount).mockResolvedValueOnce([streaks, 1]);
+      vi.mocked( dataSource.manager.findAndCount ).mockResolvedValueOnce( [ streaks, 1 ] );
 
-      const result = await controller.findAll('1', '20', mockUser);
+      const result = await controller.findAll( '1', '20', mockUser );
 
-      expect(result.data.length).toBe(1);
-      expect(dataSource.manager.findAndCount).toHaveBeenCalledWith(
+      expect( result.data.length ).toBe( 1 );
+      expect( dataSource.manager.findAndCount ).toHaveBeenCalledWith(
         StreakEntity,
-        expect.objectContaining({
+        expect.objectContaining( {
           where: { userId: mockUser.id },
-        })
+        } )
       );
-    });
-  });
+    } );
+  } );
 
-  describe('findOne', () => {
-    it('should retrieve a single streak by id', async () => {
-      vi.mocked(dataSource.manager.findOne).mockResolvedValueOnce(mockStreak);
+  describe( 'findOne', () => {
+    it( 'should retrieve a single streak by id', async () => {
+      vi.mocked( dataSource.manager.findOne ).mockResolvedValueOnce( mockStreak );
 
-      const result = await controller.findOne('streak-123', mockUser);
+      const result = await controller.findOne( 'streak-123', mockUser );
 
-      expect(result).toEqual(mockStreak);
-    });
+      expect( result ).toEqual( mockStreak );
+    } );
 
-    it('should throw NotFoundException if not found', async () => {
-      vi.mocked(dataSource.manager.findOne).mockResolvedValueOnce(null);
+    it( 'should throw NotFoundException if not found', async () => {
+      vi.mocked( dataSource.manager.findOne ).mockResolvedValueOnce( null );
 
-      await expect(controller.findOne('nonexistent', mockUser)).rejects.toThrow(
+      await expect( controller.findOne( 'nonexistent', mockUser ) ).rejects.toThrow(
         NotFoundException
       );
-    });
-  });
+    } );
+  } );
 
-  describe('update', () => {
-    it('should update a streak successfully', async () => {
+  describe( 'update', () => {
+    it( 'should update a streak successfully', async () => {
       const updateDto = {
         count: 20,
       };
 
       const updatedStreak = { ...mockStreak, ...updateDto };
 
-      vi.mocked(dataSource.manager.findOne).mockResolvedValueOnce(mockStreak);
-      vi.mocked(dataSource.manager.save).mockResolvedValueOnce(updatedStreak);
+      vi.mocked( dataSource.manager.findOne ).mockResolvedValueOnce( mockStreak );
+      vi.mocked( dataSource.manager.save ).mockResolvedValueOnce( updatedStreak );
 
-      const result = await controller.update('streak-123', updateDto, mockUser);
+      const result = await controller.update( 'streak-123', updateDto, mockUser );
 
-      expect(result.message).toBe('Streak updated successfully');
-    });
-  });
+      expect( result.message ).toBe( 'Streak updated successfully' );
+    } );
+  } );
 
-  describe('delete', () => {
-    it('should soft delete a streak successfully', async () => {
-      vi.mocked(dataSource.manager.findOne).mockResolvedValueOnce(mockStreak);
-      vi.mocked(dataSource.manager.softDelete).mockResolvedValueOnce({ affected: 1 });
+  describe( 'delete', () => {
+    it( 'should soft delete a streak successfully', async () => {
+      vi.mocked( dataSource.manager.findOne ).mockResolvedValueOnce( mockStreak );
+      vi.mocked( dataSource.manager.softDelete ).mockResolvedValueOnce( { affected: 1 } );
 
-      const result = await controller.delete('streak-123', mockUser);
+      const result = await controller.delete( 'streak-123', mockUser );
 
-      expect(result.message).toBe('Streak deleted successfully');
-    });
-  });
-});
+      expect( result.message ).toBe( 'Streak deleted successfully' );
+    } );
+  } );
+} );

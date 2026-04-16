@@ -4,11 +4,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserTopicEntity } from '@growthos/nestjs-database/entities';
 import { CaslModule } from '@growthos/nestjs-casl';
 
-@Module({
+@Module( {
     imports: [
-        TypeOrmModule.forFeature([UserTopicEntity]),
+        TypeOrmModule.forFeature( [ UserTopicEntity ] ),
         CaslModule.forRoot(),
     ],
-    controllers: [UserTopicsController],
-})
+    controllers: [ UserTopicsController ],
+} )
 export class UserTopicsModule {}

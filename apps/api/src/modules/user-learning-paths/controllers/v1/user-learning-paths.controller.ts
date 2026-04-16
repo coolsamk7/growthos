@@ -9,137 +9,137 @@ import { toApiResponse, toApiListResponse, toMessageResponse, serializeEntity } 
 import { CreateUserLearningPathRequest, UpdateUserLearningPathRequest } from '../../dtos';
 import { AuthenticatedUser } from 'src/decorators';
 
-@ApiTags('User Learning Paths')
+@ApiTags( 'User Learning Paths' )
 @ApiBearerAuth()
-@Controller({ path: 'user-learning-paths', version: '1' })
+@Controller( { path: 'user-learning-paths', version: '1' } )
 export class UserLearningPathsController {
     constructor(
         @InjectDataSource() private readonly dataSource: DataSource,
     ) {}
 
     @Post()
-    @HttpCode(HttpStatus.CREATED)
-    @UseGuards(AbilitiesGuard)
-    @CheckAbilities({ action: Action.CREATE, subject: Subject.USER_LEARNING_PATH })
-    @ApiBody({ schema: CreateUserLearningPathRequest })
+    @HttpCode( HttpStatus.CREATED )
+    @UseGuards( AbilitiesGuard )
+    @CheckAbilities( { action: Action.CREATE, subject: Subject.USER_LEARNING_PATH } )
+    @ApiBody( { schema: CreateUserLearningPathRequest } )
     async create(
         @Body() createDto: Static<typeof CreateUserLearningPathRequest>,
         @AuthenticatedUser() currentUser: any
     ) {
-        const path = this.dataSource.manager.create(UserLearningPathEntity, {
+        const path = this.dataSource.manager.create( UserLearningPathEntity, {
             ...createDto,
             userId: currentUser.id,
-            targetDate: createDto.targetDate ? new Date(createDto.targetDate) : undefined,
-        });
+            targetDate: createDto.targetDate ? new Date( createDto.targetDate ) : undefined,
+        } );
 
-        const saved = await this.dataSource.manager.save(path);
-        return toApiResponse('User learning path created successfully', serializeEntity(saved));
+        const saved = await this.dataSource.manager.save( path );
+        return toApiResponse( 'User learning path created successfully', serializeEntity( saved ) );
     }
 
     @Get()
-    @HttpCode(HttpStatus.OK)
-    @UseGuards(AbilitiesGuard)
-    @CheckAbilities({ action: Action.READ, subject: Subject.USER_LEARNING_PATH })
-    @ApiQuery({ name: 'page', required: false, type: Number })
-    @ApiQuery({ name: 'limit', required: false, type: Number })
+    @HttpCode( HttpStatus.OK )
+    @UseGuards( AbilitiesGuard )
+    @CheckAbilities( { action: Action.READ, subject: Subject.USER_LEARNING_PATH } )
+    @ApiQuery( { name: 'page', required: false, type: Number } )
+    @ApiQuery( { name: 'limit', required: false, type: Number } )
     async findAll(
-        @Query('page') page: string = '1',
-        @Query('limit') limit: string = '20',
+        @Query( 'page' ) page: string = '1',
+        @Query( 'limit' ) limit: string = '20',
         @AuthenticatedUser() currentUser: any
     ) {
-        const pageNum = parseInt(page, 10);
-        const limitNum = parseInt(limit, 10);
-        const skip = (pageNum - 1) * limitNum;
+        const pageNum = parseInt( page, 10 );
+        const limitNum = parseInt( limit, 10 );
+        const skip = ( pageNum - 1 ) * limitNum;
 
         const whereConditions: any = {};
-        if (currentUser?.role === 'USER') {
+        if ( currentUser?.role === 'USER' ) {
             whereConditions.userId = currentUser.id;
         }
 
-        const [paths, total] = await this.dataSource.manager.findAndCount(UserLearningPathEntity, {
+        const [ paths, total ] = await this.dataSource.manager.findAndCount( UserLearningPathEntity, {
             where: whereConditions,
             skip,
             take: limitNum,
             order: { createdAt: 'DESC' },
-        });
+        } );
 
         return toApiListResponse(
-            paths.map(p => serializeEntity(p)),
+            paths.map( p => serializeEntity( p ) ),
             total,
             pageNum,
             limitNum
         );
     }
 
-    @Get(':id')
-    @HttpCode(HttpStatus.OK)
-    @UseGuards(AbilitiesGuard)
-    @CheckAbilities({ action: Action.READ, subject: Subject.USER_LEARNING_PATH })
-    @ApiParam({ name: 'id', type: String })
-    async findOne(@Param('id') id: string, @AuthenticatedUser() currentUser: any) {
+    @Get( ':id' )
+    @HttpCode( HttpStatus.OK )
+    @UseGuards( AbilitiesGuard )
+    @CheckAbilities( { action: Action.READ, subject: Subject.USER_LEARNING_PATH } )
+    @ApiParam( { name: 'id', type: String } )
+    async findOne( @Param( 'id' ) id: string, @AuthenticatedUser() currentUser: any ) {
         const whereConditions: any = { id };
-        if (currentUser?.role === 'USER') {
+        if ( currentUser?.role === 'USER' ) {
             whereConditions.userId = currentUser.id;
         }
 
-        const path = await this.dataSource.manager.findOne(UserLearningPathEntity, { where: whereConditions });
+        const path = await this.dataSource.manager.findOne( UserLearningPathEntity, { where: whereConditions } );
 
-        if (!path) {
-            throw new NotFoundException({ message: 'User learning path not found' });
+        if ( !path ) {
+            throw new NotFoundException( { message: 'User learning path not found' } );
         }
 
-        return serializeEntity(path);
+        return serializeEntity( path );
     }
 
-    @Put(':id')
-    @HttpCode(HttpStatus.OK)
-    @UseGuards(AbilitiesGuard)
-    @CheckAbilities({ action: Action.UPDATE, subject: Subject.USER_LEARNING_PATH })
-    @ApiParam({ name: 'id', type: String })
-    @ApiBody({ schema: UpdateUserLearningPathRequest })
+    @Put( ':id' )
+    @HttpCode( HttpStatus.OK )
+    @UseGuards( AbilitiesGuard )
+    @CheckAbilities( { action: Action.UPDATE, subject: Subject.USER_LEARNING_PATH } )
+    @ApiParam( { name: 'id', type: String } )
+    @ApiBody( { schema: UpdateUserLearningPathRequest } )
     async update(
-        @Param('id') id: string,
+        @Param( 'id' ) id: string,
         @Body() updateDto: Static<typeof UpdateUserLearningPathRequest>,
         @AuthenticatedUser() currentUser: any
     ) {
         const whereConditions: any = { id };
-        if (currentUser?.role === 'USER') {
+        if ( currentUser?.role === 'USER' ) {
             whereConditions.userId = currentUser.id;
         }
 
-        const path = await this.dataSource.manager.findOne(UserLearningPathEntity, { where: whereConditions });
+        const path = await this.dataSource.manager.findOne( UserLearningPathEntity, { where: whereConditions } );
 
-        if (!path) {
-            throw new NotFoundException({ message: 'User learning path not found' });
+        if ( !path ) {
+            throw new NotFoundException( { message: 'User learning path not found' } );
         }
 
-        Object.assign(path, {
+        Object.assign( path, {
             ...updateDto,
-            targetDate: updateDto.targetDate ? new Date(updateDto.targetDate) : path.targetDate,
-        });
+            targetDate: updateDto.targetDate ? new Date( updateDto.targetDate ) : path.targetDate,
+        } );
 
-        const updated = await this.dataSource.manager.save(path);
-        return toApiResponse('User learning path updated successfully', serializeEntity(updated));
+        const updated = await this.dataSource.manager.save( path );
+        return toApiResponse( 'User learning path updated successfully', serializeEntity( updated ) );
     }
 
-    @Delete(':id')
-    @HttpCode(HttpStatus.OK)
-    @UseGuards(AbilitiesGuard)
-    @CheckAbilities({ action: Action.DELETE, subject: Subject.USER_LEARNING_PATH })
-    @ApiParam({ name: 'id', type: String })
-    async delete(@Param('id') id: string, @AuthenticatedUser() currentUser: any) {
+    @Delete( ':id' )
+    @HttpCode( HttpStatus.OK )
+    @UseGuards( AbilitiesGuard )
+    @CheckAbilities( { action: Action.DELETE, subject: Subject.USER_LEARNING_PATH } )
+    @ApiParam( { name: 'id', type: String } )
+    async delete( @Param( 'id' ) id: string, @AuthenticatedUser() currentUser: any ) {
         const whereConditions: any = { id };
-        if (currentUser?.role === 'USER') {
+        if ( currentUser?.role === 'USER' ) {
             whereConditions.userId = currentUser.id;
         }
 
-        const path = await this.dataSource.manager.findOne(UserLearningPathEntity, { where: whereConditions });
+        const path = await this.dataSource.manager.findOne( UserLearningPathEntity, { where: whereConditions } );
 
-        if (!path) {
-            throw new NotFoundException({ message: 'User learning path not found' });
+        if ( !path ) {
+            throw new NotFoundException( { message: 'User learning path not found' } );
         }
 
-        await this.dataSource.manager.softDelete(UserLearningPathEntity, { id });
-        return toMessageResponse('User learning path deleted successfully');
+        await this.dataSource.manager.softDelete( UserLearningPathEntity, { id } );
+        return toMessageResponse( 'User learning path deleted successfully' );
     }
 }

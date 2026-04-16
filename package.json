@@ -1,28 +1,40 @@
 {
-    "name": "growthos",
-    "packageManager": "yarn@4.9.1",
-    "workspaces": [
-        "apps/*",
-        "packages/nestjs/*",
-        "packages/shared/*"
-    ],
-    "scripts": {
-        "dev": "turbo run dev",
-        "build": "turbo run build",
-        "clean": "turbo run clean"
-    },
-    "devDependencies": {
-        "@eslint/eslintrc": "^3.2.0",
-        "@eslint/js": "^9.39.0",
-        "@types/k6": "^1.4.0",
-        "eslint": "^9.39.0",
-        "eslint-config-prettier": "^10.0.1",
-        "eslint-plugin-prettier": "^5.2.2",
-        "prettier": "^3.6.2",
-        "rimraf": "^6.0.1",
-        "tsup": "^8.5.0",
-        "turbo": "^2.5.8",
-        "typescript": "^5.9.3",
-        "typescript-eslint": "^8.46.2"
-    }
+  "name": "growthos",
+  "packageManager": "yarn@4.9.1",
+  "workspaces": [
+    "apps/*",
+    "packages/nestjs/*",
+    "packages/shared/*"
+  ],
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "clean": "turbo run clean",
+    "prepare": "husky",
+    "lint": "eslint",
+    "generate:api-client": "yarn workspace @growthos/api-client generate"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "eslint --max-warnings=0"
+    ]
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3.2.0",
+    "@eslint/js": "^9.39.0",
+    "@hey-api/openapi-ts": "^0.96.0",
+    "@types/k6": "^1.4.0",
+    "eslint": "^9.39.0",
+    "eslint-config-prettier": "^10.0.1",
+    "eslint-plugin-prettier": "^5.2.2",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.4.0",
+    "prettier": "^3.6.2",
+    "rimraf": "^6.0.1",
+    "tsup": "^8.5.0",
+    "turbo": "^2.5.8",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.46.2"
+  }
 }
