@@ -3,7 +3,8 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { ArrowLeft, Mail, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Logo } from '@/components/common/Logo';
-import { toast } from 'sonner';
+import { verifyOTP, resendOTP } from '@/services/auth.service';
+import { useToast } from '@/hooks/use-toast';
 
 export function OTPPage() {
     const navigate = useNavigate();
@@ -15,6 +16,7 @@ export function OTPPage() {
     const [ isResending, setIsResending ] = useState( false );
     const [ resendCooldown, setResendCooldown ] = useState( 0 );
     const [ error, setError ] = useState( '' );
+    const { toast } = useToast();
 
     const inputRefs = useRef<( HTMLInputElement | null )[]>( [] );
 
@@ -87,25 +89,43 @@ export function OTPPage() {
             setError( 'Please enter the complete 6-digit code' );
             return;
         }
-
         setIsLoading( true );
         try {
+            const response = await verifyOTP( { otp: otpValue } );
+            toast( {
+                title: 'success',
+                description: response?.message,
+            } )
         } catch ( error: any ) {
-            toast.error( error.message || 'Error while verifying OTP' );
+            toast( {
+               title: 'error', description: error.data.message || "otp verification failed" 
+            } );
         } finally {
             setIsLoading( false );
         }
         setError( '' );
 
-
         setIsLoading( false );
-        navigate( '/app/dashboard' );
+        navigate( '/signIn' );
     };
 
     const handleResend = async () => {
         setIsResending( true );
 
-        await new Promise( ( resolve ) => setTimeout( resolve, 1000 ) );
+        try {
+            const response = await resendOTP( );
+            toast( {
+                title: 'success',
+                description: response?.message,
+            } )
+        } catch ( error: any ) {
+            toast( {
+               title: 'error', description: error.data.message || "otp verification failed" 
+            } );
+        } finally {
+            setIsLoading( false );
+        }
+
 
         setIsResending( false );
         setResendCooldown( 120 );

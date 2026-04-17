@@ -32,23 +32,12 @@ export function LoginPage() {
             } );
             navigate( '/app/dashboard' );
         } catch ( error: any ) {
-            console.error( 'Login error caught:', error );
-
-            // NestJS error format: { message: string, statusCode: number, error: string }
-            let errorMessage = 'Login failed. Please check your credentials.';
-
-            if ( typeof error === 'string' ) {
-                errorMessage = error;
-            } else if ( error?.message ) {
-                errorMessage = error.message;
-            } else if ( typeof error === 'object' && error !== null ) {
-                errorMessage = JSON.stringify( error );
-            }
+            
 
             toast( {
                 variant: 'destructive',
                 title: 'Error',
-                description: errorMessage,
+                description: error.data.message || error.message || "login failed",
             } );
         } finally {
             setIsLoading( false );

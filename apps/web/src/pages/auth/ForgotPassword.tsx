@@ -40,7 +40,7 @@ export function ForgotPasswordPage() {
                     {!isSubmitted ? (
                         <>
                             <Link
-                                to="/login"
+                                to="/signIn"
                                 className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-6"
                             >
                                 <ArrowLeft className="size-4" />
@@ -89,7 +89,7 @@ export function ForgotPasswordPage() {
                             <p className="mt-1 font-medium text-foreground">{email}</p>
 
                             <div className="mt-8 space-y-4">
-                                <Button onClick={() => navigate( '/login' )} className="w-full" size="lg">
+                                <Button onClick={() => navigate( '/signIn' )} className="w-full" size="lg">
                                     Back to login
                                 </Button>
 
@@ -117,7 +117,7 @@ export function ForgotPasswordPage() {
 
                     <p className="mt-8 text-center text-sm text-muted-foreground">
                         Remember your password?{' '}
-                        <Link to="/login" className="font-medium text-primary hover:text-primary/80">
+                        <Link to="/signIn" className="font-medium text-primary hover:text-primary/80">
                             Sign in
                         </Link>
                     </p>

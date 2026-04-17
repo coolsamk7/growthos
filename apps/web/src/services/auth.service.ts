@@ -2,7 +2,6 @@ import { authLogin, authResendOtp, authSignup, authVerifyOtp } from '@growthos/a
 import { apiClient } from './api';
 import { tokenStorage } from '@/utils/tokenStorage';
 import { otpSessionStorage } from '@/utils/otpSessionStorage';
-import { warn } from 'console';
 
 export const loginUser = async ( data: { email: string; password: string } ) => {
     const response = await authLogin( {
@@ -68,7 +67,7 @@ export const verifyOTP = async ( data: { otp: string } ) => {
     return response.data;
 }
 
-export const resetOTP = async () => {
+export const resendOTP = async () => {
     const response = await authResendOtp( {
         body: {
             email : otpSessionStorage.getOtpSessionEmail() || ""
