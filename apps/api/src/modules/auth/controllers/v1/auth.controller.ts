@@ -14,6 +14,7 @@ import { JwtService } from '@nestjs/jwt';
 import { AuthGuard } from '@nestjs/passport';
 import { UserStatus } from '@growthos/nestjs-shared';
 import { ulid } from 'ulid'
+import { session } from 'passport';
 
 @ApiTags( 'Auth' )
 @Controller( { path: 'auth', version: '1' } )
@@ -267,8 +268,9 @@ export class AuthController {
         }
 
         // Generate and store OTP for password reset
+        const sessionId = ulid()
         const otp = this.otpService.generateOtp();
-        await this.otpService.storePasswordResetOtp( forgotPasswordDto.email, otp );
+        await this.otpService.storePasswordResetOtp( sessionId, otp );
 
         // Send OTP via email
         this.mailQueue.addToMailQueue( 'sendPasswordResetOTP', { 
@@ -277,7 +279,7 @@ export class AuthController {
             userId: user.id 
         } );
 
-        return { message: 'If the email exists, a password reset OTP has been sent.' };
+        return { message: 'If the email exists, a password reset OTP has been sent.', data: { sessionId: sessionId, email: user.email } };
     }
 
     @Public()
@@ -291,7 +293,7 @@ export class AuthController {
         }
 
         // Verify OTP
-        const isValid = await this.otpService.verifyPasswordResetOtp( forgotPasswordResetDto.email, forgotPasswordResetDto.otp );
+        const isValid = await this.otpService.verifyPasswordResetOtp( forgotPasswordResetDto.sessionId, forgotPasswordResetDto.otp );
         if ( !isValid ) {
             throw new BadRequestException( { message: 'Invalid or expired OTP' } );
         }

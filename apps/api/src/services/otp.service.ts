@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import Redis from 'ioredis';
 import bcrypt from 'bcrypt';
+import { session } from 'passport';
 
 @Injectable()
 export class OtpService {
@@ -61,19 +62,19 @@ export class OtpService {
         return isValid;
     }
 
-    async storePasswordResetOtp( email: string, otp: string ): Promise<void> {
-        const key = `password-reset:${ email }`;
+    async storePasswordResetOtp( sessionId: string, otp: string ): Promise<void> {
+        const key = `password-reset:${ session }`;
         const hashedOtp = await bcrypt.hash( otp, this.SALT_ROUNDS );
         await this.redis.setex( key, this.OTP_EXPIRY, hashedOtp );
-        this.logger.log( `Password reset OTP stored for email ${ email }` );
+        this.logger.log( `Password reset OTP stored for session ${sessionId}` );
     }
 
-    async verifyPasswordResetOtp( email: string, otp: string ): Promise<boolean> {
-        const key = `password-reset:${ email }`;
+    async verifyPasswordResetOtp( sessionId: string, otp: string ): Promise<boolean> {
+        const key = `password-reset:${ sessionId }`;
         const storedHashedOtp = await this.redis.get( key );
         
         if ( !storedHashedOtp ) {
-            this.logger.warn( `Password reset OTP not found or expired for email ${ email }` );
+            this.logger.warn( `Password reset OTP not found or expired session ${ sessionId }` );
             return false;
         }
 
@@ -81,9 +82,9 @@ export class OtpService {
         
         if ( isValid ) {
             await this.redis.del( key );
-            this.logger.log( `Password reset OTP verified and deleted for email ${ email }` );
+            this.logger.log( `Password reset OTP verified and deleted for sessionId ${ sessionId }` );
         } else {
-            this.logger.warn( `Invalid password reset OTP for email ${ email }` );
+            this.logger.warn( `Invalid password reset OTP for sessionId ${ sessionId }` );
         }
 
         return isValid;
