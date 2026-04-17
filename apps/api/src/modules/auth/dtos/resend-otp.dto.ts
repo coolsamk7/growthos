@@ -1,7 +1,7 @@
 import { Type } from 'typebox'
 
 export const ResendOtpRequest = Type.Object( {
-    userId: Type.String( { format: 'uuid' } )
+    email: Type.String( { format: 'email' } )
 } )
 
 export const ResendOtpResponse = Type.Object( {

@@ -13,6 +13,7 @@ import { AuthenticatedUser } from 'src/decorators';
 import { JwtService } from '@nestjs/jwt';
 import { AuthGuard } from '@nestjs/passport';
 import { UserStatus } from '@growthos/nestjs-shared';
+import { ulid } from 'ulid'
 
 @ApiTags( 'Auth' )
 @Controller( { path: 'auth', version: '1' } )
@@ -141,7 +142,7 @@ export class AuthController {
     @ApiOkResponse( { schema: SignupResponse } )
     async signup( @Body() signupDto: Static<typeof SignupRequest> ) {
         const existingUser = await this.dataSource.manager.findOne( UserEntity, { where: { email: signupDto.email } } );
-        
+        const sessionId = ulid();
         if ( existingUser ) {
             // If user exists and is already verified, throw error
             if ( existingUser.status === UserStatus.ACTIVE ) {
@@ -161,11 +162,18 @@ export class AuthController {
             
             // Generate and store new OTP
             const otp = this.otpService.generateOtp();
-            await this.otpService.storeOtp( existingUser.id, otp );
+            await this.otpService.storeOtp( sessionId, otp );
+
             
             this.mailQueue.addToMailQueue( 'sendOTP', { code: otp, email: existingUser.email, userId: existingUser.id } );
             
-            return { message: 'Verification email resent. Please verify your email with the OTP sent.', userId: existingUser.id };
+            return {
+                message: 'Verification email resent. Please verify your email with the OTP sent.',
+                data: {
+                    email: existingUser.email,
+                    sessionId
+                }
+            };
         }
 
         const newUser = this.dataSource.manager.create( UserEntity, {
@@ -182,11 +190,16 @@ export class AuthController {
 
         // Generate and store OTP in Redis
         const otp = this.otpService.generateOtp();
-        await this.otpService.storeOtp( savedUser.id, otp );
-
+        await this.otpService.storeOtp( sessionId, otp );
         this.mailQueue.addToMailQueue( 'sendOTP', { code: otp, email: savedUser.email, userId: savedUser.id } ) 
 
-        return { message: 'User created successfully. Please verify your email with the OTP sent.', userId: savedUser.id };
+        return {
+            message: 'User created successfully. Please verify your email with the OTP sent.',
+            data: {
+                email: savedUser.email,
+                sessionId
+            }
+        };
     }
 
     @Public()
@@ -194,12 +207,12 @@ export class AuthController {
     @ApiBody( { schema: VerifyOtpRequest } )
     @ApiOkResponse( { schema: VerifyOtpResponse } )
     async verifyOtp( @Body() verifyOtpDto: Static<typeof VerifyOtpRequest> ) {
-        const user = await this.dataSource.manager.findOne( UserEntity, { where: { id: verifyOtpDto.userId } } );
+        const user = await this.dataSource.manager.findOne( UserEntity, { where: { email: verifyOtpDto.email } } );
         if ( !user ) {
             throw new BadRequestException( { message: 'User not found' } );
         }
 
-        const isValid = await this.otpService.verifyOtp( verifyOtpDto.userId, verifyOtpDto.otp );
+        const isValid = await this.otpService.verifyOtp( verifyOtpDto.sessionId, verifyOtpDto.otp );
         if ( !isValid ) {
             throw new BadRequestException( { message: 'Invalid or expired OTP' } );
         }
@@ -216,7 +229,7 @@ export class AuthController {
     @ApiBody( { schema: ResendOtpRequest } )
     @ApiOkResponse( { schema: ResendOtpResponse } )
     async resendOtp( @Body() resendOtpDto: Static<typeof ResendOtpRequest> ) {
-        const user = await this.dataSource.manager.findOne( UserEntity, { where: { id: resendOtpDto.userId } } );
+        const user = await this.dataSource.manager.findOne( UserEntity, { where: { id: resendOtpDto.email } } );
         if ( !user ) {
             throw new BadRequestException( { message: 'User not found' } );
         }
@@ -230,8 +243,9 @@ export class AuthController {
         }
 
         // Generate and store new OTP
+        const sessionId = ulid()
         const otp = this.otpService.generateOtp();
-        await this.otpService.storeOtp( user.id, otp );
+        await this.otpService.storeOtp( sessionId, otp );
 
         this.mailQueue.addToMailQueue( 'sendOTP', { code: otp, email: user.email, userId: user.id } );
 

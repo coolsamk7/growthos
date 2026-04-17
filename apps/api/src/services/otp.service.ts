@@ -33,19 +33,19 @@ export class OtpService {
         return Math.floor( 100000 + Math.random() * 900000 ).toString();
     }
 
-    async storeOtp( userId: string, otp: string ): Promise<void> {
-        const key = `otp:${ userId }`;
+    async storeOtp( sessionId: string, otp: string ): Promise<void> {
+        const key = `otp:${ sessionId }`;
         const hashedOtp = await bcrypt.hash( otp, this.SALT_ROUNDS );
         await this.redis.setex( key, this.OTP_EXPIRY, hashedOtp );
-        this.logger.log( `OTP stored for user ${ userId }` );
+        this.logger.log( `OTP stored for sessionId ${ sessionId }` );
     }
 
-    async verifyOtp( userId: string, otp: string ): Promise<boolean> {
-        const key = `otp:${ userId }`;
+    async verifyOtp( sessionId: string, otp: string ): Promise<boolean> {
+        const key = `otp:${ sessionId }`;
         const storedHashedOtp = await this.redis.get( key );
         
         if ( !storedHashedOtp ) {
-            this.logger.warn( `OTP not found or expired for user ${ userId }` );
+            this.logger.warn( `OTP not found or expired for user ${ sessionId }` );
             return false;
         }
 
@@ -53,9 +53,9 @@ export class OtpService {
         
         if ( isValid ) {
             await this.redis.del( key );
-            this.logger.log( `OTP verified and deleted for user ${ userId }` );
+            this.logger.log( `OTP verified and deleted for session ${sessionId} ` );
         } else {
-            this.logger.warn( `Invalid OTP for user ${ userId }` );
+            this.logger.warn( `Invalid OTP for session ${sessionId}` );
         }
 
         return isValid;
