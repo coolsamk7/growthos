@@ -1,7 +1,8 @@
-import { authLogin, authSignup } from '@growthos/api-client';
+import { authLogin, authResendOtp, authSignup, authVerifyOtp } from '@growthos/api-client';
 import { apiClient } from './api';
 import { tokenStorage } from '@/utils/tokenStorage';
 import { otpSessionStorage } from '@/utils/otpSessionStorage';
+import { warn } from 'console';
 
 export const loginUser = async ( data: { email: string; password: string } ) => {
     const response = await authLogin( {
@@ -10,6 +11,10 @@ export const loginUser = async ( data: { email: string; password: string } ) => 
             password: data.password,
         },
     } );
+
+    if ( response.error ) {
+        throw response.error;
+    }
 
     if ( response.data && 'accessToken' in response.data ) {
         const accessToken = response.data.accessToken as string;
@@ -31,16 +36,48 @@ export const signupUser = async ( data: { firstName: string; lastName: string; e
             password: data.password,
         },
     } );
-    if( response.data && 'data' in response.data ) {
-        const { data } = response.data
-        otpSessionStorage.setOtpSessionData( data.sessionId, data.email );
+
+    if ( response.error ) {
+        throw response.error;
     }
+
+    if ( response.data && 'data' in response.data ) {
+        const { data: responseData } = response.data;
+        otpSessionStorage.setOtpSessionData( responseData.sessionId, responseData.email );
+    }
+
     return response.data;
 };
-
-
 
 export const logoutUser = () => {
     tokenStorage.clearTokens();
     apiClient.clearToken();
 };
+
+export const verifyOTP = async ( data: { otp: string } ) => {
+    const response = await authVerifyOtp( {
+        body: {
+            sessionId: otpSessionStorage.getOtpSessionId() || "",
+            email: otpSessionStorage.getOtpSessionEmail() || "",
+            otp: data.otp
+        }
+    } )
+    if( response.data && 'message' in response.data ) {
+        otpSessionStorage.clearSessionData()
+    }
+    return response.data;
+}
+
+export const resetOTP = async () => {
+    const response = await authResendOtp( {
+        body: {
+            email : otpSessionStorage.getOtpSessionEmail() || ""
+        }
+    } )
+
+    if( response.data && 'data' in response.data ) {
+        const { data } = response.data;
+        otpSessionStorage.setOtpSessionData( data.sessionId, data.email );
+    }
+    return response.data;
+}

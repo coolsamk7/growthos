@@ -5,10 +5,11 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Logo } from '@/components/common/Logo';
 import { loginUser } from '@/services/auth.service';
-import { toast } from 'sonner';
+import { useToast } from '@/hooks/use-toast';
 
 export function LoginPage() {
     const navigate = useNavigate();
+    const { toast } = useToast();
     const [ showPassword, setShowPassword ] = useState( false );
     const [ isLoading, setIsLoading ] = useState( false );
     const [ formData, setFormData ] = useState( {
@@ -25,11 +26,30 @@ export function LoginPage() {
                 email: formData.email,
                 password: formData.password,
             } );
-
-            toast.success( 'Login successful!' );
+            toast( {
+                title: 'Success',
+                description: 'Login successful!',
+            } );
             navigate( '/app/dashboard' );
         } catch ( error: any ) {
-            toast.error( error?.message || 'Login failed. Please check your credentials.' );
+            console.error( 'Login error caught:', error );
+
+            // NestJS error format: { message: string, statusCode: number, error: string }
+            let errorMessage = 'Login failed. Please check your credentials.';
+
+            if ( typeof error === 'string' ) {
+                errorMessage = error;
+            } else if ( error?.message ) {
+                errorMessage = error.message;
+            } else if ( typeof error === 'object' && error !== null ) {
+                errorMessage = JSON.stringify( error );
+            }
+
+            toast( {
+                variant: 'destructive',
+                title: 'Error',
+                description: errorMessage,
+            } );
         } finally {
             setIsLoading( false );
         }
