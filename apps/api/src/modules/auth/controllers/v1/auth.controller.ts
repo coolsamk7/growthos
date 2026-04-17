@@ -2,7 +2,7 @@ import { Controller, Post, Body, HttpStatus, HttpCode, BadRequestException, Inte
 import bcrypt from 'bcrypt';
 import { ApiBearerAuth, ApiBody, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { Public } from 'src/guards/public.guard';
-import { SignupRequest, SignupResponse, VerifyOtpRequest, VerifyOtpResponse, ForgotPasswordRequest, ForgotPasswordResponse, ForgotPasswordResetRequest, ForgotPasswordResetResponse, ResetPasswordRequest, ResetPasswordResponse, LoginRequest, LoginResponse, RefreshTokenRequest, RefreshTokenResponse, RevokeTokenRequest, RevokeTokenResponse } from '../../dtos'
+import { SignupRequest, SignupResponse, VerifyOtpRequest, VerifyOtpResponse, ResendOtpRequest, ResendOtpResponse, ForgotPasswordRequest, ForgotPasswordResponse, ForgotPasswordResetRequest, ForgotPasswordResetResponse, ResetPasswordRequest, ResetPasswordResponse, LoginRequest, LoginResponse, RefreshTokenRequest, RefreshTokenResponse, RevokeTokenRequest, RevokeTokenResponse } from '../../dtos'
 import type { Static } from 'typebox';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource, IsNull } from 'typeorm';
@@ -136,9 +136,27 @@ export class AuthController {
     @ApiBody( { schema: SignupRequest } )
     @ApiOkResponse( { schema: SignupResponse } )
     async signup( @Body() signupDto: Static<typeof SignupRequest> ) {
-        const user = await this.dataSource.manager.findOne( UserEntity, { where: { email: signupDto.email } } );
-        if ( user ) {
-            throw new BadRequestException( { message: `User with email ${signupDto.email} already exists` } );
+        const existingUser = await this.dataSource.manager.findOne( UserEntity, { where: { email: signupDto.email } } );
+        
+        if ( existingUser ) {
+            // If user exists and is already verified, throw error
+            if ( existingUser.status === 'ACTIVE' ) {
+                throw new BadRequestException( { message: `User with email ${signupDto.email} already exists` } );
+            }
+            
+            // User exists but is not verified - update their info and resend OTP
+            existingUser.password = await bcrypt.hash( signupDto.password, 12 );
+            existingUser.firstName = signupDto.firstName;
+            existingUser.lastName = signupDto.lastName;
+            await this.dataSource.manager.save( existingUser );
+            
+            // Generate and store new OTP
+            const otp = this.otpService.generateOtp();
+            await this.otpService.storeOtp( existingUser.id, otp );
+            
+            this.mailQueue.addToMailQueue( 'sendOTP', { code: otp, email: existingUser.email, userId: existingUser.id } );
+            
+            return { message: 'Verification email resent. Please verify your email with the OTP sent.', userId: existingUser.id };
         }
 
         const newUser = this.dataSource.manager.create( UserEntity, {
@@ -182,6 +200,29 @@ export class AuthController {
         await this.dataSource.manager.save( user );
 
         return { message: 'Email verified successfully. Welcome email sent!' };
+    }
+
+    @Public()
+    @Post( 'resend-otp' )
+    @ApiBody( { schema: ResendOtpRequest } )
+    @ApiOkResponse( { schema: ResendOtpResponse } )
+    async resendOtp( @Body() resendOtpDto: Static<typeof ResendOtpRequest> ) {
+        const user = await this.dataSource.manager.findOne( UserEntity, { where: { id: resendOtpDto.userId } } );
+        if ( !user ) {
+            throw new BadRequestException( { message: 'User not found' } );
+        }
+
+        if ( user.status === 'ACTIVE' ) {
+            throw new BadRequestException( { message: 'User is already verified' } );
+        }
+
+        // Generate and store new OTP
+        const otp = this.otpService.generateOtp();
+        await this.otpService.storeOtp( user.id, otp );
+
+        this.mailQueue.addToMailQueue( 'sendOTP', { code: otp, email: user.email, userId: user.id } );
+
+        return { message: 'OTP resent successfully. Please check your email.' };
     }
 
     @Public()
