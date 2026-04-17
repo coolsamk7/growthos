@@ -249,7 +249,10 @@ export class AuthController {
 
         this.mailQueue.addToMailQueue( 'sendOTP', { code: otp, email: user.email, userId: user.id } );
 
-        return { message: 'OTP resent successfully. Please check your email.' };
+        return { message: 'OTP resent successfully. Please check your email.', data: {
+            email: user.email,
+            sessionId
+        } };
     }
 
     @Public()

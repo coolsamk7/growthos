@@ -1,43 +1,63 @@
-import { createBrowserRouter } from "react-router-dom";
-import { AppLayout } from "@/components/layout/AppLayout";
-import { HomePage } from "@/pages/home/HomePage";
-import { DashboardPage } from "@/pages/dashboard/DashboardPage";
-import { LoginPage } from '@/pages/auth/LoginPage'
-import { LearningPathPage } from "@/pages/learning-path/LearningPathPage";
-import { SignupPage } from "@/pages/auth/SignupPage";
+import { createBrowserRouter } from 'react-router-dom';
+import { AppLayout } from '@/components/layout/AppLayout';
+import { HomePage } from '@/pages/home/HomePage';
+import { DashboardPage } from '@/pages/dashboard/DashboardPage';
+import { LoginPage } from '@/pages/auth/LoginPage';
+import { LearningPathPage } from '@/pages/learning-path/LearningPathPage';
+import { SignupPage } from '@/pages/auth/SignupPage';
+import ProtectedRoute from './ProtectedRoute';
+import { ProfilePage } from '@/pages/profile/ProfilePage';
+import { ForgotPasswordPage } from '@/pages/auth/ForgotPassword';
+import { OTPPage } from '@/pages/auth/OTPPage';
 
 export const router = createBrowserRouter( [
     {
-        path: "/",
+        path: '/',
         element: <HomePage />,
     },
     {
-        path: "/signIn",
-        element: <LoginPage />
+        path: '/signIn',
+        element: <LoginPage />,
     },
     {
-        path: "/signup",
-        element: <SignupPage />
+        path: '/signup',
+        element: <SignupPage />,
     },
     {
-        path: "/app",
-        element: <AppLayout />,
+        path: '/forgot-password',
+        element: <ForgotPasswordPage />,
+    },
+    {
+        path: '/otp',
+        element: <OTPPage />,
+    },
+    {
+        path: '/app',
+        element: (
+            <ProtectedRoute>
+                <AppLayout />
+            </ProtectedRoute>
+        ),
         children: [
             {
                 index: true,
                 element: <DashboardPage />,
             },
             {
-                path: "dashboard",
+                path: 'dashboard',
                 element: <DashboardPage />,
             },
             {
-                path: "learning-paths",
+                path: 'learning-paths',
                 element: <LearningPathPage />,
             },
             {
-                path: "learning-paths/:id",
+                path: 'learning-paths/:id',
                 element: <LearningPathPage />,
+            },
+            {
+                path: 'profile',
+                element: <ProfilePage />,
             },
         ],
     },

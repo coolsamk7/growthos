@@ -1,19 +1,21 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { Eye, EyeOff, Mail, Lock, User } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Logo } from "@/components/common/Logo";
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Eye, EyeOff, Mail, Lock, User } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Logo } from '@/components/common/Logo';
+import { signupUser } from '@/services/auth.service';
+import { toast } from 'sonner';
 
 export function SignupPage() {
     const navigate = useNavigate();
     const [ showPassword, setShowPassword ] = useState( false );
     const [ isLoading, setIsLoading ] = useState( false );
     const [ formData, setFormData ] = useState( {
-        firstName: "",
-        lastName: "",
-        email: "",
-        password: "",
+        firstName: '',
+        lastName: '',
+        email: '',
+        password: '',
     } );
 
     const handleSubmit = async ( e: React.FormEvent ) => {
@@ -21,10 +23,22 @@ export function SignupPage() {
         setIsLoading( true );
 
         // Simulate API call
-        await new Promise( ( resolve ) => setTimeout( resolve, 1000 ) );
+        try {
+            await signupUser( {
+                email: formData.email,
+                password: formData.password,
+                firstName: formData.firstName,
+                lastName: formData.lastName,
+            } );
+            toast.success( 'Successfully SignUp' );
+            navigate( '/otp' );
+        } catch ( error: any ) {
+            toast.error( error?.message || 'Signup failed. Please try again.' );
+        } finally {
+            setIsLoading( false );
+        }
 
         setIsLoading( false );
-        navigate( "/app/dashboard" );
     };
 
     const handleChange = ( e: React.ChangeEvent<HTMLInputElement> ) => {
@@ -73,12 +87,10 @@ export function SignupPage() {
                             </div>
                         </div>
                     </div>
-                    <h2 className="text-2xl font-bold text-foreground">
-                        Start Your Learning Journey
-                    </h2>
+                    <h2 className="text-2xl font-bold text-foreground">Start Your Learning Journey</h2>
                     <p className="mt-4 text-muted-foreground">
-                        Join thousands of learners who are achieving their goals with
-                        personalized study plans and intelligent progress tracking.
+                        Join thousands of learners who are achieving their goals with personalized study plans and
+                        intelligent progress tracking.
                     </p>
                     <div className="mt-8 flex items-center justify-center gap-4">
                         <div className="flex -space-x-2">
@@ -90,8 +102,7 @@ export function SignupPage() {
                             ) )}
                         </div>
                         <p className="text-sm text-muted-foreground">
-                            <span className="font-semibold text-foreground">2,500+</span>{" "}
-                            learners already joined
+                            <span className="font-semibold text-foreground">2,500+</span> learners already joined
                         </p>
                     </div>
                 </div>
@@ -104,9 +115,7 @@ export function SignupPage() {
                         <Logo />
                     </div>
 
-                    <h1 className="text-2xl font-bold tracking-tight text-foreground">
-                        Create your account
-                    </h1>
+                    <h1 className="text-2xl font-bold tracking-tight text-foreground">Create your account</h1>
                     <p className="mt-2 text-sm text-muted-foreground">
                         Get started with your personalized learning experience
                     </p>
@@ -114,10 +123,7 @@ export function SignupPage() {
                     <form onSubmit={handleSubmit} className="mt-8 space-y-5">
                         <div className="grid grid-cols-2 gap-4">
                             <div className="space-y-2">
-                                <label
-                                    htmlFor="firstName"
-                                    className="block text-sm font-medium text-foreground"
-                                >
+                                <label htmlFor="firstName" className="block text-sm font-medium text-foreground">
                                     First Name
                                 </label>
                                 <div className="relative">
@@ -137,10 +143,7 @@ export function SignupPage() {
                             </div>
 
                             <div className="space-y-2">
-                                <label
-                                    htmlFor="lastName"
-                                    className="block text-sm font-medium text-foreground"
-                                >
+                                <label htmlFor="lastName" className="block text-sm font-medium text-foreground">
                                     Last Name
                                 </label>
                                 <div className="relative">
@@ -161,10 +164,7 @@ export function SignupPage() {
                         </div>
 
                         <div className="space-y-2">
-                            <label
-                                htmlFor="email"
-                                className="block text-sm font-medium text-foreground"
-                            >
+                            <label htmlFor="email" className="block text-sm font-medium text-foreground">
                                 Email
                             </label>
                             <div className="relative">
@@ -184,10 +184,7 @@ export function SignupPage() {
                         </div>
 
                         <div className="space-y-2">
-                            <label
-                                htmlFor="password"
-                                className="block text-sm font-medium text-foreground"
-                            >
+                            <label htmlFor="password" className="block text-sm font-medium text-foreground">
                                 Password
                             </label>
                             <div className="relative">
@@ -195,7 +192,7 @@ export function SignupPage() {
                                 <Input
                                     id="password"
                                     name="password"
-                                    type={showPassword ? "text" : "password"}
+                                    type={showPassword ? 'text' : 'password'}
                                     autoComplete="new-password"
                                     required
                                     placeholder="Create a strong password"
@@ -208,28 +205,22 @@ export function SignupPage() {
                                     onClick={() => setShowPassword( !showPassword )}
                                     className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
                                 >
-                                    {showPassword ? (
-                                        <EyeOff className="size-4" />
-                                    ) : (
-                                        <Eye className="size-4" />
-                                    )}
+                                    {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
                                 </button>
                             </div>
-                            <p className="text-xs text-muted-foreground">
-                                Must be at least 8 characters
-                            </p>
+                            <p className="text-xs text-muted-foreground">Must be at least 8 characters</p>
                         </div>
 
                         <Button type="submit" className="w-full" size="lg" disabled={isLoading}>
-                            {isLoading ? "Creating account..." : "Create account"}
+                            {isLoading ? 'Creating account...' : 'Create account'}
                         </Button>
 
                         <p className="text-center text-xs text-muted-foreground">
-                            By creating an account, you agree to our{" "}
+                            By creating an account, you agree to our{' '}
                             <Link to="/terms" className="text-primary hover:underline">
                                 Terms of Service
-                            </Link>{" "}
-                            and{" "}
+                            </Link>{' '}
+                            and{' '}
                             <Link to="/privacy" className="text-primary hover:underline">
                                 Privacy Policy
                             </Link>
@@ -242,9 +233,7 @@ export function SignupPage() {
                                 <div className="w-full border-t border-border" />
                             </div>
                             <div className="relative flex justify-center text-sm">
-                                <span className="bg-background px-2 text-muted-foreground">
-                                    Or sign up with
-                                </span>
+                                <span className="bg-background px-2 text-muted-foreground">Or sign up with</span>
                             </div>
                         </div>
 
@@ -280,11 +269,8 @@ export function SignupPage() {
                     </div>
 
                     <p className="mt-8 text-center text-sm text-muted-foreground">
-                        Already have an account?{" "}
-                        <Link
-                            to="/login"
-                            className="font-medium text-primary hover:text-primary/80"
-                        >
+                        Already have an account?{' '}
+                        <Link to="/login" className="font-medium text-primary hover:text-primary/80">
                             Sign in
                         </Link>
                     </p>

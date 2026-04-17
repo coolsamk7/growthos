@@ -5,5 +5,10 @@ export const ResendOtpRequest = Type.Object( {
 } )
 
 export const ResendOtpResponse = Type.Object( {
-    message: Type.String( { example: 'OTP resent successfully' } )
+    message: Type.String( { example: 'OTP resent successfully' } ),
+    data: Type.Object( {
+        email: Type.String( { format: 'email' } ),
+        sessionId: Type.String(  )
+    } )
+
 } )

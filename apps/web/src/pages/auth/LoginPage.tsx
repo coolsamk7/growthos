@@ -1,36 +1,35 @@
-
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { Eye, EyeOff, Mail, Lock } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Logo } from "@/components/common/Logo";
-import { loginUser } from "@/services/auth.service";
-import { toast } from "sonner";
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Eye, EyeOff, Mail, Lock } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Logo } from '@/components/common/Logo';
+import { loginUser } from '@/services/auth.service';
+import { toast } from 'sonner';
 
 export function LoginPage() {
     const navigate = useNavigate();
     const [ showPassword, setShowPassword ] = useState( false );
     const [ isLoading, setIsLoading ] = useState( false );
     const [ formData, setFormData ] = useState( {
-        email: "",
-        password: "",
+        email: '',
+        password: '',
     } );
 
     const handleSubmit = async ( e: React.FormEvent ) => {
         e.preventDefault();
         setIsLoading( true );
-        
+
         try {
-            const response = await loginUser( {
+            await loginUser( {
                 email: formData.email,
                 password: formData.password,
             } );
-            
-            toast.success( "Login successful!" );
-            navigate( "/app/dashboard" );
+
+            toast.success( 'Login successful!' );
+            navigate( '/app/dashboard' );
         } catch ( error: any ) {
-            toast.error( error?.message || "Login failed. Please check your credentials." );
+            toast.error( error?.message || 'Login failed. Please check your credentials.' );
         } finally {
             setIsLoading( false );
         }
@@ -52,19 +51,12 @@ export function LoginPage() {
                         <Logo />
                     </div>
 
-                    <h1 className="text-2xl font-bold tracking-tight text-foreground">
-                        Welcome back
-                    </h1>
-                    <p className="mt-2 text-sm text-muted-foreground">
-                        Enter your credentials to access your account
-                    </p>
+                    <h1 className="text-2xl font-bold tracking-tight text-foreground">Welcome back</h1>
+                    <p className="mt-2 text-sm text-muted-foreground">Enter your credentials to access your account</p>
 
                     <form onSubmit={handleSubmit} className="mt-8 space-y-5">
                         <div className="space-y-2">
-                            <label
-                                htmlFor="email"
-                                className="block text-sm font-medium text-foreground"
-                            >
+                            <label htmlFor="email" className="block text-sm font-medium text-foreground">
                                 Email
                             </label>
                             <div className="relative">
@@ -85,10 +77,7 @@ export function LoginPage() {
 
                         <div className="space-y-2">
                             <div className="flex items-center justify-between">
-                                <label
-                                    htmlFor="password"
-                                    className="block text-sm font-medium text-foreground"
-                                >
+                                <label htmlFor="password" className="block text-sm font-medium text-foreground">
                                     Password
                                 </label>
                                 <Link
@@ -103,7 +92,7 @@ export function LoginPage() {
                                 <Input
                                     id="password"
                                     name="password"
-                                    type={showPassword ? "text" : "password"}
+                                    type={showPassword ? 'text' : 'password'}
                                     autoComplete="current-password"
                                     required
                                     placeholder="Enter your password"
@@ -116,17 +105,13 @@ export function LoginPage() {
                                     onClick={() => setShowPassword( !showPassword )}
                                     className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
                                 >
-                                    {showPassword ? (
-                                        <EyeOff className="size-4" />
-                                    ) : (
-                                        <Eye className="size-4" />
-                                    )}
+                                    {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
                                 </button>
                             </div>
                         </div>
 
                         <Button type="submit" className="w-full" size="lg" disabled={isLoading}>
-                            {isLoading ? "Signing in..." : "Sign in"}
+                            {isLoading ? 'Signing in...' : 'Sign in'}
                         </Button>
                     </form>
 
@@ -136,9 +121,7 @@ export function LoginPage() {
                                 <div className="w-full border-t border-border" />
                             </div>
                             <div className="relative flex justify-center text-sm">
-                                <span className="bg-background px-2 text-muted-foreground">
-                                    Or continue with
-                                </span>
+                                <span className="bg-background px-2 text-muted-foreground">Or continue with</span>
                             </div>
                         </div>
 
@@ -174,11 +157,8 @@ export function LoginPage() {
                     </div>
 
                     <p className="mt-8 text-center text-sm text-muted-foreground">
-                        Don&apos;t have an account?{" "}
-                        <Link
-                            to="/signup"
-                            className="font-medium text-primary hover:text-primary/80"
-                        >
+                        Don&apos;t have an account?{' '}
+                        <Link to="/signup" className="font-medium text-primary hover:text-primary/80">
                             Sign up
                         </Link>
                     </p>
@@ -213,21 +193,15 @@ export function LoginPage() {
                                     stroke="currentColor"
                                     strokeWidth={2}
                                 >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        d="m4.5 12.75 6 6 9-13.5"
-                                    />
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
                                 </svg>
                             </div>
                         </div>
                     </div>
-                    <h2 className="text-2xl font-bold text-foreground">
-                        Accelerate Your Learning
-                    </h2>
+                    <h2 className="text-2xl font-bold text-foreground">Accelerate Your Learning</h2>
                     <p className="mt-4 text-muted-foreground">
-                        Track your progress, build consistent habits, and achieve your
-                        learning goals with AI-powered insights.
+                        Track your progress, build consistent habits, and achieve your learning goals with AI-powered
+                        insights.
                     </p>
                 </div>
             </div>
