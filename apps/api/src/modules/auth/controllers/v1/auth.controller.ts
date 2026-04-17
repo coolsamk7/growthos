@@ -12,6 +12,7 @@ import { MailQueueProducerService } from 'src/modules/queue/mail-queue-producer.
 import { AuthenticatedUser } from 'src/decorators';
 import { JwtService } from '@nestjs/jwt';
 import { AuthGuard } from '@nestjs/passport';
+import { UserStatus } from '@growthos/nestjs-shared';
 
 @ApiTags( 'Auth' )
 @Controller( { path: 'auth', version: '1' } )
@@ -41,7 +42,10 @@ export class AuthController {
         }
 
         if ( user.status !== 'ACTIVE' ) {
-            throw new UnauthorizedException( { message: 'Account is not active. Please verify your email.' } );
+            if ( user.status === 'PENDING' ) {
+                throw new UnauthorizedException( { message: 'Please verify your email first. Check your inbox for the OTP.' } );
+            }
+            throw new UnauthorizedException( { message: 'Your account has been deactivated. Please contact support.' } );
         }
 
         const tokenPair = await this.tokenService.generateTokenPair( {
@@ -140,11 +144,16 @@ export class AuthController {
         
         if ( existingUser ) {
             // If user exists and is already verified, throw error
-            if ( existingUser.status === 'ACTIVE' ) {
+            if ( existingUser.status === UserStatus.ACTIVE ) {
                 throw new BadRequestException( { message: `User with email ${signupDto.email} already exists` } );
             }
             
-            // User exists but is not verified - update their info and resend OTP
+            // If user was deactivated by admin, don't allow re-signup
+            if ( existingUser.status === UserStatus.INACTIVE ) {
+                throw new BadRequestException( { message: 'Your account has been deactivated. Please contact support.' } );
+            }
+            
+            // User exists but is PENDING (not verified) - update their info and resend OTP
             existingUser.password = await bcrypt.hash( signupDto.password, 12 );
             existingUser.firstName = signupDto.firstName;
             existingUser.lastName = signupDto.lastName;
@@ -196,7 +205,7 @@ export class AuthController {
         }
 
         // Update user status to active
-        user.status = 'ACTIVE' as any;
+        user.status = UserStatus.ACTIVE;
         await this.dataSource.manager.save( user );
 
         return { message: 'Email verified successfully. Welcome email sent!' };
@@ -212,8 +221,12 @@ export class AuthController {
             throw new BadRequestException( { message: 'User not found' } );
         }
 
-        if ( user.status === 'ACTIVE' ) {
+        if ( user.status === UserStatus.ACTIVE ) {
             throw new BadRequestException( { message: 'User is already verified' } );
+        }
+
+        if ( user.status === UserStatus.INACTIVE ) {
+            throw new BadRequestException( { message: 'Your account has been deactivated. Please contact support.' } );
         }
 
         // Generate and store new OTP

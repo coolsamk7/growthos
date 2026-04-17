@@ -21,7 +21,7 @@ export class UserEntity extends IdTimestamppedEntity {
     @Column( {
         type: 'enum',
         enum: UserStatus,
-        default: UserStatus.INACTIVE,
+        default: UserStatus.PENDING,
     } )
     @Index()
     status: UserStatus
