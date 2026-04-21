@@ -4,9 +4,13 @@ import { Mail, ArrowLeft, CheckCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Logo } from '@/components/common/Logo';
+import { forgotPassword, logoutUser } from '@/services/auth.service';
+import { otpSessionStorage } from '@/utils/otpSessionStorage';
+import { useToast } from '@/hooks/use-toast';
 
 export function ForgotPasswordPage() {
     const navigate = useNavigate();
+    const { toast } = useToast();
     const [ isLoading, setIsLoading ] = useState( false );
     const [ isSubmitted, setIsSubmitted ] = useState( false );
     const [ email, setEmail ] = useState( '' );
@@ -15,17 +19,53 @@ export function ForgotPasswordPage() {
         e.preventDefault();
         setIsLoading( true );
 
-        // Simulate API call
-        await new Promise( ( resolve ) => setTimeout( resolve, 1000 ) );
-
-        setIsLoading( false );
-        setIsSubmitted( true );
+        try {
+            // Clear any existing session data and tokens
+            logoutUser();
+            otpSessionStorage.clearSessionData();
+            
+            const response = await forgotPassword( { email } );
+            
+            // Check if response contains valid sessionId and email
+            if ( response && 'data' in response ) {
+                const sessionId = otpSessionStorage.getOtpSessionId();
+                const storedEmail = otpSessionStorage.getOtpSessionEmail();
+                
+                if ( sessionId && storedEmail ) {
+                    // Valid response, navigate to restore password page
+                    navigate( '/restore-password' );
+                } else {
+                    toast( {
+                        title: 'Error',
+                        description: 'Invalid response from server',
+                    } );
+                }
+            } else {
+                toast( {
+                    title: 'Error',
+                    description: 'Failed to send verification code. Please try again.',
+                } );
+            }
+        } catch ( error: any ) {
+            const errorMessage = error?.data?.message;
+            toast( {
+                title: 'Error',
+                description: errorMessage || 'Failed to send verification code. Please try again.',
+            } );
+        } finally {
+            setIsLoading( false );
+        }
     };
 
     const handleResend = async () => {
         setIsLoading( true );
-        await new Promise( ( resolve ) => setTimeout( resolve, 1000 ) );
-        setIsLoading( false );
+        try {
+            await forgotPassword( { email } );
+        } catch ( error ) {
+            console.error( 'Error resending reset link:', error );
+        } finally {
+            setIsLoading( false );
+        }
     };
 
     return (
@@ -49,7 +89,7 @@ export function ForgotPasswordPage() {
 
                             <h1 className="text-2xl font-bold tracking-tight text-foreground">Forgot your password?</h1>
                             <p className="mt-2 text-sm text-muted-foreground">
-                                No worries, we&apos;ll send you reset instructions.
+                                No worries, we&apos;ll send you a verification code.
                             </p>
 
                             <form onSubmit={handleSubmit} className="mt-8 space-y-5">
@@ -74,7 +114,7 @@ export function ForgotPasswordPage() {
                                 </div>
 
                                 <Button type="submit" className="w-full" size="lg" disabled={isLoading}>
-                                    {isLoading ? 'Sending...' : 'Send reset link'}
+                                    {isLoading ? 'Sending...' : 'Send verification code'}
                                 </Button>
                             </form>
                         </>
@@ -163,7 +203,7 @@ export function ForgotPasswordPage() {
                     </div>
                     <h2 className="text-2xl font-bold text-foreground">Reset Your Password</h2>
                     <p className="mt-4 text-muted-foreground">
-                        Enter your email address and we&apos;ll send you a link to reset your password and get back to
+                        Enter your email address and we&apos;ll send you a verification code to reset your password and get back to
                         learning.
                     </p>
                     <div className="mt-8 space-y-3 text-left">
@@ -177,7 +217,7 @@ export function ForgotPasswordPage() {
                             <div className="flex size-6 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-medium text-primary">
                                 2
                             </div>
-                            <p className="text-sm text-muted-foreground">Check your inbox for the reset link</p>
+                            <p className="text-sm text-muted-foreground">Enter the verification code from your email</p>
                         </div>
                         <div className="flex items-start gap-3 rounded-lg bg-background/50 p-3">
                             <div className="flex size-6 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-medium text-primary">

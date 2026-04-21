@@ -9,6 +9,7 @@ import ProtectedRoute from './ProtectedRoute';
 import { ProfilePage } from '@/pages/profile/ProfilePage';
 import { ForgotPasswordPage } from '@/pages/auth/ForgotPassword';
 import { OTPPage } from '@/pages/auth/OTPPage';
+import { RestorePasswordPage } from '@/pages/auth/RestorePasswordPage';
 
 export const router = createBrowserRouter( [
     {
@@ -30,6 +31,10 @@ export const router = createBrowserRouter( [
     {
         path: '/otp',
         element: <OTPPage />,
+    },
+    {
+        path: '/restore-password',
+        element: <RestorePasswordPage />
     },
     {
         path: '/app',

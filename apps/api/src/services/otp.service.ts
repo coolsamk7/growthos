@@ -2,7 +2,6 @@ import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import Redis from 'ioredis';
 import bcrypt from 'bcrypt';
-import { session } from 'passport';
 
 @Injectable()
 export class OtpService {
@@ -63,7 +62,7 @@ export class OtpService {
     }
 
     async storePasswordResetOtp( sessionId: string, otp: string ): Promise<void> {
-        const key = `password-reset:${ session }`;
+        const key = `password-reset:${ sessionId }`;
         const hashedOtp = await bcrypt.hash( otp, this.SALT_ROUNDS );
         await this.redis.setex( key, this.OTP_EXPIRY, hashedOtp );
         this.logger.log( `Password reset OTP stored for session ${sessionId}` );

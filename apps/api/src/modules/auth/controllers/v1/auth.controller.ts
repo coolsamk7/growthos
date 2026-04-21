@@ -263,8 +263,7 @@ export class AuthController {
     async forgotPassword( @Body() forgotPasswordDto: Static<typeof ForgotPasswordRequest> ) {
         const user = await this.dataSource.manager.findOne( UserEntity, { where: { email: forgotPasswordDto.email } } );
         if ( !user ) {
-            // Return success even if user not found to prevent email enumeration
-            return { message: 'If the email exists, a password reset OTP has been sent.' };
+            throw new BadRequestException( { message: 'No account found with this email address' } );
         }
 
         // Generate and store OTP for password reset
@@ -279,7 +278,7 @@ export class AuthController {
             userId: user.id 
         } );
 
-        return { message: 'If the email exists, a password reset OTP has been sent.', data: { sessionId: sessionId, email: user.email } };
+        return { message: 'Verification code sent successfully', data: { sessionId: sessionId, email: user.email } };
     }
 
     @Public()
