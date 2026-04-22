@@ -2,6 +2,7 @@ import 'reflect-metadata'
 
 export * from './id-timestampped.entity.js'
 export * from './user.entity.js'
+export * from './user-profile.entity.js'
 export * from './refresh-token.entity.js'
 export * from './master-learning-path.entity.js'
 export * from './master-topic.entity.js'

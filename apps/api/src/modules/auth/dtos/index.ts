@@ -1,6 +1,7 @@
 export * from './signup.dto';
 export * from './response.dto';
 export * from './verify-otp.dto';
+export * from './resend-otp.dto';
 export * from './forgot-password.dto';
 export * from './forgot-password-reset.dto';
 export * from './reset-password.dto';

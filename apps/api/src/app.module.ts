@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { databaseConfig, jwtConfig, loggerConfig, otpConfig, queueConfig, redisConfig } from './config';
 import { LoggerModule } from 'nestjs-pino';
 import { AuthModule } from './modules/auth';
+import { UserProfileModule } from './modules/user-profile';
 import { LearningPathModule } from './modules/learning-path';
 import { TagsModule } from './modules/tags';
 import { MasterProblemsModule } from './modules/master-problems';
@@ -79,6 +80,7 @@ import { AppAuthGuard } from './guards/app.guard';
             adapter: BullMQAdapter,
         } ),
         AuthModule,
+        UserProfileModule,
         LearningPathModule,
         TagsModule,
         MasterProblemsModule,

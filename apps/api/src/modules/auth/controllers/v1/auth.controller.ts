@@ -2,7 +2,7 @@ import { Controller, Post, Body, HttpStatus, HttpCode, BadRequestException, Inte
 import bcrypt from 'bcrypt';
 import { ApiBearerAuth, ApiBody, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { Public } from 'src/guards/public.guard';
-import { SignupRequest, SignupResponse, VerifyOtpRequest, VerifyOtpResponse, ForgotPasswordRequest, ForgotPasswordResponse, ForgotPasswordResetRequest, ForgotPasswordResetResponse, ResetPasswordRequest, ResetPasswordResponse, LoginRequest, LoginResponse, RefreshTokenRequest, RefreshTokenResponse, RevokeTokenRequest, RevokeTokenResponse } from '../../dtos'
+import { SignupRequest, SignupResponse, VerifyOtpRequest, VerifyOtpResponse, ResendOtpRequest, ResendOtpResponse, ForgotPasswordRequest, ForgotPasswordResponse, ForgotPasswordResetRequest, ForgotPasswordResetResponse, ResetPasswordRequest, ResetPasswordResponse, LoginRequest, LoginResponse, RefreshTokenRequest, RefreshTokenResponse, RevokeTokenRequest, RevokeTokenResponse } from '../../dtos'
 import type { Static } from 'typebox';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource, IsNull } from 'typeorm';
@@ -12,6 +12,9 @@ import { MailQueueProducerService } from 'src/modules/queue/mail-queue-producer.
 import { AuthenticatedUser } from 'src/decorators';
 import { JwtService } from '@nestjs/jwt';
 import { AuthGuard } from '@nestjs/passport';
+import { UserStatus } from '@growthos/nestjs-shared';
+import { ulid } from 'ulid'
+import { session } from 'passport';
 
 @ApiTags( 'Auth' )
 @Controller( { path: 'auth', version: '1' } )
@@ -41,7 +44,10 @@ export class AuthController {
         }
 
         if ( user.status !== 'ACTIVE' ) {
-            throw new UnauthorizedException( { message: 'Account is not active. Please verify your email.' } );
+            if ( user.status === 'PENDING' ) {
+                throw new UnauthorizedException( { message: 'Please verify your email first. Check your inbox for the OTP.' } );
+            }
+            throw new UnauthorizedException( { message: 'Your account has been deactivated. Please contact support.' } );
         }
 
         const tokenPair = await this.tokenService.generateTokenPair( {
@@ -136,9 +142,39 @@ export class AuthController {
     @ApiBody( { schema: SignupRequest } )
     @ApiOkResponse( { schema: SignupResponse } )
     async signup( @Body() signupDto: Static<typeof SignupRequest> ) {
-        const user = await this.dataSource.manager.findOne( UserEntity, { where: { email: signupDto.email } } );
-        if ( user ) {
-            throw new BadRequestException( { message: `User with email ${signupDto.email} already exists` } );
+        const existingUser = await this.dataSource.manager.findOne( UserEntity, { where: { email: signupDto.email } } );
+        const sessionId = ulid();
+        if ( existingUser ) {
+            // If user exists and is already verified, throw error
+            if ( existingUser.status === UserStatus.ACTIVE ) {
+                throw new BadRequestException( { message: `User with email ${signupDto.email} already exists` } );
+            }
+            
+            // If user was deactivated by admin, don't allow re-signup
+            if ( existingUser.status === UserStatus.INACTIVE ) {
+                throw new BadRequestException( { message: 'Your account has been deactivated. Please contact support.' } );
+            }
+            
+            // User exists but is PENDING (not verified) - update their info and resend OTP
+            existingUser.password = await bcrypt.hash( signupDto.password, 12 );
+            existingUser.firstName = signupDto.firstName;
+            existingUser.lastName = signupDto.lastName;
+            await this.dataSource.manager.save( existingUser );
+            
+            // Generate and store new OTP
+            const otp = this.otpService.generateOtp();
+            await this.otpService.storeOtp( sessionId, otp );
+
+            
+            this.mailQueue.addToMailQueue( 'sendOTP', { code: otp, email: existingUser.email, userId: existingUser.id } );
+            
+            return {
+                message: 'Verification email resent. Please verify your email with the OTP sent.',
+                data: {
+                    email: existingUser.email,
+                    sessionId
+                }
+            };
         }
 
         const newUser = this.dataSource.manager.create( UserEntity, {
@@ -155,11 +191,16 @@ export class AuthController {
 
         // Generate and store OTP in Redis
         const otp = this.otpService.generateOtp();
-        await this.otpService.storeOtp( savedUser.id, otp );
-
+        await this.otpService.storeOtp( sessionId, otp );
         this.mailQueue.addToMailQueue( 'sendOTP', { code: otp, email: savedUser.email, userId: savedUser.id } ) 
 
-        return { message: 'User created successfully. Please verify your email with the OTP sent.', userId: savedUser.id };
+        return {
+            message: 'User created successfully. Please verify your email with the OTP sent.',
+            data: {
+                email: savedUser.email,
+                sessionId
+            }
+        };
     }
 
     @Public()
@@ -167,21 +208,52 @@ export class AuthController {
     @ApiBody( { schema: VerifyOtpRequest } )
     @ApiOkResponse( { schema: VerifyOtpResponse } )
     async verifyOtp( @Body() verifyOtpDto: Static<typeof VerifyOtpRequest> ) {
-        const user = await this.dataSource.manager.findOne( UserEntity, { where: { id: verifyOtpDto.userId } } );
+        const user = await this.dataSource.manager.findOne( UserEntity, { where: { email: verifyOtpDto.email } } );
         if ( !user ) {
             throw new BadRequestException( { message: 'User not found' } );
         }
 
-        const isValid = await this.otpService.verifyOtp( verifyOtpDto.userId, verifyOtpDto.otp );
+        const isValid = await this.otpService.verifyOtp( verifyOtpDto.sessionId, verifyOtpDto.otp );
         if ( !isValid ) {
             throw new BadRequestException( { message: 'Invalid or expired OTP' } );
         }
 
         // Update user status to active
-        user.status = 'ACTIVE' as any;
+        user.status = UserStatus.ACTIVE;
         await this.dataSource.manager.save( user );
 
         return { message: 'Email verified successfully. Welcome email sent!' };
+    }
+
+    @Public()
+    @Post( 'resend-otp' )
+    @ApiBody( { schema: ResendOtpRequest } )
+    @ApiOkResponse( { schema: ResendOtpResponse } )
+    async resendOtp( @Body() resendOtpDto: Static<typeof ResendOtpRequest> ) {
+        const user = await this.dataSource.manager.findOne( UserEntity, { where: { id: resendOtpDto.email } } );
+        if ( !user ) {
+            throw new BadRequestException( { message: 'User not found' } );
+        }
+
+        if ( user.status === UserStatus.ACTIVE ) {
+            throw new BadRequestException( { message: 'User is already verified' } );
+        }
+
+        if ( user.status === UserStatus.INACTIVE ) {
+            throw new BadRequestException( { message: 'Your account has been deactivated. Please contact support.' } );
+        }
+
+        // Generate and store new OTP
+        const sessionId = ulid()
+        const otp = this.otpService.generateOtp();
+        await this.otpService.storeOtp( sessionId, otp );
+
+        this.mailQueue.addToMailQueue( 'sendOTP', { code: otp, email: user.email, userId: user.id } );
+
+        return { message: 'OTP resent successfully. Please check your email.', data: {
+            email: user.email,
+            sessionId
+        } };
     }
 
     @Public()
@@ -191,13 +263,13 @@ export class AuthController {
     async forgotPassword( @Body() forgotPasswordDto: Static<typeof ForgotPasswordRequest> ) {
         const user = await this.dataSource.manager.findOne( UserEntity, { where: { email: forgotPasswordDto.email } } );
         if ( !user ) {
-            // Return success even if user not found to prevent email enumeration
-            return { message: 'If the email exists, a password reset OTP has been sent.' };
+            throw new BadRequestException( { message: 'No account found with this email address' } );
         }
 
         // Generate and store OTP for password reset
+        const sessionId = ulid()
         const otp = this.otpService.generateOtp();
-        await this.otpService.storePasswordResetOtp( forgotPasswordDto.email, otp );
+        await this.otpService.storePasswordResetOtp( sessionId, otp );
 
         // Send OTP via email
         this.mailQueue.addToMailQueue( 'sendPasswordResetOTP', { 
@@ -206,7 +278,7 @@ export class AuthController {
             userId: user.id 
         } );
 
-        return { message: 'If the email exists, a password reset OTP has been sent.' };
+        return { message: 'Verification code sent successfully', data: { sessionId: sessionId, email: user.email } };
     }
 
     @Public()
@@ -220,7 +292,7 @@ export class AuthController {
         }
 
         // Verify OTP
-        const isValid = await this.otpService.verifyPasswordResetOtp( forgotPasswordResetDto.email, forgotPasswordResetDto.otp );
+        const isValid = await this.otpService.verifyPasswordResetOtp( forgotPasswordResetDto.sessionId, forgotPasswordResetDto.otp );
         if ( !isValid ) {
             throw new BadRequestException( { message: 'Invalid or expired OTP' } );
         }

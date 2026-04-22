@@ -6,4 +6,8 @@ export const ForgotPasswordRequest = Type.Object( {
 
 export const ForgotPasswordResponse = Type.Object( {
     message: Type.String(),
+    data: Type.Object( {
+        sessionId: Type.String(),
+        email: Type.String()
+    } )
 } );

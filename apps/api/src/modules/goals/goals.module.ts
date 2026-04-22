@@ -4,11 +4,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { GoalEntity } from '@growthos/nestjs-database/entities';
 import { CaslModule } from '@growthos/nestjs-casl';
 
-@Module({
+@Module( {
     imports: [
-        TypeOrmModule.forFeature([GoalEntity]),
+        TypeOrmModule.forFeature( [ GoalEntity ] ),
         CaslModule.forRoot(),
     ],
-    controllers: [GoalsController],
-})
+    controllers: [ GoalsController ],
+} )
 export class GoalsModule {}

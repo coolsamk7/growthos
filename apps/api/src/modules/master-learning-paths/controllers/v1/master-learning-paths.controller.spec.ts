@@ -7,7 +7,7 @@ import { MasterLearningPathEntity } from '@growthos/nestjs-database/entities';
 import { MockAbilitiesGuard } from '../../../../../test-helpers/guards.mock';
 import { AbilitiesGuard } from '@growthos/nestjs-casl';
 
-describe('MasterLearningPathsController', () => {
+describe( 'MasterLearningPathsController', () => {
   let controller: MasterLearningPathsController;
   let dataSource: DataSource;
 
@@ -26,9 +26,9 @@ describe('MasterLearningPathsController', () => {
     role: 'ADMIN',
   };
 
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      controllers: [MasterLearningPathsController],
+  beforeEach( async () => {
+    const module: TestingModule = await Test.createTestingModule( {
+      controllers: [ MasterLearningPathsController ],
       providers: [
         {
           provide: DataSource,
@@ -43,123 +43,123 @@ describe('MasterLearningPathsController', () => {
           },
         },
       ],
-    })
-      .overrideGuard(AbilitiesGuard)
-      .useClass(MockAbilitiesGuard)
+    } )
+      .overrideGuard( AbilitiesGuard )
+      .useClass( MockAbilitiesGuard )
       .compile();
 
-    controller = module.get<MasterLearningPathsController>(MasterLearningPathsController);
-    dataSource = module.get<DataSource>(DataSource);
-  });
+    controller = module.get<MasterLearningPathsController>( MasterLearningPathsController );
+    dataSource = module.get<DataSource>( DataSource );
+  } );
 
-  afterEach(() => {
+  afterEach( () => {
     vi.clearAllMocks();
-  });
+  } );
 
-  describe('create', () => {
-    it('should create a master learning path successfully', async () => {
+  describe( 'create', () => {
+    it( 'should create a master learning path successfully', async () => {
       const createDto = {
         title: 'Complete TypeScript',
         description: 'Full course',
       };
 
-      vi.mocked(dataSource.manager.create).mockReturnValueOnce(mockPath);
-      vi.mocked(dataSource.manager.save).mockResolvedValueOnce(mockPath);
+      vi.mocked( dataSource.manager.create ).mockReturnValueOnce( mockPath );
+      vi.mocked( dataSource.manager.save ).mockResolvedValueOnce( mockPath );
 
-      const result = await controller.create(createDto);
+      const result = await controller.create( createDto );
 
-      expect(result.message).toBe('Master learning path created successfully');
-    });
+      expect( result.message ).toBe( 'Master learning path created successfully' );
+    } );
 
-    it('should set isPublished to true by default', async () => {
+    it( 'should set isPublished to true by default', async () => {
       const createDto = {
         title: 'Complete TypeScript',
       };
 
-      vi.mocked(dataSource.manager.create).mockReturnValueOnce(mockPath);
-      vi.mocked(dataSource.manager.save).mockResolvedValueOnce(mockPath);
+      vi.mocked( dataSource.manager.create ).mockReturnValueOnce( mockPath );
+      vi.mocked( dataSource.manager.save ).mockResolvedValueOnce( mockPath );
 
-      await controller.create(createDto);
+      await controller.create( createDto );
 
-      expect(dataSource.manager.create).toHaveBeenCalledWith(
+      expect( dataSource.manager.create ).toHaveBeenCalledWith(
         MasterLearningPathEntity,
-        expect.objectContaining({
+        expect.objectContaining( {
           isPublished: true,
-        })
+        } )
       );
-    });
-  });
+    } );
+  } );
 
-  describe('findAll', () => {
-    it('should retrieve all master learning paths', async () => {
-      const paths = [mockPath];
+  describe( 'findAll', () => {
+    it( 'should retrieve all master learning paths', async () => {
+      const paths = [ mockPath ];
 
-      vi.mocked(dataSource.manager.findAndCount).mockResolvedValueOnce([paths, 1]);
+      vi.mocked( dataSource.manager.findAndCount ).mockResolvedValueOnce( [ paths, 1 ] );
 
-      const result = await controller.findAll('1', '20', undefined, mockAdminUser);
+      const result = await controller.findAll( '1', '20', undefined, mockAdminUser );
 
-      expect(result.data.length).toBe(1);
-    });
+      expect( result.data.length ).toBe( 1 );
+    } );
 
-    it('should filter by isPublished when provided', async () => {
-      const paths = [mockPath];
+    it( 'should filter by isPublished when provided', async () => {
+      const paths = [ mockPath ];
 
-      vi.mocked(dataSource.manager.findAndCount).mockResolvedValueOnce([paths, 1]);
+      vi.mocked( dataSource.manager.findAndCount ).mockResolvedValueOnce( [ paths, 1 ] );
 
-      await controller.findAll('1', '20', 'true', mockAdminUser);
+      await controller.findAll( '1', '20', 'true', mockAdminUser );
 
-      expect(dataSource.manager.findAndCount).toHaveBeenCalledWith(
+      expect( dataSource.manager.findAndCount ).toHaveBeenCalledWith(
         MasterLearningPathEntity,
-        expect.objectContaining({
-          where: expect.objectContaining({
+        expect.objectContaining( {
+          where: expect.objectContaining( {
             isPublished: true,
-          }),
-        })
+          } ),
+        } )
       );
-    });
-  });
+    } );
+  } );
 
-  describe('findOne', () => {
-    it('should retrieve a single path by id', async () => {
-      vi.mocked(dataSource.manager.findOne).mockResolvedValueOnce(mockPath);
+  describe( 'findOne', () => {
+    it( 'should retrieve a single path by id', async () => {
+      vi.mocked( dataSource.manager.findOne ).mockResolvedValueOnce( mockPath );
 
-      const result = await controller.findOne('path-123');
+      const result = await controller.findOne( 'path-123' );
 
-      expect(result).toEqual(mockPath);
-    });
+      expect( result ).toEqual( mockPath );
+    } );
 
-    it('should throw NotFoundException if not found', async () => {
-      vi.mocked(dataSource.manager.findOne).mockResolvedValueOnce(null);
+    it( 'should throw NotFoundException if not found', async () => {
+      vi.mocked( dataSource.manager.findOne ).mockResolvedValueOnce( null );
 
-      await expect(controller.findOne('nonexistent')).rejects.toThrow(NotFoundException);
-    });
-  });
+      await expect( controller.findOne( 'nonexistent' ) ).rejects.toThrow( NotFoundException );
+    } );
+  } );
 
-  describe('update', () => {
-    it('should update a learning path successfully', async () => {
+  describe( 'update', () => {
+    it( 'should update a learning path successfully', async () => {
       const updateDto = {
         title: 'Updated Title',
       };
 
       const updatedPath = { ...mockPath, ...updateDto };
 
-      vi.mocked(dataSource.manager.findOne).mockResolvedValueOnce(mockPath);
-      vi.mocked(dataSource.manager.save).mockResolvedValueOnce(updatedPath);
+      vi.mocked( dataSource.manager.findOne ).mockResolvedValueOnce( mockPath );
+      vi.mocked( dataSource.manager.save ).mockResolvedValueOnce( updatedPath );
 
-      const result = await controller.update('path-123', updateDto);
+      const result = await controller.update( 'path-123', updateDto );
 
-      expect(result.message).toBe('Master learning path updated successfully');
-    });
-  });
+      expect( result.message ).toBe( 'Master learning path updated successfully' );
+    } );
+  } );
 
-  describe('delete', () => {
-    it('should soft delete a learning path successfully', async () => {
-      vi.mocked(dataSource.manager.findOne).mockResolvedValueOnce(mockPath);
-      vi.mocked(dataSource.manager.softDelete).mockResolvedValueOnce({ affected: 1 });
+  describe( 'delete', () => {
+    it( 'should soft delete a learning path successfully', async () => {
+      vi.mocked( dataSource.manager.findOne ).mockResolvedValueOnce( mockPath );
+      vi.mocked( dataSource.manager.softDelete ).mockResolvedValueOnce( { affected: 1 } );
 
-      const result = await controller.delete('path-123');
+      const result = await controller.delete( 'path-123' );
 
-      expect(result.message).toBe('Master learning path deleted successfully');
-    });
-  });
-});
+      expect( result.message ).toBe( 'Master learning path deleted successfully' );
+    } );
+  } );
+} );

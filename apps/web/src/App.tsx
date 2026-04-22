@@ -1,12 +1,12 @@
-import { MainLayout } from '@/components/layout'
-import { HomePage } from '@/pages/home'
+import { RouterProvider } from 'react-router-dom';
+import { router } from '@/router';
+import { Toaster } from '@/components/ui/toaster';
 
-function App() {
+export default function App() {
     return (
-        <MainLayout>
-            <HomePage />
-        </MainLayout>
-    )
+        <>
+            <RouterProvider router={router} />
+            <Toaster />
+        </>
+    );
 }
-
-export default App

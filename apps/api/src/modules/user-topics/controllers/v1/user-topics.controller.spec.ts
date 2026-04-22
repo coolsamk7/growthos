@@ -7,7 +7,7 @@ import { UserTopicEntity } from '@growthos/nestjs-database/entities';
 import { MockAbilitiesGuard } from '../../../../../test-helpers/guards.mock';
 import { AbilitiesGuard } from '@growthos/nestjs-casl';
 
-describe('UserTopicsController', () => {
+describe( 'UserTopicsController', () => {
   let controller: UserTopicsController;
   let dataSource: DataSource;
 
@@ -27,9 +27,9 @@ describe('UserTopicsController', () => {
     role: 'USER',
   };
 
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      controllers: [UserTopicsController],
+  beforeEach( async () => {
+    const module: TestingModule = await Test.createTestingModule( {
+      controllers: [ UserTopicsController ],
       providers: [
         {
           provide: DataSource,
@@ -44,95 +44,95 @@ describe('UserTopicsController', () => {
           },
         },
       ],
-    })
-      .overrideGuard(AbilitiesGuard)
-      .useClass(MockAbilitiesGuard)
+    } )
+      .overrideGuard( AbilitiesGuard )
+      .useClass( MockAbilitiesGuard )
       .compile();
 
-    controller = module.get<UserTopicsController>(UserTopicsController);
-    dataSource = module.get<DataSource>(DataSource);
-  });
+    controller = module.get<UserTopicsController>( UserTopicsController );
+    dataSource = module.get<DataSource>( DataSource );
+  } );
 
-  afterEach(() => {
+  afterEach( () => {
     vi.clearAllMocks();
-  });
+  } );
 
-  describe('create', () => {
-    it('should create user topic successfully', async () => {
+  describe( 'create', () => {
+    it( 'should create user topic successfully', async () => {
       const createDto = {
         masterTopicId: 'mtopic-123',
       };
 
-      vi.mocked(dataSource.manager.create).mockReturnValueOnce(mockUserTopic);
-      vi.mocked(dataSource.manager.save).mockResolvedValueOnce(mockUserTopic);
+      vi.mocked( dataSource.manager.create ).mockReturnValueOnce( mockUserTopic );
+      vi.mocked( dataSource.manager.save ).mockResolvedValueOnce( mockUserTopic );
 
-      const result = await controller.create(createDto, mockUser);
+      const result = await controller.create( createDto, mockUser );
 
-      expect(result.message).toBe('User topic created successfully');
-      expect(dataSource.manager.create).toHaveBeenCalledWith(
+      expect( result.message ).toBe( 'User topic created successfully' );
+      expect( dataSource.manager.create ).toHaveBeenCalledWith(
         UserTopicEntity,
-        expect.objectContaining({
+        expect.objectContaining( {
           userId: mockUser.id,
-        })
+        } )
       );
-    });
-  });
+    } );
+  } );
 
-  describe('findAll', () => {
-    it('should retrieve all user topics', async () => {
-      const topics = [mockUserTopic];
+  describe( 'findAll', () => {
+    it( 'should retrieve all user topics', async () => {
+      const topics = [ mockUserTopic ];
 
-      vi.mocked(dataSource.manager.findAndCount).mockResolvedValueOnce([topics, 1]);
+      vi.mocked( dataSource.manager.findAndCount ).mockResolvedValueOnce( [ topics, 1 ] );
 
-      const result = await controller.findAll('1', '20', mockUser);
+      const result = await controller.findAll( '1', '20', mockUser );
 
-      expect(result.data.length).toBe(1);
-      expect(dataSource.manager.findAndCount).toHaveBeenCalledWith(
+      expect( result.data.length ).toBe( 1 );
+      expect( dataSource.manager.findAndCount ).toHaveBeenCalledWith(
         UserTopicEntity,
-        expect.objectContaining({
+        expect.objectContaining( {
           where: { userId: mockUser.id },
-        })
+        } )
       );
-    });
+    } );
 
-    it('should filter by status when provided', async () => {
-      const topics = [mockUserTopic];
+    it( 'should filter by status when provided', async () => {
+      const topics = [ mockUserTopic ];
 
-      vi.mocked(dataSource.manager.findAndCount).mockResolvedValueOnce([topics, 1]);
+      vi.mocked( dataSource.manager.findAndCount ).mockResolvedValueOnce( [ topics, 1 ] );
 
-      await controller.findAll('1', '20', mockUser, 'LEARNING');
+      await controller.findAll( '1', '20', mockUser, 'LEARNING' );
 
-      expect(dataSource.manager.findAndCount).toHaveBeenCalledWith(
+      expect( dataSource.manager.findAndCount ).toHaveBeenCalledWith(
         UserTopicEntity,
-        expect.objectContaining({
-          where: expect.objectContaining({
+        expect.objectContaining( {
+          where: expect.objectContaining( {
             status: 'LEARNING',
-          }),
-        })
+          } ),
+        } )
       );
-    });
-  });
+    } );
+  } );
 
-  describe('findOne', () => {
-    it('should retrieve a single user topic', async () => {
-      vi.mocked(dataSource.manager.findOne).mockResolvedValueOnce(mockUserTopic);
+  describe( 'findOne', () => {
+    it( 'should retrieve a single user topic', async () => {
+      vi.mocked( dataSource.manager.findOne ).mockResolvedValueOnce( mockUserTopic );
 
-      const result = await controller.findOne('utopic-123', mockUser);
+      const result = await controller.findOne( 'utopic-123', mockUser );
 
-      expect(result).toEqual(mockUserTopic);
-    });
+      expect( result ).toEqual( mockUserTopic );
+    } );
 
-    it('should throw NotFoundException if not found', async () => {
-      vi.mocked(dataSource.manager.findOne).mockResolvedValueOnce(null);
+    it( 'should throw NotFoundException if not found', async () => {
+      vi.mocked( dataSource.manager.findOne ).mockResolvedValueOnce( null );
 
-      await expect(controller.findOne('nonexistent', mockUser)).rejects.toThrow(
+      await expect( controller.findOne( 'nonexistent', mockUser ) ).rejects.toThrow(
         NotFoundException
       );
-    });
-  });
+    } );
+  } );
 
-  describe('update', () => {
-    it('should update user topic successfully', async () => {
+  describe( 'update', () => {
+    it( 'should update user topic successfully', async () => {
       const updateDto = {
         status: 'COMPLETED',
         progress: 100,
@@ -140,23 +140,23 @@ describe('UserTopicsController', () => {
 
       const updatedTopic = { ...mockUserTopic, ...updateDto };
 
-      vi.mocked(dataSource.manager.findOne).mockResolvedValueOnce(mockUserTopic);
-      vi.mocked(dataSource.manager.save).mockResolvedValueOnce(updatedTopic);
+      vi.mocked( dataSource.manager.findOne ).mockResolvedValueOnce( mockUserTopic );
+      vi.mocked( dataSource.manager.save ).mockResolvedValueOnce( updatedTopic );
 
-      const result = await controller.update('utopic-123', updateDto, mockUser);
+      const result = await controller.update( 'utopic-123', updateDto, mockUser );
 
-      expect(result.message).toBe('User topic updated successfully');
-    });
-  });
+      expect( result.message ).toBe( 'User topic updated successfully' );
+    } );
+  } );
 
-  describe('delete', () => {
-    it('should soft delete user topic successfully', async () => {
-      vi.mocked(dataSource.manager.findOne).mockResolvedValueOnce(mockUserTopic);
-      vi.mocked(dataSource.manager.softDelete).mockResolvedValueOnce({ affected: 1 });
+  describe( 'delete', () => {
+    it( 'should soft delete user topic successfully', async () => {
+      vi.mocked( dataSource.manager.findOne ).mockResolvedValueOnce( mockUserTopic );
+      vi.mocked( dataSource.manager.softDelete ).mockResolvedValueOnce( { affected: 1 } );
 
-      const result = await controller.delete('utopic-123', mockUser);
+      const result = await controller.delete( 'utopic-123', mockUser );
 
-      expect(result.message).toBe('User topic deleted successfully');
-    });
-  });
-});
+      expect( result.message ).toBe( 'User topic deleted successfully' );
+    } );
+  } );
+} );

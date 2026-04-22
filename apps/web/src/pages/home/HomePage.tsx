@@ -1,211 +1,280 @@
+import { Link } from 'react-router-dom';
+import {
+    ArrowRight,
+    Route,
+    LayoutTemplate,
+    TrendingUp,
+    Flame,
+    Target,
+    Building2,
+    Server,
+    GraduationCap,
+    BookOpenCheck,
+    CheckCircle2,
+} from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Logo } from '@/components/common/Logo';
+import { ThemeToggle } from '@/components/common/ThemeToggle';
+
+const features = [
+    {
+        icon: Route,
+        title: 'Custom Paths',
+        description: 'Create personalized learning journeys tailored to your goals.',
+    },
+    {
+        icon: LayoutTemplate,
+        title: 'Templates',
+        description: 'Start with pre-built paths for popular career tracks.',
+    },
+    {
+        icon: TrendingUp,
+        title: 'Progress Tracking',
+        description: 'Visualize your growth with detailed analytics and insights.',
+    },
+    {
+        icon: Flame,
+        title: 'Streaks',
+        description: 'Build consistency with daily streaks and habit tracking.',
+    },
+    {
+        icon: Target,
+        title: 'Goals',
+        description: 'Set milestones and celebrate achievements along the way.',
+    },
+];
+
+const howItWorks = [
+    {
+        step: '01',
+        title: 'Choose Your Path',
+        description: 'Select from templates or create a custom learning path.',
+    },
+    {
+        step: '02',
+        title: 'Add Resources',
+        description: 'Curate courses, articles, and tutorials into modules.',
+    },
+    {
+        step: '03',
+        title: 'Track Progress',
+        description: 'Log your study time and mark items as complete.',
+    },
+    {
+        step: '04',
+        title: 'Achieve Goals',
+        description: 'Hit milestones and level up your skills consistently.',
+    },
+];
+
+const useCases = [
+    { icon: Building2, label: 'FAANG Prep', description: 'System design & DSA' },
+    { icon: Server, label: 'DevOps', description: 'Cloud & infrastructure' },
+    { icon: GraduationCap, label: 'UPSC', description: 'Civil services exam prep' },
+    { icon: BookOpenCheck, label: 'Students', description: 'Academic excellence' },
+];
+
 export function HomePage() {
-  return (
-    <div className="space-y-24 pb-24">
-      {/* Hero Section */}
-      <section id="hero" className="text-center space-y-8 pt-12">
-        <div className="space-y-4">
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight">
-            🚀 Build Your Learning Path.
-            <br />
-            Track Your Growth.
-            <br />
-            <span className="bg-gradient-to-r from-[--color-primary] to-[--color-accent-purple] bg-clip-text text-transparent">
-              Crack Your Goals.
-            </span>
-          </h1>
-          <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto">
-            Stop jumping between random tutorials.
-            Create a structured roadmap, track your progress, and stay consistent — all in one place.
-          </p>
+    return (
+        <div className="min-h-screen bg-background">
+            {/* Navigation */}
+            <nav className="sticky top-0 z-50 border-b bg-background/80 backdrop-blur-sm">
+                <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4">
+                    <Logo />
+                    <div className="flex items-center gap-4">
+                        <ThemeToggle />
+                        <Link to="/signIn">
+                            <Button variant="ghost">Sign in</Button>
+                        </Link>
+                        <Link to="/app">
+                            <Button>Get Started</Button>
+                        </Link>
+                    </div>
+                </div>
+            </nav>
+
+            {/* Hero Section */}
+            <section className="relative overflow-hidden py-24 md:py-32">
+                <div className="absolute inset-0 -z-10 bg-[radial-gradient(45%_40%_at_50%_60%,var(--primary)_0%,transparent_100%)] opacity-10" />
+                <div className="mx-auto max-w-7xl px-4 text-center">
+                    <div className="mx-auto max-w-3xl">
+                        <h1 className="text-pretty text-4xl font-bold tracking-tight text-foreground md:text-6xl">
+                            Build Your Learning Path. <span className="text-primary">Track Your Growth.</span>
+                        </h1>
+                        <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground">
+                            The all-in-one platform for structured learning and progress analytics. Create custom paths,
+                            track your streaks, and achieve your learning goals.
+                        </p>
+                        <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+                            <Link to="/app">
+                                <Button size="lg" className="gap-2">
+                                    Start Learning Free
+                                    <ArrowRight className="size-4" />
+                                </Button>
+                            </Link>
+                            <Button size="lg" variant="outline">
+                                View Demo
+                            </Button>
+                        </div>
+                    </div>
+
+                    {/* Stats */}
+                    <div className="mt-20 grid grid-cols-2 gap-8 md:grid-cols-4">
+                        {[
+                            { value: '10K+', label: 'Active Learners' },
+                            { value: '500+', label: 'Learning Paths' },
+                            { value: '2M+', label: 'Hours Tracked' },
+                            { value: '98%', label: 'Satisfaction' },
+                        ].map( ( stat ) => (
+                            <div key={stat.label}>
+                                <p className="text-3xl font-bold text-foreground md:text-4xl">{stat.value}</p>
+                                <p className="mt-1 text-sm text-muted-foreground">{stat.label}</p>
+                            </div>
+                        ) )}
+                    </div>
+                </div>
+            </section>
+
+            {/* Features Section */}
+            <section className="bg-muted/50 py-24">
+                <div className="mx-auto max-w-7xl px-4">
+                    <div className="text-center">
+                        <h2 className="text-3xl font-bold text-foreground md:text-4xl">
+                            Everything You Need to Learn Effectively
+                        </h2>
+                        <p className="mx-auto mt-4 max-w-2xl text-muted-foreground">
+                            Powerful features designed to help you stay focused, track progress, and achieve your
+                            learning goals faster.
+                        </p>
+                    </div>
+
+                    <div className="mt-16 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                        {features.map( ( feature ) => (
+                            <Card
+                                key={feature.title}
+                                className="group border-transparent bg-card transition-all hover:border-border hover:shadow-md"
+                            >
+                                <CardContent className="pt-6">
+                                    <div className="flex size-12 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
+                                        <feature.icon className="size-6" />
+                                    </div>
+                                    <h3 className="mt-4 text-lg font-semibold text-foreground">{feature.title}</h3>
+                                    <p className="mt-2 text-sm text-muted-foreground">{feature.description}</p>
+                                </CardContent>
+                            </Card>
+                        ) )}
+                    </div>
+                </div>
+            </section>
+
+            {/* How It Works Section */}
+            <section className="py-24">
+                <div className="mx-auto max-w-7xl px-4">
+                    <div className="text-center">
+                        <h2 className="text-3xl font-bold text-foreground md:text-4xl">How It Works</h2>
+                        <p className="mx-auto mt-4 max-w-2xl text-muted-foreground">
+                            Get started in minutes and begin your structured learning journey.
+                        </p>
+                    </div>
+
+                    <div className="mt-16 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+                        {howItWorks.map( ( item, index ) => (
+                            <div key={item.step} className="relative">
+                                {index < howItWorks.length - 1 && (
+                                    <div className="absolute left-1/2 top-8 hidden h-px w-full bg-border lg:block" />
+                                )}
+                                <div className="relative flex flex-col items-center text-center">
+                                    <div className="flex size-16 items-center justify-center rounded-2xl bg-primary text-2xl font-bold text-primary-foreground">
+                                        {item.step}
+                                    </div>
+                                    <h3 className="mt-6 text-lg font-semibold text-foreground">{item.title}</h3>
+                                    <p className="mt-2 text-sm text-muted-foreground">{item.description}</p>
+                                </div>
+                            </div>
+                        ) )}
+                    </div>
+                </div>
+            </section>
+
+            {/* Use Cases Section */}
+            <section className="bg-muted/50 py-24">
+                <div className="mx-auto max-w-7xl px-4">
+                    <div className="text-center">
+                        <h2 className="text-3xl font-bold text-foreground md:text-4xl">Perfect for Every Learner</h2>
+                        <p className="mx-auto mt-4 max-w-2xl text-muted-foreground">
+                            Whether you are preparing for interviews, learning new skills, or studying for exams,
+                            GrowthOS adapts to your needs.
+                        </p>
+                    </div>
+
+                    <div className="mt-16 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+                        {useCases.map( ( useCase ) => (
+                            <Card key={useCase.label} className="group cursor-pointer transition-all hover:shadow-md">
+                                <CardContent className="flex items-center gap-4 pt-6">
+                                    <div className="flex size-12 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                                        <useCase.icon className="size-6" />
+                                    </div>
+                                    <div>
+                                        <h3 className="font-semibold text-foreground">{useCase.label}</h3>
+                                        <p className="text-sm text-muted-foreground">{useCase.description}</p>
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        ) )}
+                    </div>
+                </div>
+            </section>
+
+            {/* CTA Section */}
+            <section className="py-24">
+                <div className="mx-auto max-w-7xl px-4">
+                    <Card className="relative overflow-hidden border-0 bg-primary">
+                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.1),transparent)]" />
+                        <CardContent className="relative py-16 text-center">
+                            <h2 className="text-3xl font-bold text-primary-foreground md:text-4xl">
+                                Ready to Start Your Learning Journey?
+                            </h2>
+                            <p className="mx-auto mt-4 max-w-2xl text-primary-foreground/80">
+                                Join thousands of learners who are achieving their goals with structured learning paths
+                                and progress tracking.
+                            </p>
+                            <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
+                                <Link to="/app">
+                                    <Button
+                                        size="lg"
+                                        variant="secondary"
+                                        className="gap-2 bg-white text-primary hover:bg-white/90"
+                                    >
+                                        Get Started Free
+                                        <ArrowRight className="size-4" />
+                                    </Button>
+                                </Link>
+                            </div>
+                            <div className="mt-8 flex items-center justify-center gap-6 text-sm text-primary-foreground/80">
+                                <div className="flex items-center gap-2">
+                                    <CheckCircle2 className="size-4" />
+                                    <span>Free forever plan</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <CheckCircle2 className="size-4" />
+                                    <span>No credit card required</span>
+                                </div>
+                            </div>
+                        </CardContent>
+                    </Card>
+                </div>
+            </section>
+
+            {/* Footer */}
+            <footer className="border-t py-12">
+                <div className="mx-auto max-w-7xl px-4">
+                    <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
+                        <Logo />
+                        <p className="text-sm text-muted-foreground">2026 GrowthOS. All rights reserved.</p>
+                    </div>
+                </div>
+            </footer>
         </div>
-        
-        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-          <button className="px-8 py-4 bg-[--color-primary] hover:bg-[--color-primary-hover] text-white rounded-lg font-semibold text-lg transition-colors">
-            Get Started Free
-          </button>
-          <button className="px-8 py-4 border-2 border-[--color-primary] text-[--color-primary] rounded-lg font-semibold text-lg hover:bg-[--color-primary] hover:text-white transition-colors">
-            Explore Learning Paths
-          </button>
-        </div>
-      </section>
-
-      {/* Value Proposition */}
-      <section id="about" className="max-w-4xl mx-auto text-center space-y-4">
-        <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
-          <span className="font-semibold text-foreground">growthOS</span> is a smart learning platform that helps you design your own study plan, 
-          follow curated roadmaps, and track your daily progress with powerful analytics.
-        </p>
-        <p className="text-lg text-muted-foreground">
-          Whether you're preparing for <span className="font-semibold text-foreground">FAANG</span>, <span className="font-semibold text-foreground">DevOps</span>, <span className="font-semibold text-foreground">UPSC</span>, or anything else — we've got you covered.
-        </p>
-      </section>
-
-      {/* Features Section */}
-      <section id="features" className="space-y-12">
-        <div className="text-center">
-          <h2 className="text-4xl font-bold mb-4">🔥 Features</h2>
-          <p className="text-muted-foreground text-lg">Everything you need to succeed in your learning journey</p>
-        </div>
-        
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {/* Feature 1 */}
-          <div className="space-y-3 p-6 rounded-xl border bg-card hover:shadow-lg hover:border-[--color-primary] transition-all">
-            <div className="text-5xl mb-2">📚</div>
-            <h3 className="text-2xl font-bold">Create Your Own Learning Path</h3>
-            <p className="text-muted-foreground">
-              Design your roadmap your way. Start from scratch or pick from curated templates and customize them based on your goals.
-            </p>
-          </div>
-
-          {/* Feature 2 */}
-          <div className="space-y-3 p-6 rounded-xl border bg-card hover:shadow-lg hover:border-[--color-primary] transition-all">
-            <div className="text-5xl mb-2">🧠</div>
-            <h3 className="text-2xl font-bold">Use Proven Roadmaps</h3>
-            <p className="text-muted-foreground">
-              Choose from expert-designed paths like FAANG Prep, DevOps Roadmap, and more. No more confusion — just follow what works.
-            </p>
-          </div>
-
-          {/* Feature 3 */}
-          <div className="space-y-3 p-6 rounded-xl border bg-card hover:shadow-lg hover:border-[--color-primary] transition-all">
-            <div className="text-5xl mb-2">📊</div>
-            <h3 className="text-2xl font-bold">Track Every Minute You Study</h3>
-            <p className="text-muted-foreground">
-              Log your study sessions, monitor progress, and see where you're improving or falling behind.
-            </p>
-          </div>
-
-          {/* Feature 4 */}
-          <div className="space-y-3 p-6 rounded-xl border bg-card hover:shadow-lg hover:border-[--color-primary] transition-all">
-            <div className="text-5xl mb-2">🔥</div>
-            <h3 className="text-2xl font-bold">Stay Consistent with Streaks</h3>
-            <p className="text-muted-foreground">
-              Build daily habits and maintain streaks to stay motivated and disciplined.
-            </p>
-          </div>
-
-          {/* Feature 5 */}
-          <div className="space-y-3 p-6 rounded-xl border bg-card hover:shadow-lg hover:border-[--color-primary] transition-all">
-            <div className="text-5xl mb-2">🎯</div>
-            <h3 className="text-2xl font-bold">Set Goals and Achieve Them</h3>
-            <p className="text-muted-foreground">
-              Set clear study goals and track how close you are to achieving them.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* How It Works */}
-      <section id="how-it-works" className="space-y-12">
-        <div className="text-center">
-          <h2 className="text-4xl font-bold mb-4">🧩 How It Works</h2>
-          <p className="text-muted-foreground text-lg">Get started in 4 simple steps</p>
-        </div>
-        
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div className="text-center space-y-4 p-6">
-            <div className="w-16 h-16 bg-[--color-primary] text-white rounded-full flex items-center justify-center text-3xl font-bold mx-auto">
-              1
-            </div>
-            <h3 className="text-xl font-bold">Choose a Learning Path</h3>
-            <p className="text-muted-foreground">
-              Pick from curated templates or create your own.
-            </p>
-          </div>
-
-          <div className="text-center space-y-4 p-6">
-            <div className="w-16 h-16 bg-[--color-primary] text-white rounded-full flex items-center justify-center text-3xl font-bold mx-auto">
-              2
-            </div>
-            <h3 className="text-xl font-bold">Customize Your Plan</h3>
-            <p className="text-muted-foreground">
-              Add or remove topics based on your needs.
-            </p>
-          </div>
-
-          <div className="text-center space-y-4 p-6">
-            <div className="w-16 h-16 bg-[--color-primary] text-white rounded-full flex items-center justify-center text-3xl font-bold mx-auto">
-              3
-            </div>
-            <h3 className="text-xl font-bold">Start Studying</h3>
-            <p className="text-muted-foreground">
-              Track your time and mark progress.
-            </p>
-          </div>
-
-          <div className="text-center space-y-4 p-6">
-            <div className="w-16 h-16 bg-[--color-primary] text-white rounded-full flex items-center justify-center text-3xl font-bold mx-auto">
-              4
-            </div>
-            <h3 className="text-xl font-bold">Analyze & Improve</h3>
-            <p className="text-muted-foreground">
-              Use insights to focus on weak areas.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Use Cases */}
-      <section id="use-cases" className="space-y-8">
-        <div className="text-center">
-          <h2 className="text-4xl font-bold mb-4">🎯 Who is this for?</h2>
-        </div>
-        
-        <div className="max-w-3xl mx-auto space-y-4">
-          <div className="flex items-start gap-3 p-4 rounded-lg border bg-card hover:border-[--color-success] transition-colors">
-            <span className="text-2xl">✔</span>
-            <p className="text-lg">Software Engineers preparing for <span className="font-semibold">FAANG</span></p>
-          </div>
-          <div className="flex items-start gap-3 p-4 rounded-lg border bg-card hover:border-[--color-success] transition-colors">
-            <span className="text-2xl">✔</span>
-            <p className="text-lg">Students preparing for <span className="font-semibold">UPSC, CAT, or exams</span></p>
-          </div>
-          <div className="flex items-start gap-3 p-4 rounded-lg border bg-card hover:border-[--color-success] transition-colors">
-            <span className="text-2xl">✔</span>
-            <p className="text-lg"><span className="font-semibold">DevOps / Backend</span> engineers learning new skills</p>
-          </div>
-          <div className="flex items-start gap-3 p-4 rounded-lg border bg-card hover:border-[--color-success] transition-colors">
-            <span className="text-2xl">✔</span>
-            <p className="text-lg">Anyone serious about <span className="font-semibold">structured learning</span></p>
-          </div>
-        </div>
-      </section>
-
-      {/* Social Proof */}
-      <section id="testimonials" className="space-y-8">
-        <div className="text-center">
-          <h2 className="text-4xl font-bold mb-4">⭐ What Users Say</h2>
-        </div>
-        
-        <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-          <div className="p-6 rounded-xl border bg-card space-y-4 hover:border-[--color-accent-purple] transition-colors">
-            <p className="text-lg italic">
-              "Finally, a platform where I can track everything in one place. No more scattered notes!"
-            </p>
-            <p className="text-sm text-muted-foreground font-semibold">— Early User</p>
-          </div>
-          
-          <div className="p-6 rounded-xl border bg-card space-y-4 hover:border-[--color-accent-cyan] transition-colors">
-            <p className="text-lg italic">
-              "Helped me stay consistent for 30+ days. Game changer."
-            </p>
-            <p className="text-sm text-muted-foreground font-semibold">— Developer</p>
-          </div>
-        </div>
-      </section>
-
-      {/* Final CTA */}
-      <section id="cta" className="text-center space-y-8 py-16 px-6 rounded-2xl bg-gradient-to-r from-[--color-primary]/10 to-[--color-accent-purple]/10 border">
-        <h2 className="text-4xl md:text-5xl font-bold">
-          🚀 Ready to take control of your learning?
-        </h2>
-        <p className="text-xl text-muted-foreground">
-          Start building your roadmap today.
-        </p>
-        <button className="px-10 py-5 bg-[--color-primary] hover:bg-[--color-primary-hover] text-white rounded-lg font-semibold text-xl transition-colors">
-          Create Your First Learning Path
-        </button>
-      </section>
-    </div>
-  )
+    );
 }

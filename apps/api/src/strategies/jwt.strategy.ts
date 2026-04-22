@@ -7,29 +7,29 @@ import { DataSource } from 'typeorm';
 import { UserEntity } from '@growthos/nestjs-database/entities';
 
 @Injectable()
-export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
+export class JwtStrategy extends PassportStrategy( Strategy, 'jwt' ) {
     constructor(
         @InjectDataSource() private readonly dataSource: DataSource,
         configService: ConfigService
     ) {
-        super({
+        super( {
             jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
             ignoreExpiration: false,
-            secretOrKey: configService.get('jwt.config').secret,
-        });
+            secretOrKey: configService.get( 'jwt.config' ).secret,
+        } );
     }
 
-    async validate(payload: any) {
-        const user = await this.dataSource.manager.findOne(UserEntity, {
+    async validate( payload: { id: string } ) {
+        const user = await this.dataSource.manager.findOne( UserEntity, {
             where: { id: payload.id }
-        });
+        } );
 
-        if (!user) {
-            throw new UnauthorizedException('User not found');
+        if ( !user ) {
+            throw new UnauthorizedException( 'User not found' );
         }
 
-        if (user.status !== 'ACTIVE') {
-            throw new UnauthorizedException('User account is not active');
+        if ( user.status !== 'ACTIVE' ) {
+            throw new UnauthorizedException( 'User account is not active' );
         }
 
         return {
