@@ -2,7 +2,6 @@ import { authForgotPassword, authForgotPasswordReset, authLogin, authRefreshToke
 import { apiClient } from './api';
 import { tokenStorage } from '@/utils/tokenStorage';
 import { otpSessionStorage } from '@/utils/otpSessionStorage';
-import { warn } from 'console';
 
 export const loginUser = async ( data: { email: string; password: string } ) => {
     const response = await authLogin( {

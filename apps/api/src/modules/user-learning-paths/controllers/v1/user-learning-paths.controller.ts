@@ -1,12 +1,20 @@
 import { Controller, Post, Get, Put, Delete, Body, Param, Query, HttpStatus, HttpCode, NotFoundException, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags, ApiQuery, ApiParam, ApiBody, ApiOkResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags, ApiQuery, ApiParam, ApiBody, ApiOkResponse, ApiCreatedResponse } from '@nestjs/swagger';
 import type { Static } from 'typebox';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { UserLearningPathEntity } from '@growthos/nestjs-database/entities';
 import { CheckAbilities, AbilitiesGuard, Action, Subject } from '@growthos/nestjs-casl';
 import { toApiResponse, toApiListResponse, toMessageResponse, serializeEntity } from 'src/utils/response';
-import { CreateUserLearningPathRequest, UpdateUserLearningPathRequest } from '../../dtos';
+import { 
+    CreateUserLearningPathRequest, 
+    UpdateUserLearningPathRequest,
+    CreateUserLearningPathResponse,
+    UpdateUserLearningPathResponse,
+    GetUserLearningPathResponse,
+    GetUserLearningPathsResponse,
+    DeleteUserLearningPathResponse,
+} from '../../dtos';
 import { AuthenticatedUser } from 'src/decorators';
 
 @ApiTags( 'User Learning Paths' )
@@ -22,6 +30,7 @@ export class UserLearningPathsController {
     @UseGuards( AbilitiesGuard )
     @CheckAbilities( { action: Action.CREATE, subject: Subject.USER_LEARNING_PATH } )
     @ApiBody( { schema: CreateUserLearningPathRequest } )
+    @ApiCreatedResponse( { schema: CreateUserLearningPathResponse } )
     async create(
         @Body() createDto: Static<typeof CreateUserLearningPathRequest>,
         @AuthenticatedUser() currentUser: any
@@ -42,6 +51,7 @@ export class UserLearningPathsController {
     @CheckAbilities( { action: Action.READ, subject: Subject.USER_LEARNING_PATH } )
     @ApiQuery( { name: 'page', required: false, type: Number } )
     @ApiQuery( { name: 'limit', required: false, type: Number } )
+    @ApiOkResponse( { schema: GetUserLearningPathsResponse } )
     async findAll(
         @Query( 'page' ) page: string = '1',
         @Query( 'limit' ) limit: string = '20',
@@ -76,6 +86,7 @@ export class UserLearningPathsController {
     @UseGuards( AbilitiesGuard )
     @CheckAbilities( { action: Action.READ, subject: Subject.USER_LEARNING_PATH } )
     @ApiParam( { name: 'id', type: String } )
+    @ApiOkResponse( { schema: GetUserLearningPathResponse } )
     async findOne( @Param( 'id' ) id: string, @AuthenticatedUser() currentUser: any ) {
         const whereConditions: any = { id };
         if ( currentUser?.role === 'USER' ) {
@@ -97,6 +108,7 @@ export class UserLearningPathsController {
     @CheckAbilities( { action: Action.UPDATE, subject: Subject.USER_LEARNING_PATH } )
     @ApiParam( { name: 'id', type: String } )
     @ApiBody( { schema: UpdateUserLearningPathRequest } )
+    @ApiOkResponse( { schema: UpdateUserLearningPathResponse } )
     async update(
         @Param( 'id' ) id: string,
         @Body() updateDto: Static<typeof UpdateUserLearningPathRequest>,
@@ -127,6 +139,7 @@ export class UserLearningPathsController {
     @UseGuards( AbilitiesGuard )
     @CheckAbilities( { action: Action.DELETE, subject: Subject.USER_LEARNING_PATH } )
     @ApiParam( { name: 'id', type: String } )
+    @ApiOkResponse( { schema: DeleteUserLearningPathResponse } )
     async delete( @Param( 'id' ) id: string, @AuthenticatedUser() currentUser: any ) {
         const whereConditions: any = { id };
         if ( currentUser?.role === 'USER' ) {

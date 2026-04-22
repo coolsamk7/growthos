@@ -16,6 +16,7 @@ export class ApiClient {
 
         client.setConfig( {
             baseUrl: baseURL,
+            auth: token,
             headers: token ? { Authorization: `Bearer ${token}` } : undefined,
         } );
 
@@ -59,6 +60,7 @@ export class ApiClient {
     setToken( token: string ) {
         this.axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
         client.setConfig( {
+            auth: token,
             headers: { Authorization: `Bearer ${token}` },
         } );
     }
@@ -66,6 +68,7 @@ export class ApiClient {
     clearToken() {
         delete this.axiosInstance.defaults.headers.common['Authorization'];
         client.setConfig( {
+            auth: undefined,
             headers: {},
         } );
     }

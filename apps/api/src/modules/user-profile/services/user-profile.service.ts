@@ -1,7 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { UserEntity, UserProfileEntity } from '@growthos/nestjs-database/entities';
+import { Value } from 'typebox/value';
+import { UpdatePersonalInfoRequest } from '../dtos/update-personal-info.dto';
 
 @Injectable()
 export class UserProfileService {
@@ -57,6 +59,14 @@ export class UserProfileService {
     }
 
     async updatePersonalInfo( userId: string, data: { firstName?: string; lastName?: string; phone?: string; dateOfBirth?: string } ) {
+        // Validate data against TypeBox schema
+        const isValid = Value.Check( UpdatePersonalInfoRequest, data );
+        if ( !isValid ) {
+            const errors = [ ...Value.Errors( UpdatePersonalInfoRequest, data ) ];
+            const errorMessages = errors.map( err => err.message ).join( ', ' );
+            throw new BadRequestException( `Validation failed: ${errorMessages}` );
+        }
+
         const user = await this.dataSource.manager.findOne( UserEntity, { 
             where: { id: userId } 
         } );
