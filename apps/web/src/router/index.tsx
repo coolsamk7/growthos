@@ -4,6 +4,7 @@ import { HomePage } from '@/pages/home/HomePage';
 import { DashboardPage } from '@/pages/dashboard/DashboardPage';
 import { LoginPage } from '@/pages/auth/LoginPage';
 import { LearningPathPage } from '@/pages/learning-path/LearningPathPage';
+import { LearningPathDetailPage } from '@/pages/learning-path/LearningPathDetailPage';
 import { SignupPage } from '@/pages/auth/SignupPage';
 import ProtectedRoute from './ProtectedRoute';
 import { ProfilePage } from '@/pages/profile/ProfilePage';
@@ -58,7 +59,7 @@ export const router = createBrowserRouter( [
             },
             {
                 path: 'learning-paths/:id',
-                element: <LearningPathPage />,
+                element: <LearningPathDetailPage />,
             },
             {
                 path: 'profile',

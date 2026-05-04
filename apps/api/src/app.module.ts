@@ -13,6 +13,7 @@ import { MasterProblemsModule } from './modules/master-problems';
 import { MasterTopicsModule } from './modules/master-topics';
 import { MasterLearningPathsModule } from './modules/master-learning-paths';
 import { UserLearningPathsModule } from './modules/user-learning-paths';
+import { UserModulesModule } from './modules/user-modules';
 import { UserTopicsModule } from './modules/user-topics';
 import { UserProblemsModule } from './modules/user-problems';
 import { GoalsModule } from './modules/goals';
@@ -87,6 +88,7 @@ import { AppAuthGuard } from './guards/app.guard';
         MasterTopicsModule,
         MasterLearningPathsModule,
         UserLearningPathsModule,
+        UserModulesModule,
         UserTopicsModule,
         UserProblemsModule,
         GoalsModule,

@@ -1,11 +1,13 @@
 import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm'
 import { IdTimestamppedEntity } from './id-timestampped.entity.js'
 import { UserLearningPathEntity } from './user-learning-path.entity.js'
+import { UserModuleEntity } from './user-module.entity.js'
 import { MasterTopicEntity } from './master-topic.entity.js'
 import { TopicStatus } from '@growthos/nestjs-shared'
 
 @Entity( 'user_topics' )
 @Index( [ 'userLearningPathId', 'orderIndex' ] )
+@Index( [ 'userModuleId', 'orderIndex' ] )
 export class UserTopicEntity extends IdTimestamppedEntity {
     @Column( { name: 'user_learning_path_id', type: 'varchar' } )
     userLearningPathId: string
@@ -13,6 +15,13 @@ export class UserTopicEntity extends IdTimestamppedEntity {
     @ManyToOne( () => UserLearningPathEntity )
     @JoinColumn( { name: 'user_learning_path_id' } )
     userLearningPath: UserLearningPathEntity
+
+    @Column( { name: 'user_module_id', type: 'varchar', nullable: true } )
+    userModuleId?: string
+
+    @ManyToOne( () => UserModuleEntity )
+    @JoinColumn( { name: 'user_module_id' } )
+    userModule?: UserModuleEntity
 
     @Column( { type: 'varchar' } )
     name: string

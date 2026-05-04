@@ -27,11 +27,13 @@ export class AbilityFactory {
                 // Can read user data for analytics
                 can( Action.READ, Subject.USER )
                 can( Action.READ, Subject.USER_LEARNING_PATH )
+                can( Action.READ, Subject.USER_MODULE )
                 can( Action.READ, Subject.USER_TOPIC )
                 can( Action.READ, Subject.USER_PROBLEM )
 
                 // Can manage their own user data
                 can( Action.MANAGE, Subject.USER_LEARNING_PATH )
+                can( Action.MANAGE, Subject.USER_MODULE )
                 can( Action.MANAGE, Subject.USER_TOPIC )
                 can( Action.MANAGE, Subject.USER_PROBLEM )
                 can( Action.MANAGE, Subject.PROBLEM_ATTEMPT )
@@ -52,6 +54,7 @@ export class AbilityFactory {
 
                 // Users can only manage their own data
                 can( Action.MANAGE, Subject.USER_LEARNING_PATH )
+                can( Action.MANAGE, Subject.USER_MODULE )
                 can( Action.MANAGE, Subject.USER_TOPIC )
                 can( Action.MANAGE, Subject.USER_PROBLEM )
                 can( Action.MANAGE, Subject.PROBLEM_ATTEMPT )

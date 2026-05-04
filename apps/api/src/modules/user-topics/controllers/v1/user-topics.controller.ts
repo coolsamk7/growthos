@@ -36,12 +36,28 @@ export class UserTopicsController {
     @CheckAbilities( { action: Action.READ, subject: Subject.USER_TOPIC } )
     @ApiQuery( { name: 'page', required: false, type: Number } )
     @ApiQuery( { name: 'limit', required: false, type: Number } )
-    async findAll( @Query( 'page' ) page: string = '1', @Query( 'limit' ) limit: string = '20', @AuthenticatedUser() currentUser: any ) {
+    @ApiQuery( { name: 'userModuleId', required: false, type: String } )
+    async findAll( 
+        @Query( 'page' ) page: string = '1', 
+        @Query( 'limit' ) limit: string = '20',
+        @Query( 'userModuleId' ) userModuleId?: string,
+        @AuthenticatedUser() currentUser: any 
+    ) {
         const pageNum = parseInt( page, 10 );
         const limitNum = parseInt( limit, 10 );
         const skip = ( pageNum - 1 ) * limitNum;
-        const where: any = {};// No userId filter for this entity
-        const [ items, total ] = await this.dataSource.manager.findAndCount( UserTopicEntity, { where, skip, take: limitNum, order: { createdAt: 'DESC' } } );
+        const where: any = {};
+        
+        if ( userModuleId ) {
+            where.userModuleId = userModuleId;
+        }
+        
+        const [ items, total ] = await this.dataSource.manager.findAndCount( UserTopicEntity, { 
+            where, 
+            skip, 
+            take: limitNum, 
+            order: { orderIndex: 'ASC', createdAt: 'DESC' } 
+        } );
         return toApiListResponse( items.map( i => serializeEntity( i ) ), total, pageNum, limitNum );
     }
 

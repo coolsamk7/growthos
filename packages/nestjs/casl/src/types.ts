@@ -15,6 +15,7 @@ export enum Subject {
     MASTER_TOPIC = 'MasterTopic',
     MASTER_PROBLEM = 'MasterProblem',
     USER_LEARNING_PATH = 'UserLearningPath',
+    USER_MODULE = 'UserModule',
     USER_TOPIC = 'UserTopic',
     USER_PROBLEM = 'UserProblem',
     PROBLEM_ATTEMPT = 'ProblemAttempt',

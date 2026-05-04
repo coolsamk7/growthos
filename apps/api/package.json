@@ -18,7 +18,8 @@
         "test:cov": "vitest --coverage",
         "test:ui": "vitest --ui",
         "test:e2e": "jest --config ./test/jest-e2e.json",
-        "export:openapi": "curl http://localhost:5600/openapi.json -o ../../packages/shared/api-client/openapi.json"
+        "export:openapi": "curl http://localhost:5600/openapi.json -o ../../packages/shared/api-client/openapi.json",
+        "migrate:topics": "tsx src/scripts/migrate-topics-to-modules.ts"
     },
     "dependencies": {
         "@bull-board/api": "^6.21.2",

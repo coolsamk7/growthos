@@ -2,6 +2,7 @@ import Type from 'typebox';
 
 export const CreateUserTopicRequest = Type.Object( {
     userLearningPathId: Type.String(),
+    userModuleId: Type.Optional( Type.String() ),
     name: Type.String( { minLength: 1, maxLength: 255 } ),
     description: Type.Optional( Type.String() ),
     status: Type.Optional( Type.Union( [
@@ -17,6 +18,7 @@ export const CreateUserTopicRequest = Type.Object( {
 
 export const UpdateUserTopicRequest = Type.Object( {
     userLearningPathId: Type.Optional( Type.String() ),
+    userModuleId: Type.Optional( Type.String() ),
     name: Type.Optional( Type.String( { minLength: 1, maxLength: 255 } ) ),
     description: Type.Optional( Type.String() ),
     status: Type.Optional( Type.Union( [

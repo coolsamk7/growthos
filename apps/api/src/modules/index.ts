@@ -5,6 +5,7 @@ export * from './master-problems';
 export * from './master-topics';
 export * from './master-learning-paths';
 export * from './user-learning-paths';
+export * from './user-modules';
 export * from './user-topics';
 export * from './user-problems';
 export * from './goals';
