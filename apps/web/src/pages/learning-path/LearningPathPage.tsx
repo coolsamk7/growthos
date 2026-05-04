@@ -1,14 +1,30 @@
-import { Plus } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Link } from "react-router-dom";
+import { ChevronDown, ChevronRight, CheckCircle2, Circle, PlayCircle, Plus } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import { cn } from "@/lib/utils";
 import { getLearingPaths } from "@/services/learning-path.service";
 
 import AddLearningPathDialog from "./AddLearningpathDialog";
 
-// ✅ Type
+// ✅ Types
+export type ModuleItem = {
+  id: string;
+  title: string;
+  status: 'completed' | 'in-progress' | 'todo';
+  difficulty: 'Easy' | 'Medium' | 'Hard';
+};
+
+export type Module = {
+  id: string;
+  title: string;
+  progress: number;
+  items: ModuleItem[];
+};
+
 export type LearningPath = {
   id: string;
   title: string;
@@ -16,11 +32,114 @@ export type LearningPath = {
   progress: number;
   completedItems: number;
   totalItems: number;
+  modules?: Module[];
 };
+
+const statusIcon = {
+  completed: CheckCircle2,
+  'in-progress': PlayCircle,
+  todo: Circle,
+};
+
+const statusColor = {
+  completed: 'text-success',
+  'in-progress': 'text-primary',
+  todo: 'text-muted-foreground',
+};
+
+const difficultyVariant = {
+  Easy: 'success',
+  Medium: 'warning',
+  Hard: 'destructive',
+} as const;
+
+function ModuleCard( { module, isExpanded, onToggle }: { module: Module; isExpanded: boolean; onToggle: () => void } ) {
+  return (
+    <Card className="overflow-hidden">
+      <button
+        onClick={onToggle}
+        className="flex w-full items-center justify-between p-6 text-left transition-colors hover:bg-muted/50"
+      >
+        <div className="flex items-center gap-4">
+          {isExpanded ? (
+            <ChevronDown className="size-5 text-muted-foreground" />
+          ) : (
+            <ChevronRight className="size-5 text-muted-foreground" />
+          )}
+          <div>
+            <h3 className="font-semibold text-foreground">{module.title}</h3>
+            <p className="mt-1 text-sm text-muted-foreground">
+              {module.items.filter( ( i ) => i.status === 'completed' ).length} of {module.items.length}{' '}
+              completed
+            </p>
+          </div>
+        </div>
+        <div className="flex items-center gap-4">
+          <div className="w-32">
+            <Progress value={module.progress} className="h-2" />
+          </div>
+          <span className="text-sm font-medium text-muted-foreground">{module.progress}%</span>
+        </div>
+      </button>
+
+      {isExpanded && (
+        <CardContent className="border-t pt-4">
+          <div className="flex flex-col gap-2">
+            {module.items.map( ( item ) => (
+              <ModuleItemRow key={item.id} item={item} />
+            ) )}
+          </div>
+        </CardContent>
+      )}
+    </Card>
+  );
+}
+
+function ModuleItemRow( { item }: { item: ModuleItem } ) {
+  const StatusIcon = statusIcon[item.status];
+
+  return (
+    <div
+      className={cn(
+        'flex items-center justify-between rounded-xl p-4 transition-colors',
+        item.status === 'completed'
+          ? 'bg-success/5'
+          : item.status === 'in-progress'
+            ? 'bg-primary/5'
+            : 'bg-muted/50 hover:bg-muted',
+      )}
+    >
+      <div className="flex items-center gap-3">
+        <StatusIcon className={cn( 'size-5', statusColor[item.status] )} />
+        <span
+          className={cn(
+            'font-medium',
+            item.status === 'completed' ? 'text-muted-foreground line-through' : 'text-foreground',
+          )}
+        >
+          {item.title}
+        </span>
+      </div>
+      <div className="flex items-center gap-3">
+        <Badge variant={difficultyVariant[item.difficulty as keyof typeof difficultyVariant]}>
+          {item.difficulty}
+        </Badge>
+        <Badge
+          variant={
+            item.status === 'completed' ? 'success' : item.status === 'in-progress' ? 'default' : 'outline'
+          }
+        >
+          {item.status === 'in-progress' ? 'In Progress' : item.status}
+        </Badge>
+      </div>
+    </div>
+  );
+}
 
 export function LearningPathPage() {
   const [ learningPaths, setLearningPaths ] = useState<LearningPath[]>( [] );
   const [ loading, setLoading ] = useState( true );
+  const [ expandedModules, setExpandedModules ] = useState<Set<string>>( new Set() );
 
   useEffect( () => {
     fetchLearningPaths();
@@ -40,6 +159,18 @@ export function LearningPathPage() {
 
   const handleCreate = ( newPath: LearningPath ) => {
     setLearningPaths( ( prev ) => [ ...prev, newPath ] );
+  };
+
+  const toggleModule = ( moduleId: string ) => {
+    setExpandedModules( ( prev ) => {
+      const next = new Set( prev );
+      if ( next.has( moduleId ) ) {
+        next.delete( moduleId );
+      } else {
+        next.add( moduleId );
+      }
+      return next;
+    } );
   };
 
   return (
@@ -67,6 +198,7 @@ export function LearningPathPage() {
           <p className="text-muted-foreground">No learning paths yet. Create your first one!</p>
         ) : learningPaths.map( ( path ) => (
           <div key={path.id} className="flex flex-col gap-4">
+            {/* Path Header Card */}
             <Card className="bg-muted/30">
               <CardHeader>
                 <div className="flex items-start justify-between">
@@ -88,28 +220,21 @@ export function LearningPathPage() {
               </CardHeader>
 
               <CardContent>
-                <div className="flex flex-col gap-3">
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-muted-foreground">
-                      Overall Progress
-                    </span>
-                    <span className="font-medium text-foreground">
-                      {path.progress}%
-                    </span>
+                <div className="flex items-center gap-6">
+                  <div className="flex-1">
+                    <div className="mb-2 flex items-center justify-between text-sm">
+                      <span className="text-muted-foreground">Overall Progress</span>
+                      <span className="font-medium text-foreground">{path.progress}%</span>
+                    </div>
+                    <Progress value={path.progress} className="h-2" />
                   </div>
-
-                  <Progress value={path.progress} className="h-2" />
-
                   <div className="flex gap-6 text-sm">
                     <div className="text-center">
-                      <p className="text-2xl font-bold">
-                        {path.completedItems}
-                      </p>
+                      <p className="text-2xl font-bold text-foreground">{path.completedItems}</p>
                       <p className="text-muted-foreground">Completed</p>
                     </div>
-
                     <div className="text-center">
-                      <p className="text-2xl font-bold">
+                      <p className="text-2xl font-bold text-foreground">
                         {path.totalItems - path.completedItems}
                       </p>
                       <p className="text-muted-foreground">Remaining</p>
@@ -118,6 +243,20 @@ export function LearningPathPage() {
                 </div>
               </CardContent>
             </Card>
+
+            {/* Modules */}
+            {path.modules && path.modules.length > 0 && (
+              <div className="flex flex-col gap-3 pl-4">
+                {path.modules.map( ( module ) => (
+                  <ModuleCard
+                    key={module.id}
+                    module={module}
+                    isExpanded={expandedModules.has( module.id )}
+                    onToggle={() => toggleModule( module.id )}
+                  />
+                ) )}
+              </div>
+            )}
           </div>
         ) ) }
       </div>

@@ -4,9 +4,7 @@ export const addNewLearningPath = async ( data: {
     title: string;
     description: string;
     targetDate: string;
-    masterLearningPathId: string
 } ) => {
-    console.log( data )
     const response = await userLearningPathsCreate( {
         body: {
             name: data.title,

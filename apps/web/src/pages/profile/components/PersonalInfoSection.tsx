@@ -82,6 +82,7 @@ export function PersonalInfoSection( {
                     onChange={( value ) => onChange( 'dateOfBirth', value )}
                     disabled={!isEditing}
                     placeholder="Select your birth date"
+                    disableFuture={true}
                 />
             </div>
         </ProfileSection>

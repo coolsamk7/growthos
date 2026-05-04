@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { LearningPath } from "./LearningPathPage";
 import { addNewLearningPath } from "@/services/learning-path.service";
+import { DatePicker } from "@/components/ui/date-picker";
 
 type Props = {
   onCreate: ( path: LearningPath ) => void;
@@ -25,7 +26,6 @@ export default function AddLearningPathDialog( { onCreate }: Props ) {
   const [ title, setTitle ] = useState( "" );
   const [ description, setDescription ] = useState( "" );
   const [ targetDate, setTargetDate ] = useState( "" );
-  const [ masterLearningPathId, setMasterLearningPathId ] = useState( "" );
   const [ loading, setLoading ] = useState( false );
 
   const handleCreate = async () => {
@@ -37,7 +37,6 @@ export default function AddLearningPathDialog( { onCreate }: Props ) {
         title,
         description,
         targetDate,
-        masterLearningPathId,
       } );
 
     
@@ -45,7 +44,6 @@ export default function AddLearningPathDialog( { onCreate }: Props ) {
       setTitle( "" );
       setDescription( "" );
       setTargetDate( "" );
-      setMasterLearningPathId( "" );
       setOpen( false );
     } catch ( error ) {
       console.error( "Failed to create learning path:", error );
@@ -84,21 +82,15 @@ export default function AddLearningPathDialog( { onCreate }: Props ) {
             className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
 
-          <input
-            type="text"
-            placeholder="Target Date"
-            value={targetDate}
-            onChange={( e ) => setTargetDate( e.target.value )}
-            className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-
-          <input
-            type="text"
-            placeholder="Master Learning Path ID"
-            value={masterLearningPathId}
-            onChange={( e ) => setMasterLearningPathId( e.target.value )}
-            className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
+          <div className="flex flex-col gap-2">
+            <label className="text-sm font-medium text-foreground">Target Date</label>
+            <DatePicker
+              value={targetDate}
+              onChange={setTargetDate}
+              placeholder="Select target date"
+              disablePast={true}
+            />
+          </div>
         </div>
 
         <DialogFooter>

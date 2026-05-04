@@ -16,10 +16,24 @@ interface DatePickerProps {
   onChange?: ( value: string ) => void
   disabled?: boolean
   placeholder?: string
+  disablePast?: boolean
+  disableFuture?: boolean
 }
 
-export function DatePicker( { value, onChange, disabled, placeholder = "Pick a date" }: DatePickerProps ) {
+export function DatePicker( { value, onChange, disabled, placeholder = "Pick a date", disablePast = false, disableFuture = false }: DatePickerProps ) {
   const [ open, setOpen ] = React.useState( false )
+
+  // Get today's date at midnight for comparison
+  const today = React.useMemo( () => {
+    const now = new Date()
+    return new Date( now.getFullYear(), now.getMonth(), now.getDate() )
+  }, [] )
+
+  // Get tomorrow's date for future comparison
+  const tomorrow = React.useMemo( () => {
+    const now = new Date()
+    return new Date( now.getFullYear(), now.getMonth(), now.getDate() + 1 )
+  }, [] )
 
   // Parse the value prop into a Date object
   const selectedDate = React.useMemo( () => {
@@ -88,8 +102,15 @@ export function DatePicker( { value, onChange, disabled, placeholder = "Pick a d
           onDayFocus={handleSelect}
           defaultMonth={selectedDate}
           captionLayout="dropdown-buttons"
-          fromYear={1900}
-          toYear={new Date().getUTCFullYear()}
+          fromYear={disablePast ? new Date().getFullYear() : 1900}
+          toYear={disableFuture ? new Date().getUTCFullYear() : new Date().getUTCFullYear() + 10}
+          disabled={
+            disablePast 
+              ? ( date: Date ) => date < today 
+              : disableFuture 
+                ? ( date: Date ) => date >= tomorrow 
+                : undefined
+          }
         />
       </PopoverContent>
     </Popover>
