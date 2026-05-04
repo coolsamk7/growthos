@@ -17,6 +17,13 @@ export const addNewLearningPath = async ( data: {
 
 export const getLearingPaths = async () => {
     const response = await userLearningPathsFindAll();
-    return response.data?.data || [];
+    const paths = response.data?.data || [];
+    return paths.map( ( path: any ) => ( {
+        ...path,
+        title: path.name,
+        progress: 0,
+        completedItems: 0,
+        totalItems: 0,
+    } ) );
 }
 
