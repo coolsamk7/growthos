@@ -6,3 +6,4 @@ export * from './user-module.service';
 export * from './user-topic.service';
 export * from './note.service';
 export * from './user-problem.service';
+export * from './study-session.service';

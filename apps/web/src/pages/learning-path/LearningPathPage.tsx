@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { ChevronDown, ChevronRight, CheckCircle2, Circle, PlayCircle, Plus } from "lucide-react";
+import { ChevronDown, ChevronRight, CheckCircle2, Circle, PlayCircle, Plus, Trash2 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
-import { getLearingPaths } from "@/services/learning-path.service";
+import { getLearingPaths, deleteLearningPath } from "@/services/learning-path.service";
+import { useToast } from "@/hooks/use-toast";
 
 import AddLearningPathDialog from "./AddLearningpathDialog";
 
@@ -140,6 +141,7 @@ export function LearningPathPage() {
   const [ learningPaths, setLearningPaths ] = useState<LearningPath[]>( [] );
   const [ loading, setLoading ] = useState( true );
   const [ expandedModules, setExpandedModules ] = useState<Set<string>>( new Set() );
+  const { toast } = useToast();
 
   useEffect( () => {
     fetchLearningPaths();
@@ -159,6 +161,27 @@ export function LearningPathPage() {
 
   const handleCreate = ( newPath: LearningPath ) => {
     setLearningPaths( ( prev ) => [ ...prev, newPath ] );
+  };
+
+  const handleDelete = async ( id: string, title: string ) => {
+    if ( !confirm( `Are you sure you want to delete "${title}"? This will soft delete the learning path and all its modules, topics, and problems.` ) ) {
+      return;
+    }
+
+    try {
+      await deleteLearningPath( id );
+      setLearningPaths( ( prev ) => prev.filter( ( path ) => path.id !== id ) );
+      toast( {
+        title: "Success",
+        description: "Learning path deleted successfully",
+      } );
+    } catch ( error ) {
+      toast( {
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to delete learning path",
+      } );
+    }
   };
 
   const toggleModule = ( moduleId: string ) => {
@@ -202,7 +225,7 @@ export function LearningPathPage() {
             <Card className="bg-muted/30">
               <CardHeader>
                 <div className="flex items-start justify-between">
-                  <div>
+                  <div className="flex-1">
                     <CardTitle className="text-xl">
                       {path.title}
                     </CardTitle>
@@ -211,11 +234,20 @@ export function LearningPathPage() {
                     </p>
                   </div>
 
-                  <Link to={`/app/learning-paths/${path.id}`}>
-                    <Button variant="outline" size="sm">
-                      View Details
+                  <div className="flex items-center gap-2">
+                    <Link to={`/app/learning-paths/${path.id}`}>
+                      <Button variant="outline" size="sm">
+                        View Details
+                      </Button>
+                    </Link>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => handleDelete( path.id, path.title )}
+                    >
+                      <Trash2 className="size-4 text-destructive" />
                     </Button>
-                  </Link>
+                  </div>
                 </div>
               </CardHeader>
 

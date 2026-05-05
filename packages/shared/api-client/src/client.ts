@@ -76,4 +76,25 @@ export class ApiClient {
     getInstance() {
         return this.axiosInstance;
     }
+
+    // HTTP method proxies
+    async get( url: string, config?: any ) {
+        return this.axiosInstance.get( url, config );
+    }
+
+    async post( url: string, data?: any, config?: any ) {
+        return this.axiosInstance.post( url, data, config );
+    }
+
+    async put( url: string, data?: any, config?: any ) {
+        return this.axiosInstance.put( url, data, config );
+    }
+
+    async delete( url: string, config?: any ) {
+        return this.axiosInstance.delete( url, config );
+    }
+
+    async patch( url: string, data?: any, config?: any ) {
+        return this.axiosInstance.patch( url, data, config );
+    }
 }

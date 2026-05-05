@@ -2,7 +2,9 @@ import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm'
 import { IdTimestamppedEntity } from './id-timestampped.entity.js'
 import { UserEntity } from './user.entity.js'
 import { UserLearningPathEntity } from './user-learning-path.entity.js'
+import { UserModuleEntity } from './user-module.entity.js'
 import { UserTopicEntity } from './user-topic.entity.js'
+import { UserProblemEntity } from './user-problem.entity.js'
 
 @Entity( 'study_sessions' )
 @Index( [ 'userId', 'sessionDate' ] )
@@ -22,6 +24,13 @@ export class StudySessionEntity extends IdTimestamppedEntity {
     @JoinColumn( { name: 'user_learning_path_id' } )
     userLearningPath?: UserLearningPathEntity
 
+    @Column( { name: 'user_module_id', type: 'varchar', nullable: true } )
+    userModuleId?: string
+
+    @ManyToOne( () => UserModuleEntity )
+    @JoinColumn( { name: 'user_module_id' } )
+    userModule?: UserModuleEntity
+
     @Column( { name: 'user_topic_id', type: 'varchar', nullable: true } )
     userTopicId?: string
 
@@ -29,8 +38,18 @@ export class StudySessionEntity extends IdTimestamppedEntity {
     @JoinColumn( { name: 'user_topic_id' } )
     userTopic?: UserTopicEntity
 
+    @Column( { name: 'user_problem_id', type: 'varchar', nullable: true } )
+    userProblemId?: string
+
+    @ManyToOne( () => UserProblemEntity )
+    @JoinColumn( { name: 'user_problem_id' } )
+    userProblem?: UserProblemEntity
+
     @Column( { type: 'integer', name: 'duration_minutes' } )
     durationMinutes: number
+
+    @Column( { type: 'integer', name: 'duration_seconds', nullable: true } )
+    durationSeconds?: number
 
     @Column( { type: 'text', nullable: true } )
     notes?: string
@@ -38,4 +57,13 @@ export class StudySessionEntity extends IdTimestamppedEntity {
     @Column( { type: 'date', name: 'session_date' } )
     @Index()
     sessionDate: Date
+
+    @Column( { type: 'timestamp', name: 'start_time', nullable: true } )
+    startTime?: Date
+
+    @Column( { type: 'timestamp', name: 'end_time', nullable: true } )
+    endTime?: Date
+
+    @Column( { type: 'boolean', name: 'is_active', default: false } )
+    isActive: boolean
 }

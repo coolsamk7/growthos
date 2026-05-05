@@ -32,12 +32,28 @@ export class ResourcesController {
     @CheckAbilities( { action: Action.READ, subject: Subject.RESOURCE } )
     @ApiQuery( { name: 'page', required: false, type: Number } )
     @ApiQuery( { name: 'limit', required: false, type: Number } )
-    async findAll( @Query( 'page' ) page: string = '1', @Query( 'limit' ) limit: string = '20', @AuthenticatedUser() currentUser: any ) {
+    @ApiQuery( { name: 'entityType', required: true, type: String, enum: [ 'module', 'topic', 'problem' ] } )
+    @ApiQuery( { name: 'entityId', required: true, type: String } )
+    async findAll(
+        @AuthenticatedUser() currentUser: any,
+        @Query( 'page' ) page: string = '1',
+        @Query( 'limit' ) limit: string = '20',
+        @Query( 'entityType' ) entityType: 'module' | 'topic' | 'problem',
+        @Query( 'entityId' ) entityId: string
+    ) {
         const pageNum = parseInt( page, 10 );
         const limitNum = parseInt( limit, 10 );
         const skip = ( pageNum - 1 ) * limitNum;
-        const where: any = {};// No userId filter for this entity
-        const [ items, total ] = await this.dataSource.manager.findAndCount( ResourceEntity, { where, skip, take: limitNum, order: { createdAt: 'DESC' } } );
+        
+        console.log( '[Resources] findAll:', { entityType, entityId, userId: currentUser.id } );
+        
+        const [ items, total ] = await this.dataSource.manager.findAndCount( ResourceEntity, {
+            where: { entityType, entityId },
+            skip,
+            take: limitNum,
+            order: { orderIndex: 'ASC', createdAt: 'DESC' }
+        } );
+        
         return toApiListResponse( items.map( i => serializeEntity( i ) ), total, pageNum, limitNum );
     }
 

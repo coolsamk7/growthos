@@ -11,6 +11,7 @@ import { ProfilePage } from '@/pages/profile/ProfilePage';
 import { ForgotPasswordPage } from '@/pages/auth/ForgotPassword';
 import { OTPPage } from '@/pages/auth/OTPPage';
 import { RestorePasswordPage } from '@/pages/auth/RestorePasswordPage';
+import { StudySessionsPage } from '@/pages/study-sessions';
 
 export const router = createBrowserRouter( [
     {
@@ -64,6 +65,10 @@ export const router = createBrowserRouter( [
             {
                 path: 'profile',
                 element: <ProfilePage />,
+            },
+            {
+                path: 'study-sessions',
+                element: <StudySessionsPage />,
             },
         ],
     },

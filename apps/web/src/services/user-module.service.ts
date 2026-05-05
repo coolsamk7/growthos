@@ -21,6 +21,7 @@ export interface UserModule {
     completedAt?: string;
     createdAt: string;
     updatedAt: string;
+    topicCount?: number;
 }
 
 export interface CreateModuleData {
@@ -50,7 +51,7 @@ export const createUserModule = async ( data: CreateModuleData ) => {
 
 export const getUserModules = async ( userLearningPathId?: string ) => {
     const response = await userModulesFindAll( {
-        queries: {
+        query: {
             userLearningPathId,
             page: 1,
             limit: 100

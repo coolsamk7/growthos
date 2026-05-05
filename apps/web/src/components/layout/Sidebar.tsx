@@ -1,5 +1,5 @@
 import { NavLink, useLocation } from 'react-router-dom';
-import { LayoutDashboard, BookOpen, BarChart3, Target, Settings, ChevronLeft, ChevronRight } from 'lucide-react';
+import { LayoutDashboard, BookOpen, BarChart3, Target, Settings, ChevronLeft, ChevronRight, Clock } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Logo } from '@/components/common/Logo';
 import { Button } from '@/components/ui/button';
@@ -14,6 +14,7 @@ interface SidebarProps {
 const navItems = [
     { icon: LayoutDashboard, label: 'Dashboard', href: '/app/dashboard' },
     { icon: BookOpen, label: 'Learning Paths', href: '/app/learning-paths' },
+    { icon: Clock, label: 'Study Sessions', href: '/app/study-sessions' },
     { icon: BarChart3, label: 'Progress', href: '/app/progress' },
     { icon: Target, label: 'Goals', href: '/app/goals' },
     { icon: Settings, label: 'Settings', href: '/app/settings' },

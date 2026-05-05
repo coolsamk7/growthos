@@ -37,7 +37,7 @@ export class NotesController {
         @Query( 'page' ) page: string = '1', 
         @Query( 'limit' ) limit: string = '20',
         @Query( 'userTopicId' ) userTopicId?: string,
-        @AuthenticatedUser() currentUser: any 
+        @AuthenticatedUser() currentUser?: any 
     ) {
         const pageNum = parseInt( page, 10 );
         const limitNum = parseInt( limit, 10 );

@@ -3,7 +3,7 @@ import { ApiBearerAuth, ApiTags, ApiQuery, ApiParam, ApiBody, ApiOkResponse, Api
 import type { Static } from 'typebox';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
-import { UserModuleEntity, UserLearningPathEntity } from '@growthos/nestjs-database/entities';
+import { UserModuleEntity, UserLearningPathEntity, UserTopicEntity } from '@growthos/nestjs-database/entities';
 import { CheckAbilities, AbilitiesGuard, Action, Subject } from '@growthos/nestjs-casl';
 import { toApiResponse, toApiListResponse, toMessageResponse, serializeEntity } from 'src/utils/response';
 import { 
@@ -98,8 +98,21 @@ export class UserModulesController {
             .take( limitNum )
             .getManyAndCount();
 
+        // Add topic counts to each module
+        const modulesWithCounts = await Promise.all(
+            modules.map( async ( module ) => {
+                const topicCount = await this.dataSource.manager.count( UserTopicEntity, {
+                    where: { userModuleId: module.id }
+                } );
+                return {
+                    ...serializeEntity( module ),
+                    topicCount
+                };
+            } )
+        );
+
         return toApiListResponse(
-            modules.map( m => serializeEntity( m ) ),
+            modulesWithCounts,
             total,
             pageNum,
             limitNum

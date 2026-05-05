@@ -1,7 +1,8 @@
-import Type from 'typebox';
+import { Type } from 'typebox';
 
 export const CreateResourceRequest = Type.Object( {
-    userTopicId: Type.String(),
+    entityType: Type.Union( [ Type.Literal( 'module' ), Type.Literal( 'topic' ), Type.Literal( 'problem' ) ] ),
+    entityId: Type.String(),
     title: Type.String( { minLength: 1, maxLength: 255 } ),
     url: Type.String( { format: 'uri' } ),
     type: Type.Optional( Type.String() ),
@@ -11,7 +12,6 @@ export const CreateResourceRequest = Type.Object( {
 } );
 
 export const UpdateResourceRequest = Type.Object( {
-    userTopicId: Type.Optional( Type.String() ),
     title: Type.Optional( Type.String( { minLength: 1, maxLength: 255 } ) ),
     url: Type.Optional( Type.String( { format: 'uri' } ) ),
     type: Type.Optional( Type.String() ),
