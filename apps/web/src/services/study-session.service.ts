@@ -58,12 +58,13 @@ export const getActiveSession = async (): Promise<StudySession | null> => {
     return response.data?.data;
 };
 
-export const getStudySessions = async ( page: number = 1, limit: number = 20 ) => {
+export const getStudySessions = async ( params: { page?: number; limit?: number } = {} ) => {
+    const { page = 1, limit = 20 } = params;
     const response = await apiClient.get( '/v1/study-sessions', {
         params: { page, limit }
     } );
     return {
-        data: response.data?.data || [],
+        sessions: response.data?.data || [],
         total: response.data?.total || 0,
         page: response.data?.page || 1,
         limit: response.data?.limit || limit,
@@ -91,6 +92,11 @@ export const getHeatmapData = async ( startDate?: string, endDate?: string ): Pr
     if ( startDate ) params.startDate = startDate;
     if ( endDate ) params.endDate = endDate;
     
-    const response = await apiClient.get( '/v1/study-sessions/heatmap', { params } );
-    return response.data?.data || {};
+    try {
+        const response = await apiClient.get( '/v1/study-sessions/heatmap', { params } );
+        return response.data?.data || {};
+    } catch ( error: any ) {
+        console.error( 'Heatmap API error:', error.response?.status, error.response?.data );
+        throw error;
+    }
 };

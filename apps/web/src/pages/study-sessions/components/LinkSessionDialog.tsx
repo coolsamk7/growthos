@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { 
     Dialog, 
     DialogContent, 
@@ -7,9 +8,11 @@ import {
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { AlertTriangle, Link } from 'lucide-react';
 import { format } from 'date-fns';
 import { ContentTreePicker, type ContentSelection } from '@/components/common/ContentTreePicker';
+import { getLearingPaths } from '@/services/learning-path.service';
 import type { StudySession } from '../../../services/study-session.service';
 
 interface LinkSessionDialogProps {
@@ -22,6 +25,7 @@ interface LinkSessionDialogProps {
     };
     formatDuration: ( session: StudySession ) => string;
     onSelectionChange: ( selection: ContentSelection ) => void;
+    onLearningPathChange: ( learningPathId: string ) => void;
     onNamesLoaded: ( names: { modules: Record<string, string>; topics: Record<string, string>; problems: Record<string, string> } ) => void;
     onClose: () => void;
     onLink: () => void;
@@ -33,10 +37,43 @@ export function LinkSessionDialog( {
     contentNames,
     formatDuration,
     onSelectionChange,
+    onLearningPathChange,
     onNamesLoaded,
     onClose,
     onLink
 }: LinkSessionDialogProps ) {
+    const [ selectedLearningPathId, setSelectedLearningPathId ] = useState<string>( '' );
+    const [ learningPaths, setLearningPaths ] = useState<any[]>( [] );
+    const [ loading, setLoading ] = useState( false );
+
+    useEffect( () => {
+        if ( session ) {
+            loadLearningPaths();
+            if ( session.userLearningPathId ) {
+                setSelectedLearningPathId( session.userLearningPathId );
+            }
+        }
+    }, [ session ] );
+
+    const loadLearningPaths = async () => {
+        try {
+            setLoading( true );
+            const paths = await getLearingPaths();
+            setLearningPaths( paths );
+        } catch ( error ) {
+            console.error( 'Failed to load learning paths:', error );
+        } finally {
+            setLoading( false );
+        }
+    };
+
+    const handleLearningPathChange = ( pathId: string ) => {
+        setSelectedLearningPathId( pathId );
+        onLearningPathChange( pathId );
+        // Reset content selection when learning path changes
+        onSelectionChange( {} );
+    };
+
     return (
         <Dialog open={!!session} onOpenChange={onClose}>
             <DialogContent className="max-w-2xl">
@@ -61,23 +98,36 @@ export function LinkSessionDialog( {
                     </div>
 
                     <div className="border-t pt-4">
-                        <p className="text-sm font-medium mb-3">Select Content:</p>
-                        {session?.userLearningPathId ? (
+                        <p className="text-sm font-medium mb-3">Select Learning Path:</p>
+                        <Select 
+                            value={selectedLearningPathId} 
+                            onValueChange={handleLearningPathChange}
+                            disabled={loading}
+                        >
+                            <SelectTrigger>
+                                <SelectValue placeholder="Choose a learning path..." />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {learningPaths.map( ( path ) => (
+                                    <SelectItem key={path.id} value={path.id}>
+                                        {path.title || path.name}
+                                    </SelectItem>
+                                ) )}
+                            </SelectContent>
+                        </Select>
+                    </div>
+
+                    {selectedLearningPathId && (
+                        <div className="border-t pt-4">
+                            <p className="text-sm font-medium mb-3">Select Content:</p>
                             <ContentTreePicker
-                                learningPathId={session.userLearningPathId}
+                                learningPathId={selectedLearningPathId}
                                 onSelect={onSelectionChange}
                                 selectedIds={selection}
                                 onNamesLoaded={onNamesLoaded}
                             />
-                        ) : (
-                            <Alert>
-                                <AlertDescription>
-                                    This session is not associated with any learning path. 
-                                    Please delete it and create a new session from your learning path.
-                                </AlertDescription>
-                            </Alert>
-                        )}
-                    </div>
+                        </div>
+                    )}
 
                     {selection.moduleId && (
                         <div className="border-t pt-4">
@@ -94,7 +144,7 @@ export function LinkSessionDialog( {
                     <Button variant="outline" onClick={onClose}>
                         Cancel
                     </Button>
-                    <Button onClick={onLink} disabled={!selection.moduleId}>
+                    <Button onClick={onLink} disabled={!selectedLearningPathId || !selection.moduleId}>
                         <Link className="h-4 w-4 mr-2" />
                         Link Session
                     </Button>

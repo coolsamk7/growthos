@@ -21,3 +21,10 @@ apiClient.setRefreshTokenCallback( async () => {
     
     return newAccessToken;
 } );
+
+// Setup unauthorized callback to handle session expiration
+apiClient.setOnUnauthorizedCallback( () => {
+    tokenStorage.clearTokens();
+    apiClient.clearToken();
+    window.location.href = '/signIn';
+} );

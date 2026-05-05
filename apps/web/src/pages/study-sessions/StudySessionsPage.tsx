@@ -30,6 +30,7 @@ export function StudySessionsPage() {
     const [ linkingSession, setLinkingSession ] = useState<StudySession | null>( null );
     const [ showOrphansOnly, setShowOrphansOnly ] = useState( false );
     const [ linkSelection, setLinkSelection ] = useState<ContentSelection>( {} );
+    const [ selectedLearningPathId, setSelectedLearningPathId ] = useState<string>( '' );
     const [ contentNames, setContentNames ] = useState<{ 
         modules: Record<string, string>; 
         topics: Record<string, string>; 
@@ -91,16 +92,31 @@ export function StudySessionsPage() {
             return;
         }
 
+        if ( !selectedLearningPathId ) {
+            toast.error( 'Please select a learning path' );
+            return;
+        }
+
         try {
-            await updateStudySession( linkingSession.id, {
+            const updateData: any = {
+                userLearningPathId: selectedLearningPathId,
                 userModuleId: linkSelection.moduleId,
-                userTopicId: linkSelection.topicId,
-                userProblemId: linkSelection.problemId,
-            } );
+            };
+
+            if ( linkSelection.topicId ) {
+                updateData.userTopicId = linkSelection.topicId;
+            }
+
+            if ( linkSelection.problemId ) {
+                updateData.userProblemId = linkSelection.problemId;
+            }
+
+            await updateStudySession( linkingSession.id, updateData );
             
             toast.success( 'Session linked successfully!' );
             setLinkingSession( null );
             setLinkSelection( {} );
+            setSelectedLearningPathId( '' );
             loadSessions();
         } catch ( error: any ) {
             toast.error( error.response?.data?.message || 'Failed to link session' );
@@ -197,10 +213,12 @@ export function StudySessionsPage() {
                     contentNames={contentNames}
                     formatDuration={formatDuration}
                     onSelectionChange={setLinkSelection}
+                    onLearningPathChange={setSelectedLearningPathId}
                     onNamesLoaded={setContentNames}
                     onClose={() => {
                         setLinkingSession( null );
                         setLinkSelection( {} );
+                        setSelectedLearningPathId( '' );
                         setContentNames( { modules: {}, topics: {}, problems: {} } );
                     }}
                     onLink={handleLinkSession}

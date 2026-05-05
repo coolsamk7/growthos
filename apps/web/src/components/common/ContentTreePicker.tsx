@@ -3,7 +3,7 @@ import { ChevronRight, ChevronDown, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
-import { apiClient } from '@/lib/api-client';
+import { apiClient } from '@/services/api';
 import { toast } from 'sonner';
 
 interface ContentTreePickerProps {

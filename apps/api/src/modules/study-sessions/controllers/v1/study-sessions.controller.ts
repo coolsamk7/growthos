@@ -115,15 +115,27 @@ export class StudySessionsController {
         @Query( 'endDate' ) endDate?: string,
         @AuthenticatedUser() currentUser?: any 
     ) {
-        const end = endDate ? new Date( endDate ) : new Date();
-        const start = startDate ? new Date( startDate ) : new Date( end.getTime() - 365 * 24 * 60 * 60 * 1000 );
+        const endDate_obj = endDate ? new Date( endDate ) : new Date();
+        const startDate_obj = startDate ? new Date( startDate ) : new Date( endDate_obj.getTime() - 365 * 24 * 60 * 60 * 1000 );
+        
+        // Set to start of day for start and end of day for end to include the full range
+        startDate_obj.setHours( 0, 0, 0, 0 );
+        endDate_obj.setHours( 23, 59, 59, 999 );
 
         const sessions = await this.dataSource.manager.find( StudySessionEntity, {
             where: {
                 userId: currentUser.id,
-                sessionDate: Between( start, end )
+                sessionDate: Between( startDate_obj, endDate_obj ),
+                isActive: false  // Only include completed sessions
             },
-            select: [ 'sessionDate', 'durationMinutes' ]
+            select: [ 'id', 'sessionDate', 'durationMinutes', 'durationSeconds' ]
+        } );
+
+        console.log( 'Heatmap query:', { 
+            userId: currentUser.id,
+            startDate: startDate_obj.toISOString(),
+            endDate: endDate_obj.toISOString(),
+            sessionsFound: sessions.length 
         } );
 
         const heatmapData: Record<string, number> = {};
@@ -140,8 +152,28 @@ export class StudySessionsController {
                 dateKey = String( date ).split( 'T' )[0];
             }
             
-            heatmapData[dateKey] = ( heatmapData[dateKey] || 0 ) + session.durationMinutes;
+            // Calculate total minutes from both durationMinutes and durationSeconds
+            // Prefer durationSeconds if it exists and is greater than 0, otherwise use durationMinutes
+            let totalMinutes = 0;
+            if ( session.durationSeconds && session.durationSeconds > 0 ) {
+                // Round up to at least 1 minute if there's any study time
+                totalMinutes = Math.max( 1, Math.floor( session.durationSeconds / 60 ) );
+            } else if ( session.durationMinutes && session.durationMinutes > 0 ) {
+                totalMinutes = session.durationMinutes;
+            }
+            
+            console.log( 'Processing session:', { 
+                id: session.id,
+                dateKey, 
+                durationMinutes: session.durationMinutes,
+                durationSeconds: session.durationSeconds,
+                totalMinutes 
+            } );
+            
+            heatmapData[dateKey] = ( heatmapData[dateKey] || 0 ) + totalMinutes;
         } );
+
+        console.log( 'Final heatmap data:', heatmapData );
 
         return toApiResponse( 'Heatmap data retrieved', heatmapData );
     }

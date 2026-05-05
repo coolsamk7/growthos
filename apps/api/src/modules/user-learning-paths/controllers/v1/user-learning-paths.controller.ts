@@ -141,21 +141,32 @@ export class UserLearningPathsController {
     @ApiParam( { name: 'id', type: String } )
     @ApiOkResponse()
     async getTree( @Param( 'id' ) id: string, @AuthenticatedUser() currentUser: any ) {
-        const whereConditions: any = { userLearningPathId: id };
+        // First verify the learning path exists and belongs to the user
+        const pathWhereConditions: any = { id };
         if ( currentUser?.role === 'USER' ) {
-            whereConditions.userId = currentUser.id;
+            pathWhereConditions.userId = currentUser.id;
+        }
+
+        const learningPath = await this.dataSource.manager.findOne( UserLearningPathEntity, { 
+            where: pathWhereConditions 
+        } );
+
+        if ( !learningPath ) {
+            throw new NotFoundException( { message: 'User learning path not found' } );
         }
 
         // Get all modules for this learning path
         const modules = await this.dataSource.manager.find( UserModuleEntity, {
-            where: whereConditions
+            where: { userLearningPathId: id },
+            order: { orderIndex: 'ASC' }
         } );
 
         // Build tree structure
         const tree = await Promise.all( modules.map( async ( module ) => {
             // Get topics for this module
             const topics = await this.dataSource.manager.find( UserTopicEntity, {
-                where: { userModuleId: module.id }
+                where: { userModuleId: module.id },
+                order: { orderIndex: 'ASC' }
             } );
 
             const topicsWithProblems = await Promise.all( topics.map( async ( topic ) => {
