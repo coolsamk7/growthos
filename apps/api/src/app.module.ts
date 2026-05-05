@@ -21,6 +21,7 @@ import { NotesModule } from './modules/notes';
 import { ResourcesModule } from './modules/resources';
 import { StreaksModule } from './modules/streaks';
 import { StudySessionsModule } from './modules/study-sessions';
+import { SessionTagsModule } from './modules/session-tags/session-tags.module';
 import { ProblemAttemptsModule } from './modules/problem-attempts';
 import { QueueModule } from './modules/queue'; 
 import { BullModule } from '@nestjs/bullmq'
@@ -96,6 +97,7 @@ import { AppAuthGuard } from './guards/app.guard';
         ResourcesModule,
         StreaksModule,
         StudySessionsModule,
+        SessionTagsModule,
         ProblemAttemptsModule,
         QueueModule
     ],

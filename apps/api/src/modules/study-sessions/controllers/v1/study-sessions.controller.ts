@@ -2,12 +2,17 @@ import { Controller, Post, Get, Put, Delete, Body, Param, Query, HttpStatus, Htt
 import { ApiBearerAuth, ApiTags, ApiBody, ApiQuery, ApiParam } from '@nestjs/swagger';
 import type { Static } from 'typebox';
 import { InjectDataSource } from '@nestjs/typeorm';
-import { DataSource, Between } from 'typeorm';
-import { StudySessionEntity } from '@growthos/nestjs-database/entities';
+import { DataSource, Between, In } from 'typeorm';
+import { StudySessionEntity, SessionTagEntity } from '@growthos/nestjs-database/entities';
 import { CheckAbilities, AbilitiesGuard, Action, Subject } from '@growthos/nestjs-casl';
 import { toApiResponse, toApiListResponse, toMessageResponse, serializeEntity } from 'src/utils/response';
 import { CreateStudySessionRequest, UpdateStudySessionRequest } from '../../dtos';
 import { AuthenticatedUser } from 'src/decorators';
+import Type from 'typebox';
+
+const AddTagsRequest = Type.Object( {
+    tagIds: Type.Array( Type.String() )
+} );
 
 @ApiTags( 'Study Sessions' )
 @ApiBearerAuth()
@@ -94,7 +99,7 @@ export class StudySessionsController {
     async getActiveSession( @AuthenticatedUser() currentUser: any ) {
         const item = await this.dataSource.manager.findOne( StudySessionEntity, {
             where: { userId: currentUser.id, isActive: true },
-            relations: [ 'userLearningPath', 'userModule', 'userTopic', 'userProblem' ]
+            relations: [ 'userLearningPath', 'userModule', 'userTopic', 'userProblem', 'tags' ]
         } );
         
         if ( !item ) {
@@ -195,7 +200,7 @@ export class StudySessionsController {
             skip, 
             take: limitNum, 
             order: { createdAt: 'DESC' },
-            relations: [ 'userLearningPath', 'userModule', 'userTopic', 'userProblem' ]
+            relations: [ 'userLearningPath', 'userModule', 'userTopic', 'userProblem', 'tags' ]
         } );
         return toApiListResponse( items.map( i => serializeEntity( i ) ), total, pageNum, limitNum );
     }
@@ -281,7 +286,7 @@ export class StudySessionsController {
         if ( currentUser?.role === 'USER' ) { where.userId = currentUser.id; }
         const item = await this.dataSource.manager.findOne( StudySessionEntity, { 
             where,
-            relations: [ 'userLearningPath', 'userModule', 'userTopic', 'userProblem' ]
+            relations: [ 'userLearningPath', 'userModule', 'userTopic', 'userProblem', 'tags' ]
         } );
         if ( !item ) throw new NotFoundException( { message: 'Not found' } );
         return serializeEntity( item );
@@ -315,5 +320,66 @@ export class StudySessionsController {
         if ( !item ) throw new NotFoundException( { message: 'Not found' } );
         await this.dataSource.manager.softDelete( StudySessionEntity, { id } );
         return toMessageResponse( 'Deleted successfully' );
+    }
+
+    @Post( ':id/tags' )
+    @HttpCode( HttpStatus.OK )
+    @UseGuards( AbilitiesGuard )
+    @CheckAbilities( { action: Action.UPDATE, subject: Subject.STUDY_SESSION } )
+    @ApiParam( { name: 'id', type: String } )
+    @ApiBody( { schema: AddTagsRequest } )
+    async addTags( 
+        @Param( 'id' ) id: string, 
+        @Body() body: typeof AddTagsRequest.static,
+        @AuthenticatedUser() currentUser: any 
+    ) {
+        const session = await this.dataSource.manager.findOne( StudySessionEntity, {
+            where: { id, userId: currentUser.id },
+            relations: [ 'tags' ]
+        } );
+
+        if ( !session ) {
+            throw new NotFoundException( { message: 'Session not found' } );
+        }
+
+        // Find the tags
+        const tags = await this.dataSource.manager.find( SessionTagEntity, {
+            where: { id: In( body.tagIds ), userId: currentUser.id }
+        } );
+
+        // Add tags (avoid duplicates)
+        const existingTagIds = new Set( session.tags?.map( t => t.id ) || [] );
+        const newTags = tags.filter( t => !existingTagIds.has( t.id ) );
+        
+        session.tags = [ ...( session.tags || [] ), ...newTags ];
+        await this.dataSource.manager.save( session );
+
+        return toApiResponse( 'Tags added successfully', serializeEntity( session ) );
+    }
+
+    @Delete( ':id/tags/:tagId' )
+    @HttpCode( HttpStatus.OK )
+    @UseGuards( AbilitiesGuard )
+    @CheckAbilities( { action: Action.UPDATE, subject: Subject.STUDY_SESSION } )
+    @ApiParam( { name: 'id', type: String } )
+    @ApiParam( { name: 'tagId', type: String } )
+    async removeTag( 
+        @Param( 'id' ) id: string,
+        @Param( 'tagId' ) tagId: string,
+        @AuthenticatedUser() currentUser: any 
+    ) {
+        const session = await this.dataSource.manager.findOne( StudySessionEntity, {
+            where: { id, userId: currentUser.id },
+            relations: [ 'tags' ]
+        } );
+
+        if ( !session ) {
+            throw new NotFoundException( { message: 'Session not found' } );
+        }
+
+        session.tags = session.tags?.filter( t => t.id !== tagId ) || [];
+        await this.dataSource.manager.save( session );
+
+        return toApiResponse( 'Tag removed successfully', serializeEntity( session ) );
     }
 }
