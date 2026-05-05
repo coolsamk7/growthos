@@ -3,7 +3,7 @@ import { ApiBearerAuth, ApiTags, ApiQuery, ApiParam, ApiBody, ApiOkResponse, Api
 import type { Static } from 'typebox';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
-import { UserLearningPathEntity } from '@growthos/nestjs-database/entities';
+import { UserLearningPathEntity, UserModuleEntity, UserTopicEntity, UserProblemEntity } from '@growthos/nestjs-database/entities';
 import { CheckAbilities, AbilitiesGuard, Action, Subject } from '@growthos/nestjs-casl';
 import { toApiResponse, toApiListResponse, toMessageResponse, serializeEntity } from 'src/utils/response';
 import { 
@@ -132,6 +132,56 @@ export class UserLearningPathsController {
 
         const updated = await this.dataSource.manager.save( path );
         return toApiResponse( 'User learning path updated successfully', serializeEntity( updated ) );
+    }
+
+    @Get( ':id/tree' )
+    @HttpCode( HttpStatus.OK )
+    @UseGuards( AbilitiesGuard )
+    @CheckAbilities( { action: Action.READ, subject: Subject.USER_LEARNING_PATH } )
+    @ApiParam( { name: 'id', type: String } )
+    @ApiOkResponse()
+    async getTree( @Param( 'id' ) id: string, @AuthenticatedUser() currentUser: any ) {
+        const whereConditions: any = { userLearningPathId: id };
+        if ( currentUser?.role === 'USER' ) {
+            whereConditions.userId = currentUser.id;
+        }
+
+        // Get all modules for this learning path
+        const modules = await this.dataSource.manager.find( UserModuleEntity, {
+            where: whereConditions
+        } );
+
+        // Build tree structure
+        const tree = await Promise.all( modules.map( async ( module ) => {
+            // Get topics for this module
+            const topics = await this.dataSource.manager.find( UserTopicEntity, {
+                where: { userModuleId: module.id }
+            } );
+
+            const topicsWithProblems = await Promise.all( topics.map( async ( topic ) => {
+                // Get problems for this topic
+                const problems = await this.dataSource.manager.find( UserProblemEntity, {
+                    where: { userTopicId: topic.id }
+                } );
+
+                return {
+                    id: topic.id,
+                    name: topic.name,
+                    problems: problems.map( p => ( {
+                        id: p.id,
+                        title: p.title
+                    } ) )
+                };
+            } ) );
+
+            return {
+                id: module.id,
+                name: module.name,
+                topics: topicsWithProblems
+            };
+        } ) );
+
+        return toApiResponse( 'Learning path tree retrieved successfully', tree );
     }
 
     @Delete( ':id' )

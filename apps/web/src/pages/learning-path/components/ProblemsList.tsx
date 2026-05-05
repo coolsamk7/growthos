@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Code, Plus, Trash2, Edit2, Star, StarOff, ExternalLink } from 'lucide-react';
+import { Code, Plus, Trash2, Edit2, Star, StarOff, ExternalLink, ChevronDown, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
@@ -22,6 +22,8 @@ import {
 } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { ResourcesList } from './ResourcesList';
+import { TimerDialog } from '@/components/common/TimerDialog';
 
 interface ProblemsListProps {
     topicId: string;
@@ -45,6 +47,7 @@ export function ProblemsList( { topicId }: ProblemsListProps ) {
     const [ loading, setLoading ] = useState( true );
     const [ dialogOpen, setDialogOpen ] = useState( false );
     const [ editingProblem, setEditingProblem ] = useState<UserProblem | null>( null );
+    const [ expandedProblems, setExpandedProblems ] = useState<Set<string>>( new Set() );
     const [ page, setPage ] = useState( 1 );
     const [ totalProblems, setTotalProblems ] = useState( 0 );
     const [ hasMore, setHasMore ] = useState( false );
@@ -199,6 +202,18 @@ export function ProblemsList( { topicId }: ProblemsListProps ) {
         }
     };
 
+    const toggleProblem = ( problemId: string ) => {
+        setExpandedProblems( ( prev ) => {
+            const next = new Set( prev );
+            if ( next.has( problemId ) ) {
+                next.delete( problemId );
+            } else {
+                next.add( problemId );
+            }
+            return next;
+        } );
+    };
+
     if ( loading && problems.length === 0 ) {
         return <div className="text-xs text-muted-foreground">Loading problems...</div>;
     }
@@ -222,9 +237,23 @@ export function ProblemsList( { topicId }: ProblemsListProps ) {
                 <div className="space-y-2">
                     {problems
                         .filter( ( p ) => p && p.id )
-                        .map( ( problem ) => (
-                        <div key={problem.id} className="rounded border p-2 bg-background">
-                            <div className="flex items-start justify-between gap-2">
+                        .map( ( problem ) => {
+                            const isExpanded = expandedProblems.has( problem.id );
+                            return (
+                        <div key={problem.id} className="rounded border overflow-hidden bg-background">
+                            <div className="flex items-start justify-between gap-2 p-2">
+                                <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    className="size-6 shrink-0"
+                                    onClick={() => toggleProblem( problem.id )}
+                                >
+                                    {isExpanded ? (
+                                        <ChevronDown className="size-4" />
+                                    ) : (
+                                        <ChevronRight className="size-4" />
+                                    )}
+                                </Button>
                                 <div className="flex-1 min-w-0">
                                     <div className="flex items-center gap-2 mb-1">
                                         <p className="text-sm font-medium flex items-center gap-1">
@@ -250,6 +279,14 @@ export function ProblemsList( { topicId }: ProblemsListProps ) {
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-1">
+                                    <TimerDialog
+                                        title={problem.title}
+                                        userTopicId={topicId}
+                                        userProblemId={problem.id}
+                                        onSessionComplete={() => {
+                                            toast( { title: 'Session completed!', description: 'Your study session has been saved.' } );
+                                        }}
+                                    />
                                     <Select
                                         value={problem.status}
                                         onValueChange={( value: ProblemStatus ) =>
@@ -296,8 +333,18 @@ export function ProblemsList( { topicId }: ProblemsListProps ) {
                                     </Button>
                                 </div>
                             </div>
+                            
+                            {isExpanded && (
+                                <div className="border-t bg-muted/20 p-3">
+                                    <ResourcesList
+                                        entityType="problem"
+                                        entityId={problem.id}
+                                    />
+                                </div>
+                            )}
                         </div>
-                    ) )}
+                    );
+                    } )}
                 </div>
             )}
             

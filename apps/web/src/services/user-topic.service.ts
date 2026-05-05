@@ -21,6 +21,7 @@ export interface UserTopic {
     masterTopicId?: string;
     createdAt: string;
     updatedAt: string;
+    problemCount?: number;
 }
 
 export interface CreateTopicData {
@@ -50,20 +51,28 @@ export const createUserTopic = async ( data: CreateTopicData ) => {
     return response.data?.data;
 };
 
-export const getUserTopics = async ( userModuleId?: string, page: number = 1, limit: number = 100 ) => {
-    const queries: any = {
-        page,
-        limit
-    };
+export const getUserTopics = async ( userModuleId: string, page: number = 1, limit: number = 100 ) => {
+    console.log( '[user-topic.service] getUserTopics called with:', { userModuleId, page, limit } );
     
-    // Only add userModuleId if it's defined
-    if ( userModuleId ) {
-        queries.userModuleId = userModuleId;
+    if ( !userModuleId ) {
+        console.error( '[user-topic.service] ERROR: userModuleId is missing!' );
+        throw new Error( 'userModuleId is required' );
     }
     
+    const queryParams = {
+        page,
+        limit,
+        userModuleId
+    };
+    
+    console.log( '[user-topic.service] Sending queries:', queryParams );
+    
     const response = await userTopicsFindAll( {
-        queries
+        query: queryParams
     } );
+    
+    console.log( '[user-topic.service] Response received:', response );
+    
     return {
         data: response.data?.data || [],
         total: response.data?.total || 0,

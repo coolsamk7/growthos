@@ -1,4 +1,4 @@
-import { userLearningPathsCreate, userLearningPathsFindAll, userLearningPathsFindOne } from "@growthos/api-client"
+import { userLearningPathsCreate, userLearningPathsFindAll, userLearningPathsFindOne, userLearningPathsDelete } from "@growthos/api-client"
 
 export const addNewLearningPath = async ( data: { 
     title: string;
@@ -38,5 +38,12 @@ export const getLearningPath = async ( id: string ) => {
         ...path,
         title: path.name,
     };
+}
+
+export const deleteLearningPath = async ( id: string ) => {
+    const response = await userLearningPathsDelete( {
+        path: { id }
+    } );
+    return response.data;
 }
 

@@ -14,6 +14,8 @@ import { useToast } from '@/hooks/use-toast';
 import { AddTopicDialog } from './AddTopicDialog';
 import { NotesList } from './NotesList';
 import { ProblemsList } from './ProblemsList';
+import { ResourcesList } from './ResourcesList';
+import { TimerDialog } from '@/components/common/TimerDialog';
 
 interface TopicListProps {
     userLearningPathId: string;
@@ -51,6 +53,8 @@ export function TopicList( { userLearningPathId, userModuleId }: TopicListProps 
     const [ totalTopics, setTotalTopics ] = useState( 0 );
     const [ hasMore, setHasMore ] = useState( false );
     const { toast } = useToast();
+    
+    console.log( 'TopicList - received userModuleId:', userModuleId, 'userLearningPathId:', userLearningPathId );
     
     const ITEMS_PER_PAGE = 10;
 
@@ -209,11 +213,26 @@ export function TopicList( { userLearningPathId, userModuleId }: TopicListProps 
                                         </div>
 
                                         <div className="flex items-center gap-2">
+                                            {typeof topic.problemCount === 'number' && (
+                                                <Badge variant="outline" className="text-xs">
+                                                    {topic.problemCount} problems
+                                                </Badge>
+                                            )}
+                                            
                                             {topic.confidenceScore > 0 && (
                                                 <Badge variant="secondary" className="text-xs">
                                                     {topic.confidenceScore}%
                                                 </Badge>
                                             )}
+                                            
+                                            <TimerDialog
+                                                title={topic.name}
+                                                userLearningPathId={userLearningPathId}
+                                                userTopicId={topic.id}
+                                                onSessionComplete={() => {
+                                                    toast( { title: 'Session completed!', description: 'Your study session has been saved.' } );
+                                                }}
+                                            />
                                             
                                             <Select
                                                 value={topic.status}
@@ -245,6 +264,10 @@ export function TopicList( { userLearningPathId, userModuleId }: TopicListProps 
 
                                     {isExpanded && (
                                         <div className="border-t bg-muted/20 p-4 space-y-4">
+                                            <ResourcesList
+                                                entityType="topic"
+                                                entityId={topic.id}
+                                            />
                                             <NotesList topicId={topic.id} />
                                             <ProblemsList topicId={topic.id} />
                                         </div>

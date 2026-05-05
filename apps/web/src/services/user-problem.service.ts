@@ -59,20 +59,19 @@ export const createUserProblem = async ( data: CreateProblemData ) => {
     return response.data?.data;
 };
 
-export const getUserProblems = async ( userTopicId?: string, page: number = 1, limit: number = 100 ) => {
-    const queries: any = {
-        page,
-        limit
-    };
-    
-    // Only add userTopicId if it's defined
-    if ( userTopicId ) {
-        queries.userTopicId = userTopicId;
+export const getUserProblems = async ( userTopicId: string, page: number = 1, limit: number = 100 ) => {
+    if ( !userTopicId ) {
+        throw new Error( 'userTopicId is required' );
     }
     
     const response = await userProblemsFindAll( {
-        queries
+        query: {
+            page,
+            limit,
+            userTopicId
+        }
     } );
+    
     return {
         data: response.data?.data || [],
         total: response.data?.total || 0,

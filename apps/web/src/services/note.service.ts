@@ -51,7 +51,7 @@ export const getNotes = async ( userTopicId?: string ) => {
     }
     
     const response = await notesFindAll( {
-        queries
+        query: queries
     } );
     return response.data?.data || [];
 };

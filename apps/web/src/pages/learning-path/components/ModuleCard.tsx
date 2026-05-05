@@ -15,6 +15,8 @@ import { UserModule, ModuleStatus, deleteUserModule } from '@/services/user-modu
 import { useToast } from '@/hooks/use-toast';
 import { EditModuleDialog } from './EditModuleDialog';
 import { TopicList } from './TopicList';
+import { ResourcesList } from './ResourcesList';
+import { TimerDialog } from '@/components/common/TimerDialog';
 
 interface ModuleCardProps {
     module: UserModule;
@@ -46,6 +48,8 @@ export function ModuleCard( { module, isExpanded, onToggle, onUpdate, onDelete }
     const [ editDialogOpen, setEditDialogOpen ] = useState( false );
     const [ deleting, setDeleting ] = useState( false );
     const { toast } = useToast();
+
+    console.log( 'ModuleCard - module.id:', module?.id, 'module:', module );
 
     const statusInfo = statusConfig[module.status];
     const StatusIcon = statusInfo.icon;
@@ -111,6 +115,15 @@ export function ModuleCard( { module, isExpanded, onToggle, onUpdate, onDelete }
                         </div>
                         <span className="text-sm font-medium text-muted-foreground">{module.progress}%</span>
                         
+                        <TimerDialog
+                            title={module.name}
+                            userLearningPathId={module.userLearningPathId}
+                            userModuleId={module.id}
+                            onSessionComplete={() => {
+                                toast( { title: 'Session completed!', description: 'Your study session has been saved.' } );
+                            }}
+                        />
+                        
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild onClick={( e ) => e.stopPropagation()}>
                                 <Button variant="ghost" size="icon" disabled={deleting}>
@@ -150,7 +163,7 @@ export function ModuleCard( { module, isExpanded, onToggle, onUpdate, onDelete }
                                 </div>
                             )}
                             
-                            <div className="grid grid-cols-3 gap-4 rounded-lg border p-4">
+                            <div className="grid grid-cols-4 gap-4 rounded-lg border p-4">
                                 <div>
                                     <p className="text-sm text-muted-foreground">Status</p>
                                     <p className="font-medium">{statusInfo.label}</p>
@@ -160,10 +173,19 @@ export function ModuleCard( { module, isExpanded, onToggle, onUpdate, onDelete }
                                     <p className="font-medium">{module.progress}%</p>
                                 </div>
                                 <div>
+                                    <p className="text-sm text-muted-foreground">Topics</p>
+                                    <p className="font-medium">{module.topicCount || 0}</p>
+                                </div>
+                                <div>
                                     <p className="text-sm text-muted-foreground">Order</p>
                                     <p className="font-medium">#{module.orderIndex + 1}</p>
                                 </div>
                             </div>
+
+                            <ResourcesList
+                                entityType="module"
+                                entityId={module.id}
+                            />
 
                             <TopicList
                                 userLearningPathId={module.userLearningPathId}
