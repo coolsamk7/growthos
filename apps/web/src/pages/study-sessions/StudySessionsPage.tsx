@@ -18,7 +18,8 @@ import {
     EditNotesDialog,
     LinkSessionDialog,
     SessionPagination,
-    SessionSearch
+    SessionSearch,
+    ExportButton
 } from './components';
 import { toast } from 'sonner';
 
@@ -200,14 +201,19 @@ export function StudySessionsPage() {
                 </div>
 
                 {/* Search and Filters */}
-                <div className="mb-6">
-                    <SessionSearch
-                        filters={searchFilters}
-                        onFiltersChange={setSearchFilters}
-                        onSearch={handleSearch}
-                        moduleNames={contentNames.modules}
-                        topicNames={contentNames.topics}
-                    />
+                <div className="mb-6 flex gap-3">
+                    <div className="flex-1">
+                        <SessionSearch
+                            filters={searchFilters}
+                            onFiltersChange={setSearchFilters}
+                            onSearch={handleSearch}
+                            moduleNames={contentNames.modules}
+                            topicNames={contentNames.topics}
+                        />
+                    </div>
+                    <div className="flex items-start">
+                        <ExportButton sessions={sessions} disabled={loading} />
+                    </div>
                 </div>
 
                 {/* Sessions List */}

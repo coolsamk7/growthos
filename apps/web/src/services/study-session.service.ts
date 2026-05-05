@@ -1,4 +1,5 @@
 import { apiClient } from './api';
+import { downloadFile, formatDateForExport, escapeCSVField } from '@/utils/export';
 
 export interface StudySession {
     id: string;
@@ -124,4 +125,57 @@ export const getHeatmapData = async ( startDate?: string, endDate?: string ): Pr
         console.error( 'Heatmap API error:', error.response?.status, error.response?.data );
         throw error;
     }
+};
+
+export const exportSessionsToCSV = ( sessions: StudySession[], filename?: string ) => {
+    // Define CSV headers
+    const headers = [
+        'Date',
+        'Duration (minutes)',
+        'Duration (formatted)',
+        'Learning Path',
+        'Module',
+        'Topic',
+        'Problem',
+        'Status',
+        'Notes',
+        'Created At'
+    ];
+    
+    // Convert sessions to CSV rows
+    const rows = sessions.map( session => {
+        const durationMinutes = session.durationSeconds 
+            ? Math.floor( session.durationSeconds / 60 )
+            : session.durationMinutes;
+            
+        const hours = Math.floor( durationMinutes / 60 );
+        const mins = durationMinutes % 60;
+        const durationFormatted = hours > 0 
+            ? `${hours}h ${mins}m` 
+            : `${mins}m`;
+        
+        return [
+            formatDateForExport( session.sessionDate ),
+            durationMinutes,
+            durationFormatted,
+            session.userLearningPath?.name || '',
+            session.userModule?.name || '',
+            session.userTopic?.name || '',
+            session.userProblem?.title || '',
+            session.isActive ? 'Active' : 'Completed',
+            session.notes || '',
+            session.createdAt
+        ].map( escapeCSVField );
+    } );
+    
+    // Combine headers and rows
+    const csv = [ headers, ...rows ]
+        .map( row => row.join( ',' ) )
+        .join( '\n' );
+    
+    // Generate filename with current date
+    const defaultFilename = `study-sessions-${new Date().toISOString().split( 'T' )[0]}.csv`;
+    
+    // Download file
+    downloadFile( csv, filename || defaultFilename, 'text/csv' );
 };
