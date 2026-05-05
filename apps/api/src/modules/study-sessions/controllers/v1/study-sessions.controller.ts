@@ -200,6 +200,77 @@ export class StudySessionsController {
         return toApiListResponse( items.map( i => serializeEntity( i ) ), total, pageNum, limitNum );
     }
 
+    @Get( 'search' )
+    @HttpCode( HttpStatus.OK )
+    @UseGuards( AbilitiesGuard )
+    @CheckAbilities( { action: Action.READ, subject: Subject.STUDY_SESSION } )
+    @ApiQuery( { name: 'q', required: false, type: String } )
+    @ApiQuery( { name: 'startDate', required: false, type: String } )
+    @ApiQuery( { name: 'endDate', required: false, type: String } )
+    @ApiQuery( { name: 'moduleId', required: false, type: String } )
+    @ApiQuery( { name: 'topicId', required: false, type: String } )
+    @ApiQuery( { name: 'problemId', required: false, type: String } )
+    @ApiQuery( { name: 'page', required: false, type: Number } )
+    @ApiQuery( { name: 'limit', required: false, type: Number } )
+    async search( 
+        @Query( 'q' ) query?: string,
+        @Query( 'startDate' ) startDate?: string,
+        @Query( 'endDate' ) endDate?: string,
+        @Query( 'moduleId' ) moduleId?: string,
+        @Query( 'topicId' ) topicId?: string,
+        @Query( 'problemId' ) problemId?: string,
+        @Query( 'page' ) page: string = '1',
+        @Query( 'limit' ) limit: string = '20',
+        @AuthenticatedUser() currentUser?: any 
+    ) {
+        const pageNum = parseInt( page, 10 );
+        const limitNum = parseInt( limit, 10 );
+        const skip = ( pageNum - 1 ) * limitNum;
+        
+        const queryBuilder = this.dataSource.manager
+            .createQueryBuilder( StudySessionEntity, 'session' )
+            .leftJoinAndSelect( 'session.userModule', 'module' )
+            .leftJoinAndSelect( 'session.userTopic', 'topic' )
+            .leftJoinAndSelect( 'session.userProblem', 'problem' )
+            .where( 'session.userId = :userId', { userId: currentUser.id } );
+        
+        // Text search in notes
+        if ( query ) {
+            queryBuilder.andWhere( 'session.notes ILIKE :query', { query: `%${query}%` } );
+        }
+        
+        // Date range filter
+        if ( startDate ) {
+            queryBuilder.andWhere( 'session.sessionDate >= :startDate', { startDate: new Date( startDate ) } );
+        }
+        if ( endDate ) {
+            queryBuilder.andWhere( 'session.sessionDate <= :endDate', { endDate: new Date( endDate ) } );
+        }
+        
+        // Content filters
+        if ( moduleId ) {
+            queryBuilder.andWhere( 'session.userModuleId = :moduleId', { moduleId } );
+        }
+        if ( topicId ) {
+            queryBuilder.andWhere( 'session.userTopicId = :topicId', { topicId } );
+        }
+        if ( problemId ) {
+            queryBuilder.andWhere( 'session.userProblemId = :problemId', { problemId } );
+        }
+        
+        // Get total count
+        const total = await queryBuilder.getCount();
+        
+        // Get paginated results
+        const items = await queryBuilder
+            .orderBy( 'session.createdAt', 'DESC' )
+            .skip( skip )
+            .take( limitNum )
+            .getMany();
+        
+        return toApiListResponse( items.map( i => serializeEntity( i ) ), total, pageNum, limitNum );
+    }
+
     @Get( ':id' )
     @HttpCode( HttpStatus.OK )
     @UseGuards( AbilitiesGuard )

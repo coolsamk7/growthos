@@ -72,6 +72,31 @@ export const getStudySessions = async ( params: { page?: number; limit?: number 
     };
 };
 
+export interface SearchFilters {
+    q?: string;
+    startDate?: string;
+    endDate?: string;
+    moduleId?: string;
+    topicId?: string;
+    problemId?: string;
+    page?: number;
+    limit?: number;
+}
+
+export const searchStudySessions = async ( filters: SearchFilters ) => {
+    const { page = 1, limit = 20, ...rest } = filters;
+    const response = await apiClient.get( '/v1/study-sessions/search', {
+        params: { page, limit, ...rest }
+    } );
+    return {
+        sessions: response.data?.data || [],
+        total: response.data?.total || 0,
+        page: response.data?.page || 1,
+        limit: response.data?.limit || limit,
+        totalPages: response.data?.totalPages || 1,
+    };
+};
+
 export const getStudySession = async ( id: string ): Promise<StudySession> => {
     const response = await apiClient.get( `/v1/study-sessions/${id}` );
     return response.data;

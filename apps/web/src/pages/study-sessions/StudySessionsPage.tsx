@@ -5,17 +5,20 @@ import { PomodoroTimer } from '@/components/common/PomodoroTimer';
 import { HeatmapCalendar } from '@/components/common/HeatmapCalendar';
 import type { ContentSelection } from '@/components/common/ContentTreePicker';
 import { 
-    getStudySessions, 
+    getStudySessions,
+    searchStudySessions, 
     updateStudySession, 
     deleteStudySession,
-    type StudySession 
+    type StudySession,
+    type SearchFilters
 } from '@/services/study-session.service';
 import { 
     SessionStatsSummary,
     SessionList,
     EditNotesDialog,
     LinkSessionDialog,
-    SessionPagination
+    SessionPagination,
+    SessionSearch
 } from './components';
 import { toast } from 'sonner';
 
@@ -31,6 +34,7 @@ export function StudySessionsPage() {
     const [ showOrphansOnly, setShowOrphansOnly ] = useState( false );
     const [ linkSelection, setLinkSelection ] = useState<ContentSelection>( {} );
     const [ selectedLearningPathId, setSelectedLearningPathId ] = useState<string>( '' );
+    const [ searchFilters, setSearchFilters ] = useState<SearchFilters>( {} );
     const [ contentNames, setContentNames ] = useState<{ 
         modules: Record<string, string>; 
         topics: Record<string, string>; 
@@ -44,7 +48,19 @@ export function StudySessionsPage() {
     const loadSessions = async () => {
         try {
             setLoading( true );
-            const response = await getStudySessions( { page, limit: 20 } );
+            
+            // Check if we have active filters
+            const hasFilters = Object.keys( searchFilters ).some( 
+                k => k !== 'page' && k !== 'limit' && searchFilters[k as keyof SearchFilters] 
+            );
+            
+            let response;
+            if ( hasFilters ) {
+                response = await searchStudySessions( { ...searchFilters, page, limit: 20 } );
+            } else {
+                response = await getStudySessions( { page, limit: 20 } );
+            }
+            
             setSessions( response.sessions );
             setTotalPages( response.totalPages );
         } catch ( error: any ) {
@@ -52,6 +68,11 @@ export function StudySessionsPage() {
         } finally {
             setLoading( false );
         }
+    };
+
+    const handleSearch = () => {
+        setPage( 1 ); // Reset to first page when searching
+        loadSessions();
     };
 
     const handleEditOpen = ( session: StudySession ) => {
@@ -176,6 +197,17 @@ export function StudySessionsPage() {
                 {/* Heatmap */}
                 <div className="mb-8">
                     <HeatmapCalendar />
+                </div>
+
+                {/* Search and Filters */}
+                <div className="mb-6">
+                    <SessionSearch
+                        filters={searchFilters}
+                        onFiltersChange={setSearchFilters}
+                        onSearch={handleSearch}
+                        moduleNames={contentNames.modules}
+                        topicNames={contentNames.topics}
+                    />
                 </div>
 
                 {/* Sessions List */}
