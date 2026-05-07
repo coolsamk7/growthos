@@ -330,7 +330,7 @@ export class StudySessionsController {
     @ApiBody( { schema: AddTagsRequest } )
     async addTags( 
         @Param( 'id' ) id: string, 
-        @Body() body: typeof AddTagsRequest.static,
+        @Body() body: Static<typeof AddTagsRequest>,
         @AuthenticatedUser() currentUser: any 
     ) {
         const session = await this.dataSource.manager.findOne( StudySessionEntity, {

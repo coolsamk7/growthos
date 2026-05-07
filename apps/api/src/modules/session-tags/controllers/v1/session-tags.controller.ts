@@ -6,7 +6,8 @@ import { SessionTagEntity } from '@growthos/nestjs-database/entities';
 import { CheckAbilities, AbilitiesGuard, Action, Subject } from '@growthos/nestjs-casl';
 import { toApiResponse, toApiListResponse, serializeEntity } from 'src/utils/response';
 import { AuthenticatedUser } from 'src/decorators';
-import Type from 'typebox';
+import Type from 'typebox'
+import type { Static } from 'typebox';
 
 const CreateSessionTagRequest = Type.Object( {
     name: Type.String( { minLength: 1, maxLength: 50 } ),
@@ -27,7 +28,7 @@ export class SessionTagsController {
     @CheckAbilities( { action: Action.CREATE, subject: Subject.STUDY_SESSION } )
     @ApiBody( { schema: CreateSessionTagRequest } )
     @ApiOkResponse()
-    async create( @Body() createDto: typeof CreateSessionTagRequest.static, @AuthenticatedUser() currentUser: any ) {
+    async create( @Body() createDto: Static<typeof CreateSessionTagRequest>, @AuthenticatedUser() currentUser: any ) {
         const tag = this.dataSource.manager.create( SessionTagEntity, {
             ...createDto,
             userId: currentUser.id,
