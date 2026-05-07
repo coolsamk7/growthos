@@ -2,12 +2,17 @@ import { Controller, Post, Get, Put, Delete, Body, Param, Query, HttpStatus, Htt
 import { ApiBearerAuth, ApiTags, ApiBody, ApiQuery, ApiParam } from '@nestjs/swagger';
 import type { Static } from 'typebox';
 import { InjectDataSource } from '@nestjs/typeorm';
-import { DataSource, Between } from 'typeorm';
-import { StudySessionEntity } from '@growthos/nestjs-database/entities';
+import { DataSource, Between, In } from 'typeorm';
+import { StudySessionEntity, SessionTagEntity } from '@growthos/nestjs-database/entities';
 import { CheckAbilities, AbilitiesGuard, Action, Subject } from '@growthos/nestjs-casl';
 import { toApiResponse, toApiListResponse, toMessageResponse, serializeEntity } from 'src/utils/response';
 import { CreateStudySessionRequest, UpdateStudySessionRequest } from '../../dtos';
 import { AuthenticatedUser } from 'src/decorators';
+import Type from 'typebox';
+
+const AddTagsRequest = Type.Object( {
+    tagIds: Type.Array( Type.String() )
+} );
 
 @ApiTags( 'Study Sessions' )
 @ApiBearerAuth()
@@ -94,7 +99,7 @@ export class StudySessionsController {
     async getActiveSession( @AuthenticatedUser() currentUser: any ) {
         const item = await this.dataSource.manager.findOne( StudySessionEntity, {
             where: { userId: currentUser.id, isActive: true },
-            relations: [ 'userLearningPath', 'userModule', 'userTopic', 'userProblem' ]
+            relations: [ 'userLearningPath', 'userModule', 'userTopic', 'userProblem', 'tags' ]
         } );
         
         if ( !item ) {
@@ -115,15 +120,27 @@ export class StudySessionsController {
         @Query( 'endDate' ) endDate?: string,
         @AuthenticatedUser() currentUser?: any 
     ) {
-        const end = endDate ? new Date( endDate ) : new Date();
-        const start = startDate ? new Date( startDate ) : new Date( end.getTime() - 365 * 24 * 60 * 60 * 1000 );
+        const endDate_obj = endDate ? new Date( endDate ) : new Date();
+        const startDate_obj = startDate ? new Date( startDate ) : new Date( endDate_obj.getTime() - 365 * 24 * 60 * 60 * 1000 );
+        
+        // Set to start of day for start and end of day for end to include the full range
+        startDate_obj.setHours( 0, 0, 0, 0 );
+        endDate_obj.setHours( 23, 59, 59, 999 );
 
         const sessions = await this.dataSource.manager.find( StudySessionEntity, {
             where: {
                 userId: currentUser.id,
-                sessionDate: Between( start, end )
+                sessionDate: Between( startDate_obj, endDate_obj ),
+                isActive: false  // Only include completed sessions
             },
-            select: [ 'sessionDate', 'durationMinutes' ]
+            select: [ 'id', 'sessionDate', 'durationMinutes', 'durationSeconds' ]
+        } );
+
+        console.log( 'Heatmap query:', { 
+            userId: currentUser.id,
+            startDate: startDate_obj.toISOString(),
+            endDate: endDate_obj.toISOString(),
+            sessionsFound: sessions.length 
         } );
 
         const heatmapData: Record<string, number> = {};
@@ -140,8 +157,28 @@ export class StudySessionsController {
                 dateKey = String( date ).split( 'T' )[0];
             }
             
-            heatmapData[dateKey] = ( heatmapData[dateKey] || 0 ) + session.durationMinutes;
+            // Calculate total minutes from both durationMinutes and durationSeconds
+            // Prefer durationSeconds if it exists and is greater than 0, otherwise use durationMinutes
+            let totalMinutes = 0;
+            if ( session.durationSeconds && session.durationSeconds > 0 ) {
+                // Round up to at least 1 minute if there's any study time
+                totalMinutes = Math.max( 1, Math.floor( session.durationSeconds / 60 ) );
+            } else if ( session.durationMinutes && session.durationMinutes > 0 ) {
+                totalMinutes = session.durationMinutes;
+            }
+            
+            console.log( 'Processing session:', { 
+                id: session.id,
+                dateKey, 
+                durationMinutes: session.durationMinutes,
+                durationSeconds: session.durationSeconds,
+                totalMinutes 
+            } );
+            
+            heatmapData[dateKey] = ( heatmapData[dateKey] || 0 ) + totalMinutes;
         } );
+
+        console.log( 'Final heatmap data:', heatmapData );
 
         return toApiResponse( 'Heatmap data retrieved', heatmapData );
     }
@@ -163,8 +200,79 @@ export class StudySessionsController {
             skip, 
             take: limitNum, 
             order: { createdAt: 'DESC' },
-            relations: [ 'userLearningPath', 'userModule', 'userTopic', 'userProblem' ]
+            relations: [ 'userLearningPath', 'userModule', 'userTopic', 'userProblem', 'tags' ]
         } );
+        return toApiListResponse( items.map( i => serializeEntity( i ) ), total, pageNum, limitNum );
+    }
+
+    @Get( 'search' )
+    @HttpCode( HttpStatus.OK )
+    @UseGuards( AbilitiesGuard )
+    @CheckAbilities( { action: Action.READ, subject: Subject.STUDY_SESSION } )
+    @ApiQuery( { name: 'q', required: false, type: String } )
+    @ApiQuery( { name: 'startDate', required: false, type: String } )
+    @ApiQuery( { name: 'endDate', required: false, type: String } )
+    @ApiQuery( { name: 'moduleId', required: false, type: String } )
+    @ApiQuery( { name: 'topicId', required: false, type: String } )
+    @ApiQuery( { name: 'problemId', required: false, type: String } )
+    @ApiQuery( { name: 'page', required: false, type: Number } )
+    @ApiQuery( { name: 'limit', required: false, type: Number } )
+    async search( 
+        @Query( 'q' ) query?: string,
+        @Query( 'startDate' ) startDate?: string,
+        @Query( 'endDate' ) endDate?: string,
+        @Query( 'moduleId' ) moduleId?: string,
+        @Query( 'topicId' ) topicId?: string,
+        @Query( 'problemId' ) problemId?: string,
+        @Query( 'page' ) page: string = '1',
+        @Query( 'limit' ) limit: string = '20',
+        @AuthenticatedUser() currentUser?: any 
+    ) {
+        const pageNum = parseInt( page, 10 );
+        const limitNum = parseInt( limit, 10 );
+        const skip = ( pageNum - 1 ) * limitNum;
+        
+        const queryBuilder = this.dataSource.manager
+            .createQueryBuilder( StudySessionEntity, 'session' )
+            .leftJoinAndSelect( 'session.userModule', 'module' )
+            .leftJoinAndSelect( 'session.userTopic', 'topic' )
+            .leftJoinAndSelect( 'session.userProblem', 'problem' )
+            .where( 'session.userId = :userId', { userId: currentUser.id } );
+        
+        // Text search in notes
+        if ( query ) {
+            queryBuilder.andWhere( 'session.notes ILIKE :query', { query: `%${query}%` } );
+        }
+        
+        // Date range filter
+        if ( startDate ) {
+            queryBuilder.andWhere( 'session.sessionDate >= :startDate', { startDate: new Date( startDate ) } );
+        }
+        if ( endDate ) {
+            queryBuilder.andWhere( 'session.sessionDate <= :endDate', { endDate: new Date( endDate ) } );
+        }
+        
+        // Content filters
+        if ( moduleId ) {
+            queryBuilder.andWhere( 'session.userModuleId = :moduleId', { moduleId } );
+        }
+        if ( topicId ) {
+            queryBuilder.andWhere( 'session.userTopicId = :topicId', { topicId } );
+        }
+        if ( problemId ) {
+            queryBuilder.andWhere( 'session.userProblemId = :problemId', { problemId } );
+        }
+        
+        // Get total count
+        const total = await queryBuilder.getCount();
+        
+        // Get paginated results
+        const items = await queryBuilder
+            .orderBy( 'session.createdAt', 'DESC' )
+            .skip( skip )
+            .take( limitNum )
+            .getMany();
+        
         return toApiListResponse( items.map( i => serializeEntity( i ) ), total, pageNum, limitNum );
     }
 
@@ -178,7 +286,7 @@ export class StudySessionsController {
         if ( currentUser?.role === 'USER' ) { where.userId = currentUser.id; }
         const item = await this.dataSource.manager.findOne( StudySessionEntity, { 
             where,
-            relations: [ 'userLearningPath', 'userModule', 'userTopic', 'userProblem' ]
+            relations: [ 'userLearningPath', 'userModule', 'userTopic', 'userProblem', 'tags' ]
         } );
         if ( !item ) throw new NotFoundException( { message: 'Not found' } );
         return serializeEntity( item );
@@ -212,5 +320,66 @@ export class StudySessionsController {
         if ( !item ) throw new NotFoundException( { message: 'Not found' } );
         await this.dataSource.manager.softDelete( StudySessionEntity, { id } );
         return toMessageResponse( 'Deleted successfully' );
+    }
+
+    @Post( ':id/tags' )
+    @HttpCode( HttpStatus.OK )
+    @UseGuards( AbilitiesGuard )
+    @CheckAbilities( { action: Action.UPDATE, subject: Subject.STUDY_SESSION } )
+    @ApiParam( { name: 'id', type: String } )
+    @ApiBody( { schema: AddTagsRequest } )
+    async addTags( 
+        @Param( 'id' ) id: string, 
+        @Body() body: Static<typeof AddTagsRequest>,
+        @AuthenticatedUser() currentUser: any 
+    ) {
+        const session = await this.dataSource.manager.findOne( StudySessionEntity, {
+            where: { id, userId: currentUser.id },
+            relations: [ 'tags' ]
+        } );
+
+        if ( !session ) {
+            throw new NotFoundException( { message: 'Session not found' } );
+        }
+
+        // Find the tags
+        const tags = await this.dataSource.manager.find( SessionTagEntity, {
+            where: { id: In( body.tagIds ), userId: currentUser.id }
+        } );
+
+        // Add tags (avoid duplicates)
+        const existingTagIds = new Set( session.tags?.map( t => t.id ) || [] );
+        const newTags = tags.filter( t => !existingTagIds.has( t.id ) );
+        
+        session.tags = [ ...( session.tags || [] ), ...newTags ];
+        await this.dataSource.manager.save( session );
+
+        return toApiResponse( 'Tags added successfully', serializeEntity( session ) );
+    }
+
+    @Delete( ':id/tags/:tagId' )
+    @HttpCode( HttpStatus.OK )
+    @UseGuards( AbilitiesGuard )
+    @CheckAbilities( { action: Action.UPDATE, subject: Subject.STUDY_SESSION } )
+    @ApiParam( { name: 'id', type: String } )
+    @ApiParam( { name: 'tagId', type: String } )
+    async removeTag( 
+        @Param( 'id' ) id: string,
+        @Param( 'tagId' ) tagId: string,
+        @AuthenticatedUser() currentUser: any 
+    ) {
+        const session = await this.dataSource.manager.findOne( StudySessionEntity, {
+            where: { id, userId: currentUser.id },
+            relations: [ 'tags' ]
+        } );
+
+        if ( !session ) {
+            throw new NotFoundException( { message: 'Session not found' } );
+        }
+
+        session.tags = session.tags?.filter( t => t.id !== tagId ) || [];
+        await this.dataSource.manager.save( session );
+
+        return toApiResponse( 'Tag removed successfully', serializeEntity( session ) );
     }
 }

@@ -1,4 +1,5 @@
 import { apiClient } from './api';
+import { downloadFile, formatDateForExport, escapeCSVField } from '@/utils/export';
 
 export interface StudySession {
     id: string;
@@ -58,12 +59,38 @@ export const getActiveSession = async (): Promise<StudySession | null> => {
     return response.data?.data;
 };
 
-export const getStudySessions = async ( page: number = 1, limit: number = 20 ) => {
+export const getStudySessions = async ( params: { page?: number; limit?: number } = {} ) => {
+    const { page = 1, limit = 20 } = params;
     const response = await apiClient.get( '/v1/study-sessions', {
         params: { page, limit }
     } );
     return {
-        data: response.data?.data || [],
+        sessions: response.data?.data || [],
+        total: response.data?.total || 0,
+        page: response.data?.page || 1,
+        limit: response.data?.limit || limit,
+        totalPages: response.data?.totalPages || 1,
+    };
+};
+
+export interface SearchFilters {
+    q?: string;
+    startDate?: string;
+    endDate?: string;
+    moduleId?: string;
+    topicId?: string;
+    problemId?: string;
+    page?: number;
+    limit?: number;
+}
+
+export const searchStudySessions = async ( filters: SearchFilters ) => {
+    const { page = 1, limit = 20, ...rest } = filters;
+    const response = await apiClient.get( '/v1/study-sessions/search', {
+        params: { page, limit, ...rest }
+    } );
+    return {
+        sessions: response.data?.data || [],
         total: response.data?.total || 0,
         page: response.data?.page || 1,
         limit: response.data?.limit || limit,
@@ -91,6 +118,64 @@ export const getHeatmapData = async ( startDate?: string, endDate?: string ): Pr
     if ( startDate ) params.startDate = startDate;
     if ( endDate ) params.endDate = endDate;
     
-    const response = await apiClient.get( '/v1/study-sessions/heatmap', { params } );
-    return response.data?.data || {};
+    try {
+        const response = await apiClient.get( '/v1/study-sessions/heatmap', { params } );
+        return response.data?.data || {};
+    } catch ( error: any ) {
+        console.error( 'Heatmap API error:', error.response?.status, error.response?.data );
+        throw error;
+    }
+};
+
+export const exportSessionsToCSV = ( sessions: StudySession[], filename?: string ) => {
+    // Define CSV headers
+    const headers = [
+        'Date',
+        'Duration (minutes)',
+        'Duration (formatted)',
+        'Learning Path',
+        'Module',
+        'Topic',
+        'Problem',
+        'Status',
+        'Notes',
+        'Created At'
+    ];
+    
+    // Convert sessions to CSV rows
+    const rows = sessions.map( session => {
+        const durationMinutes = session.durationSeconds 
+            ? Math.floor( session.durationSeconds / 60 )
+            : session.durationMinutes;
+            
+        const hours = Math.floor( durationMinutes / 60 );
+        const mins = durationMinutes % 60;
+        const durationFormatted = hours > 0 
+            ? `${hours}h ${mins}m` 
+            : `${mins}m`;
+        
+        return [
+            formatDateForExport( session.sessionDate ),
+            durationMinutes,
+            durationFormatted,
+            session.userLearningPath?.name || '',
+            session.userModule?.name || '',
+            session.userTopic?.name || '',
+            session.userProblem?.title || '',
+            session.isActive ? 'Active' : 'Completed',
+            session.notes || '',
+            session.createdAt
+        ].map( escapeCSVField );
+    } );
+    
+    // Combine headers and rows
+    const csv = [ headers, ...rows ]
+        .map( row => row.join( ',' ) )
+        .join( '\n' );
+    
+    // Generate filename with current date
+    const defaultFilename = `study-sessions-${new Date().toISOString().split( 'T' )[0]}.csv`;
+    
+    // Download file
+    downloadFile( csv, filename || defaultFilename, 'text/csv' );
 };

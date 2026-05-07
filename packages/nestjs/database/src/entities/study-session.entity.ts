@@ -1,10 +1,11 @@
-import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm'
+import { Column, Entity, Index, JoinColumn, ManyToOne, ManyToMany, JoinTable } from 'typeorm'
 import { IdTimestamppedEntity } from './id-timestampped.entity.js'
 import { UserEntity } from './user.entity.js'
 import { UserLearningPathEntity } from './user-learning-path.entity.js'
 import { UserModuleEntity } from './user-module.entity.js'
 import { UserTopicEntity } from './user-topic.entity.js'
 import { UserProblemEntity } from './user-problem.entity.js'
+import { SessionTagEntity } from './session-tag.entity.js'
 
 @Entity( 'study_sessions' )
 @Index( [ 'userId', 'sessionDate' ] )
@@ -66,4 +67,12 @@ export class StudySessionEntity extends IdTimestamppedEntity {
 
     @Column( { type: 'boolean', name: 'is_active', default: false } )
     isActive: boolean
+
+    @ManyToMany( () => SessionTagEntity )
+    @JoinTable( {
+        name: 'study_session_tags',
+        joinColumn: { name: 'study_session_id', referencedColumnName: 'id' },
+        inverseJoinColumn: { name: 'session_tag_id', referencedColumnName: 'id' }
+    } )
+    tags: SessionTagEntity[]
 }

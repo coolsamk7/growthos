@@ -5,17 +5,21 @@ import { PomodoroTimer } from '@/components/common/PomodoroTimer';
 import { HeatmapCalendar } from '@/components/common/HeatmapCalendar';
 import type { ContentSelection } from '@/components/common/ContentTreePicker';
 import { 
-    getStudySessions, 
+    getStudySessions,
+    searchStudySessions, 
     updateStudySession, 
     deleteStudySession,
-    type StudySession 
+    type StudySession,
+    type SearchFilters
 } from '@/services/study-session.service';
 import { 
     SessionStatsSummary,
     SessionList,
     EditNotesDialog,
     LinkSessionDialog,
-    SessionPagination
+    SessionPagination,
+    SessionSearch,
+    ExportButton
 } from './components';
 import { toast } from 'sonner';
 
@@ -30,6 +34,8 @@ export function StudySessionsPage() {
     const [ linkingSession, setLinkingSession ] = useState<StudySession | null>( null );
     const [ showOrphansOnly, setShowOrphansOnly ] = useState( false );
     const [ linkSelection, setLinkSelection ] = useState<ContentSelection>( {} );
+    const [ selectedLearningPathId, setSelectedLearningPathId ] = useState<string>( '' );
+    const [ searchFilters, setSearchFilters ] = useState<SearchFilters>( {} );
     const [ contentNames, setContentNames ] = useState<{ 
         modules: Record<string, string>; 
         topics: Record<string, string>; 
@@ -43,7 +49,19 @@ export function StudySessionsPage() {
     const loadSessions = async () => {
         try {
             setLoading( true );
-            const response = await getStudySessions( { page, limit: 20 } );
+            
+            // Check if we have active filters
+            const hasFilters = Object.keys( searchFilters ).some( 
+                k => k !== 'page' && k !== 'limit' && searchFilters[k as keyof SearchFilters] 
+            );
+            
+            let response;
+            if ( hasFilters ) {
+                response = await searchStudySessions( { ...searchFilters, page, limit: 20 } );
+            } else {
+                response = await getStudySessions( { page, limit: 20 } );
+            }
+            
             setSessions( response.sessions );
             setTotalPages( response.totalPages );
         } catch ( error: any ) {
@@ -51,6 +69,11 @@ export function StudySessionsPage() {
         } finally {
             setLoading( false );
         }
+    };
+
+    const handleSearch = () => {
+        setPage( 1 ); // Reset to first page when searching
+        loadSessions();
     };
 
     const handleEditOpen = ( session: StudySession ) => {
@@ -91,16 +114,31 @@ export function StudySessionsPage() {
             return;
         }
 
+        if ( !selectedLearningPathId ) {
+            toast.error( 'Please select a learning path' );
+            return;
+        }
+
         try {
-            await updateStudySession( linkingSession.id, {
+            const updateData: any = {
+                userLearningPathId: selectedLearningPathId,
                 userModuleId: linkSelection.moduleId,
-                userTopicId: linkSelection.topicId,
-                userProblemId: linkSelection.problemId,
-            } );
+            };
+
+            if ( linkSelection.topicId ) {
+                updateData.userTopicId = linkSelection.topicId;
+            }
+
+            if ( linkSelection.problemId ) {
+                updateData.userProblemId = linkSelection.problemId;
+            }
+
+            await updateStudySession( linkingSession.id, updateData );
             
             toast.success( 'Session linked successfully!' );
             setLinkingSession( null );
             setLinkSelection( {} );
+            setSelectedLearningPathId( '' );
             loadSessions();
         } catch ( error: any ) {
             toast.error( error.response?.data?.message || 'Failed to link session' );
@@ -162,6 +200,22 @@ export function StudySessionsPage() {
                     <HeatmapCalendar />
                 </div>
 
+                {/* Search and Filters */}
+                <div className="mb-6 flex gap-3">
+                    <div className="flex-1">
+                        <SessionSearch
+                            filters={searchFilters}
+                            onFiltersChange={setSearchFilters}
+                            onSearch={handleSearch}
+                            moduleNames={contentNames.modules}
+                            topicNames={contentNames.topics}
+                        />
+                    </div>
+                    <div className="flex items-start">
+                        <ExportButton sessions={sessions} disabled={loading} />
+                    </div>
+                </div>
+
                 {/* Sessions List */}
                 <SessionList
                     sessions={sessions}
@@ -197,10 +251,12 @@ export function StudySessionsPage() {
                     contentNames={contentNames}
                     formatDuration={formatDuration}
                     onSelectionChange={setLinkSelection}
+                    onLearningPathChange={setSelectedLearningPathId}
                     onNamesLoaded={setContentNames}
                     onClose={() => {
                         setLinkingSession( null );
                         setLinkSelection( {} );
+                        setSelectedLearningPathId( '' );
                         setContentNames( { modules: {}, topics: {}, problems: {} } );
                     }}
                     onLink={handleLinkSession}

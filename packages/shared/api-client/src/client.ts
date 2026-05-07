@@ -4,6 +4,7 @@ import { client } from './generated/client.gen';
 export class ApiClient {
     private axiosInstance: AxiosInstance;
     private refreshTokenCallback?: () => Promise<string>;
+    private onUnauthorizedCallback?: () => void;
 
     constructor( baseURL: string, token?: string ) {
         this.axiosInstance = axios.create( {
@@ -45,7 +46,10 @@ export class ApiClient {
                     const retryResponse = await fetch( retryRequest );
                     return retryResponse;
                 } catch ( error ) {
-                    // If refresh fails, return the original 401 response
+                    // If refresh fails, trigger unauthorized callback
+                    if ( this.onUnauthorizedCallback ) {
+                        this.onUnauthorizedCallback();
+                    }
                     return response;
                 }
             }
@@ -55,6 +59,10 @@ export class ApiClient {
 
     setRefreshTokenCallback( callback: () => Promise<string> ) {
         this.refreshTokenCallback = callback;
+    }
+
+    setOnUnauthorizedCallback( callback: () => void ) {
+        this.onUnauthorizedCallback = callback;
     }
 
     setToken( token: string ) {

@@ -6,11 +6,13 @@ export const toApiResponse = <T>( message: string, data: T ) => {
 };
 
 export const toApiListResponse = <T>( data: T[], total: number, page: number, limit: number ) => {
+    const totalPages = Math.ceil( total / limit );
     return {
         data,
         total,
         page,
         limit,
+        totalPages,
     };
 };
 

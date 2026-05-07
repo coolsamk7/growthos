@@ -19,9 +19,17 @@ export function HeatmapCalendar( { startDate, endDate }: HeatmapCalendarProps ) 
     const loadHeatmapData = async () => {
         try {
             setLoading( true );
-            const start = startDate?.toISOString().split( 'T' )[0];
-            const end = endDate?.toISOString().split( 'T' )[0];
-            const heatmapData = await getHeatmapData( start, end );
+            
+            // Calculate date range: default to last 365 days if not provided
+            const end = endDate || new Date();
+            const start = startDate || new Date( end.getTime() - 365 * 24 * 60 * 60 * 1000 );
+            
+            const startStr = start.toISOString().split( 'T' )[0];
+            const endStr = end.toISOString().split( 'T' )[0];
+            
+            console.log( 'Loading heatmap data:', { start: startStr, end: endStr } );
+            const heatmapData = await getHeatmapData( startStr, endStr );
+            console.log( 'Heatmap data loaded:', heatmapData );
             setData( heatmapData );
         } catch ( error ) {
             console.error( 'Failed to load heatmap data:', error );
@@ -170,6 +178,10 @@ export function HeatmapCalendar( { startDate, endDate }: HeatmapCalendarProps ) 
                                             const today = new Date();
                                             const isToday = day.toDateString() === today.toDateString();
                                             const isFuture = day > today;
+                                            
+                                            if ( minutes > 0 ) {
+                                                console.log( 'Day with activity:', { dateKey, minutes } );
+                                            }
                                             
                                             return (
                                                 <div
