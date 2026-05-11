@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ChevronDown, ChevronRight, MoreVertical, Pencil, Trash2, PlayCircle, CheckCircle2, Circle } from 'lucide-react';
+import { ChevronDown, ChevronRight, MoreVertical, Pencil, Trash2, PlayCircle, CheckCircle2, Circle, Tags as TagsIcon } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
@@ -17,6 +17,8 @@ import { EditModuleDialog } from './EditModuleDialog';
 import { TopicList } from './TopicList';
 import { ResourcesList } from './ResourcesList';
 import { TimerDialog } from '@/components/common/TimerDialog';
+import { useItemTags, useTags, useAttachTags } from '@/hooks/useTags';
+import { Tag, TagSelector } from '@/components/common';
 
 interface ModuleCardProps {
     module: UserModule;
@@ -47,7 +49,19 @@ const statusConfig: Record<ModuleStatus, { icon: any; color: string; label: stri
 export function ModuleCard( { module, isExpanded, onToggle, onUpdate, onDelete }: ModuleCardProps ) {
     const [ editDialogOpen, setEditDialogOpen ] = useState( false );
     const [ deleting, setDeleting ] = useState( false );
+    const [ isEditingTags, setIsEditingTags ] = useState( false );
     const { toast } = useToast();
+    
+    // Tag management
+    const { tags: allTags } = useTags();
+    const { tags: moduleTags, refetch: refetchTags } = useItemTags( 'user-module', module.id );
+    const { attachTags, attaching } = useAttachTags( 'user-module' );
+    const [ selectedTags, setSelectedTags ] = useState<any[]>( [] );
+
+    // Sync selected tags when module tags load
+    useState( () => {
+        setSelectedTags( moduleTags.map( t => ( { id: t.id, name: t.name, color: t.color, category: t.category } ) ) );
+    }, [ moduleTags ] );
 
     console.log( 'ModuleCard - module.id:', module?.id, 'module:', module );
 
@@ -75,6 +89,24 @@ export function ModuleCard( { module, isExpanded, onToggle, onUpdate, onDelete }
             } );
         } finally {
             setDeleting( false );
+        }
+    };
+
+    const handleSaveTags = async () => {
+        try {
+            await attachTags( module.id, selectedTags.map( t => t.id ) );
+            toast( {
+                title: 'Success',
+                description: 'Tags updated successfully',
+            } );
+            refetchTags();
+            setIsEditingTags( false );
+        } catch ( error: any ) {
+            toast( {
+                variant: 'destructive',
+                title: 'Error',
+                description: error.message || 'Failed to update tags',
+            } );
         }
     };
 
@@ -162,6 +194,51 @@ export function ModuleCard( { module, isExpanded, onToggle, onUpdate, onDelete }
                                     <p className="text-sm text-muted-foreground">{module.description}</p>
                                 </div>
                             )}
+                            
+                            {/* Tags Section */}
+                            <div className="rounded-lg border p-4">
+                                <div className="flex items-center justify-between mb-3">
+                                    <div className="flex items-center gap-2">
+                                        <TagsIcon className="h-4 w-4 text-muted-foreground" />
+                                        <h4 className="text-sm font-medium">Tags</h4>
+                                    </div>
+                                    <Button
+                                        size="sm"
+                                        variant="ghost"
+                                        onClick={() => setIsEditingTags( !isEditingTags )}
+                                    >
+                                        {isEditingTags ? 'Cancel' : 'Edit Tags'}
+                                    </Button>
+                                </div>
+                                
+                                {isEditingTags ? (
+                                    <div className="space-y-3">
+                                        <TagSelector
+                                            tags={allTags.map( t => ( { id: t.id, name: t.name, color: t.color, category: t.category } ) )}
+                                            selectedTags={selectedTags}
+                                            onTagsChange={setSelectedTags}
+                                            placeholder="Select tags for this module..."
+                                        />
+                                        <Button
+                                            size="sm"
+                                            onClick={handleSaveTags}
+                                            disabled={attaching}
+                                        >
+                                            {attaching ? 'Saving...' : 'Save Tags'}
+                                        </Button>
+                                    </div>
+                                ) : (
+                                    <div className="flex gap-2 flex-wrap">
+                                        {moduleTags.length === 0 ? (
+                                            <span className="text-sm text-muted-foreground">No tags added yet</span>
+                                        ) : (
+                                            moduleTags.map( tag => (
+                                                <Tag key={tag.id} name={tag.name} color={tag.color} />
+                                            ) )
+                                        )}
+                                    </div>
+                                )}
+                            </div>
                             
                             <div className="grid grid-cols-4 gap-4 rounded-lg border p-4">
                                 <div>

@@ -3,7 +3,7 @@ import { ApiBearerAuth, ApiTags, ApiBody, ApiQuery, ApiParam } from '@nestjs/swa
 import type { Static } from 'typebox';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource, Between, In } from 'typeorm';
-import { StudySessionEntity, SessionTagEntity } from '@growthos/nestjs-database/entities';
+import { StudySessionEntity } from '@growthos/nestjs-database/entities';
 import { CheckAbilities, AbilitiesGuard, Action, Subject } from '@growthos/nestjs-casl';
 import { toApiResponse, toApiListResponse, toMessageResponse, serializeEntity } from 'src/utils/response';
 import { CreateStudySessionRequest, UpdateStudySessionRequest } from '../../dtos';
@@ -322,6 +322,8 @@ export class StudySessionsController {
         return toMessageResponse( 'Deleted successfully' );
     }
 
+    // NOTE: Old tag system - use /v1/tags/study-session/:sessionId endpoints instead
+    /*
     @Post( ':id/tags' )
     @HttpCode( HttpStatus.OK )
     @UseGuards( AbilitiesGuard )
@@ -382,4 +384,5 @@ export class StudySessionsController {
 
         return toApiResponse( 'Tag removed successfully', serializeEntity( session ) );
     }
+    */
 }

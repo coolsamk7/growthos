@@ -9,10 +9,16 @@ import {
     Edit, 
     Trash2, 
     AlertTriangle, 
-    Link 
+    Link,
+    Tags as TagsIcon
 } from 'lucide-react';
 import { format } from 'date-fns';
 import type { StudySession } from '../../../services/study-session.service';
+import { useState } from 'react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { useTags, useItemTags, useAttachTags } from '@/hooks/useTags';
+import { Tag, TagSelector } from '@/components/common';
+import { toast } from 'sonner';
 
 interface SessionListProps {
     sessions: StudySession[];
@@ -37,6 +43,41 @@ export function SessionList( {
     onDelete,
     formatDuration
 }: SessionListProps ) {
+    const [ editingSessionTags, setEditingSessionTags ] = useState<StudySession | null>( null );
+    const { tags: allTags } = useTags();
+    const { tags: sessionTags, refetch: refetchTags } = useItemTags( 
+        'study-session', 
+        editingSessionTags?.id || '' 
+    );
+    const { attachTags, attaching } = useAttachTags( 'study-session' );
+    const [ selectedTags, setSelectedTags ] = useState<any[]>( [] );
+
+    // Sync selected tags when dialog opens
+    useState( () => {
+        if ( editingSessionTags ) {
+            setSelectedTags(
+                sessionTags.map( ( t ) => ( {
+                    id: t.id,
+                    name: t.name,
+                    color: t.color,
+                    category: t.category,
+                } ) )
+            );
+        }
+    }, [ sessionTags, editingSessionTags ] );
+
+    const handleSaveTags = async () => {
+        if ( !editingSessionTags ) return;
+        try {
+            await attachTags( editingSessionTags.id, selectedTags.map( ( t ) => t.id ) );
+            toast.success( 'Tags updated successfully' );
+            refetchTags();
+            setEditingSessionTags( null );
+        } catch ( error: any ) {
+            toast.error( error.message || 'Failed to update tags' );
+        }
+    };
+
     const isOrphanSession = ( session: StudySession ) => {
         const isOrphan = !session.userModuleId && !session.userTopicId && !session.userProblemId;
         // Also check if relations are loaded but null
@@ -193,6 +234,15 @@ export function SessionList( {
 
                                         {/* Actions */}
                                         <div className="flex gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                                            <Button
+                                                variant="ghost"
+                                                size="sm"
+                                                className="hover:bg-purple-50 hover:text-purple-600 dark:hover:bg-purple-900/20"
+                                                onClick={() => setEditingSessionTags( session )}
+                                                title="Manage tags"
+                                            >
+                                                <TagsIcon className="h-3.5 w-3.5" />
+                                            </Button>
                                             {isOrphan && (
                                                 <Button
                                                     variant="outline"
@@ -227,6 +277,31 @@ export function SessionList( {
                     </div>
                 )}
             </CardContent>
+
+            {/* Tags Dialog */}
+            <Dialog open={!!editingSessionTags} onOpenChange={() => setEditingSessionTags( null )}>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>Manage Session Tags</DialogTitle>
+                    </DialogHeader>
+                    <div className="space-y-4 py-4">
+                        <TagSelector
+                            tags={allTags.map( ( t ) => ( {
+                                id: t.id,
+                                name: t.name,
+                                color: t.color,
+                                category: t.category,
+                            } ) )}
+                            selectedTags={selectedTags}
+                            onTagsChange={setSelectedTags}
+                            placeholder="Select tags for this session..."
+                        />
+                        <Button onClick={handleSaveTags} disabled={attaching} className="w-full">
+                            {attaching ? 'Saving...' : 'Save Tags'}
+                        </Button>
+                    </div>
+                </DialogContent>
+            </Dialog>
         </Card>
     );
 }

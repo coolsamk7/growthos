@@ -4,12 +4,14 @@ export const CreateTagRequest = Type.Object( {
     name: Type.String( { minLength: 1, maxLength: 100 } ),
     category: Type.Optional( Type.String() ),
     description: Type.Optional( Type.String() ),
+    color: Type.Optional( Type.String() ),
 } );
 
 export const UpdateTagRequest = Type.Object( {
     name: Type.Optional( Type.String( { minLength: 1, maxLength: 100 } ) ),
     category: Type.Optional( Type.String() ),
     description: Type.Optional( Type.String() ),
+    color: Type.Optional( Type.String() ),
 } );
 
 export const TagSchema = {
@@ -17,6 +19,7 @@ export const TagSchema = {
     name: Type.String(),
     category: Type.Optional( Type.String() ),
     description: Type.Optional( Type.String() ),
+    color: Type.Optional( Type.String() ),
     usageCount: Type.Number(),
     createdAt: Type.String(),
     updatedAt: Type.String(),

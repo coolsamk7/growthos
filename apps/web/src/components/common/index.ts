@@ -1,2 +1,5 @@
 export { LoadingSpinner } from './LoadingSpinner'
 export { ThemeToggle } from './ThemeToggle'
+export { Tag } from './Tag'
+export { TagSelector } from './TagSelector'
+export type { TagOption } from './TagSelector'
