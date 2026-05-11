@@ -1,6 +1,7 @@
 import { Command, CommandRunner, SubCommand } from 'nest-commander';
 import { SeedDbCommand } from './seed.cmd';
 import { CreateUsersCommand } from './create-users.cmd';
+import { AddTagsCommand } from './add-tags.cmd';
 
 
 @Command( {
@@ -8,6 +9,7 @@ import { CreateUsersCommand } from './create-users.cmd';
     subCommands: [
         SeedDbCommand,
         CreateUsersCommand,
+        AddTagsCommand,
     ],
 } )
 export class DbRootCommand extends CommandRunner {

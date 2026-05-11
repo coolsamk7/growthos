@@ -13,6 +13,9 @@ export class TagEntity extends IdTimestamppedEntity {
     @Column( { type: 'text', nullable: true } )
     description?: string
 
+    @Column( { type: 'varchar', nullable: true } )
+    color?: string
+
     @Column( { type: 'integer', default: 0, name: 'usage_count' } )
     usageCount: number
 }

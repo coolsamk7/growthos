@@ -1,5 +1,5 @@
 import { NavLink, useLocation } from 'react-router-dom';
-import { LayoutDashboard, BookOpen, BarChart3, Target, Settings, ChevronLeft, ChevronRight, Clock } from 'lucide-react';
+import { LayoutDashboard, BookOpen, BarChart3, Target, Settings, ChevronLeft, ChevronRight, Clock, Tag } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Logo } from '@/components/common/Logo';
 import { Button } from '@/components/ui/button';
@@ -17,6 +17,10 @@ const navItems = [
     { icon: Clock, label: 'Study Sessions', href: '/app/study-sessions' },
     { icon: BarChart3, label: 'Progress', href: '/app/progress' },
     { icon: Target, label: 'Goals', href: '/app/goals' },
+];
+
+const adminItems = [
+    { icon: Tag, label: 'Manage Tags', href: '/app/admin/tags' },
     { icon: Settings, label: 'Settings', href: '/app/settings' },
 ];
 
@@ -52,6 +56,37 @@ export function Sidebar( { collapsed, onToggle }: SidebarProps ) {
                         const isActive =
                             location.pathname === item.href ||
                             ( item.href === '/app/dashboard' && location.pathname === '/app' );
+
+                        return (
+                            <NavLink
+                                key={item.href}
+                                to={item.href}
+                                className={cn(
+                                    'flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors',
+                                    isActive
+                                        ? 'bg-primary text-primary-foreground'
+                                        : 'text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground',
+                                    collapsed && 'justify-center px-2',
+                                )}
+                            >
+                                <item.icon className="size-5 shrink-0" />
+                                {!collapsed && <span>{item.label}</span>}
+                            </NavLink>
+                        );
+                    } )}
+                    
+                    {/* Admin Section */}
+                    {!collapsed && (
+                        <div className="mt-4 mb-2 px-3">
+                            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                                Admin
+                            </p>
+                        </div>
+                    )}
+                    {collapsed && <Separator className="my-2" />}
+                    
+                    {adminItems.map( ( item ) => {
+                        const isActive = location.pathname === item.href;
 
                         return (
                             <NavLink
