@@ -8,12 +8,16 @@ import { CheckAbilities, AbilitiesGuard, Action, Subject } from '@growthos/nestj
 import { toApiResponse, toApiListResponse, toMessageResponse, serializeEntity } from 'src/utils/response';
 import { CreateStreakRequest, UpdateStreakRequest } from '../../dtos';
 import { AuthenticatedUser } from 'src/decorators';
+import { StreaksService } from '../../services';
 
 @ApiTags( 'Streaks' )
 @ApiBearerAuth()
 @Controller( { path: 'streaks', version: '1' } )
 export class StreaksController {
-    constructor( @InjectDataSource() private readonly dataSource: DataSource ) {}
+    constructor( 
+        @InjectDataSource() private readonly dataSource: DataSource,
+        private readonly streaksService: StreaksService,
+    ) {}
 
     @Post()
     @HttpCode( HttpStatus.CREATED )
@@ -83,5 +87,32 @@ export class StreaksController {
         if ( !item ) throw new NotFoundException( { message: 'Not found' } );
         await this.dataSource.manager.softDelete( StreakEntity, { id } );
         return toMessageResponse( 'Deleted successfully' );
+    }
+
+    @Get( 'stats/current' )
+    @HttpCode( HttpStatus.OK )
+    @UseGuards( AbilitiesGuard )
+    @CheckAbilities( { action: Action.READ, subject: Subject.STREAK } )
+    async getCurrentStats( @AuthenticatedUser() currentUser: any ) {
+        const stats = await this.streaksService.getStreakStats( currentUser.id );
+        return toApiResponse( 'Streak stats retrieved', stats );
+    }
+
+    @Post( 'activity/track' )
+    @HttpCode( HttpStatus.OK )
+    @UseGuards( AbilitiesGuard )
+    @CheckAbilities( { action: Action.UPDATE, subject: Subject.STREAK } )
+    async trackActivity( @AuthenticatedUser() currentUser: any ) {
+        const streak = await this.streaksService.updateStreakForUser( currentUser.id );
+        return toApiResponse( 'Activity tracked', serializeEntity( streak ) );
+    }
+
+    @Post( 'problems/increment' )
+    @HttpCode( HttpStatus.OK )
+    @UseGuards( AbilitiesGuard )
+    @CheckAbilities( { action: Action.UPDATE, subject: Subject.STREAK } )
+    async incrementProblems( @AuthenticatedUser() currentUser: any ) {
+        const streak = await this.streaksService.incrementProblemsSolved( currentUser.id );
+        return toApiResponse( 'Problems count incremented', serializeEntity( streak ) );
     }
 }
