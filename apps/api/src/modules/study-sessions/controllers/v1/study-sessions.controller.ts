@@ -99,7 +99,7 @@ export class StudySessionsController {
     async getActiveSession( @AuthenticatedUser() currentUser: any ) {
         const item = await this.dataSource.manager.findOne( StudySessionEntity, {
             where: { userId: currentUser.id, isActive: true },
-            relations: [ 'userLearningPath', 'userModule', 'userTopic', 'userProblem', 'tags' ]
+            relations: [ 'userLearningPath', 'userModule', 'userTopic', 'userProblem', 'studySessionTags' ]
         } );
         
         if ( !item ) {

@@ -1,10 +1,11 @@
-import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm'
+import { Column, Entity, Index, JoinColumn, ManyToOne, OneToMany } from 'typeorm'
 import { IdTimestamppedEntity } from './id-timestampped.entity.js'
 import { UserEntity } from './user.entity.js'
 import { UserLearningPathEntity } from './user-learning-path.entity.js'
 import { UserModuleEntity } from './user-module.entity.js'
 import { UserTopicEntity } from './user-topic.entity.js'
 import { UserProblemEntity } from './user-problem.entity.js'
+import { StudySessionTagEntity } from './study-session-tag.entity.js'
 
 @Entity( 'study_sessions' )
 @Index( [ 'userId', 'sessionDate' ] )
@@ -66,7 +67,7 @@ export class StudySessionEntity extends IdTimestamppedEntity {
 
     @Column( { type: 'boolean', name: 'is_active', default: false } )
     isActive: boolean
-
-    // NOTE: Tags are now managed through StudySessionTagEntity junction table
-    // Use /v1/tags/study-session/:sessionId endpoints to manage tags
+    
+    @OneToMany( () => StudySessionTagEntity, studySessionTag => studySessionTag.studySession )
+    studySessionTags: StudySessionTagEntity[];
 }
