@@ -4,7 +4,6 @@ import { BullModule } from '@nestjs/bullmq';
 import { mailConfig, queueConfig, loggerConfig } from './config';
 import { LoggerModule } from 'nestjs-pino';
 import { MailService } from './mail/mail.service';
-import { MailQueueConsumer } from './consumers/mail-queue.consumer';
 
 @Module( {
     imports: [
@@ -30,6 +29,6 @@ import { MailQueueConsumer } from './consumers/mail-queue.consumer';
             name: 'mail',
         } ),
     ],
-    providers: [ MailService, MailQueueConsumer ],
+    providers: [ MailService ],
 } )
 export class AppModule {}

@@ -22,13 +22,7 @@
         "migrate:topics": "tsx src/scripts/migrate-topics-to-modules.ts"
     },
     "dependencies": {
-        "@bull-board/api": "^6.21.2",
-        "@bull-board/express": "^6.21.2",
-        "@bull-board/nestjs": "^6.21.2",
-        "@bull-board/ui": "^6.21.2",
         "@growthos/nestjs-database": "workspace:^",
-        "@nestjs/bull-shared": "^11.0.4",
-        "@nestjs/bullmq": "^11.0.4",
         "@nestjs/common": "^11.1.8",
         "@nestjs/config": "^4.0.2",
         "@nestjs/core": "^11.1.8",
@@ -42,7 +36,6 @@
         "@types/ioredis": "^5.0.0",
         "@types/multer": "^2.0.0",
         "bcrypt": "^6.0.0",
-        "bullmq": "^5.73.5",
         "cache-manager": "^7.2.4",
         "change-case": "^5.4.4",
         "class-validator": "^0.14.1",

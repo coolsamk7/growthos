@@ -1,4 +1,3 @@
-export * from './queue';
 export * from './learning-path';
 export * from './tags';
 export * from './master-problems';
