@@ -167,19 +167,30 @@ export class TagsController {
         } );
 
         const existingTagIds = new Set( existingLinks.map( link => link.tagId ) );
+        const newTagIdsSet = new Set( tagIds );
+        
+        // Remove tags that are no longer selected
+        const tagsToRemove = existingLinks.filter( link => !newTagIdsSet.has( link.tagId ) );
+        for ( const link of tagsToRemove ) {
+            await this.dataSource.manager.delete( MasterProblemTagEntity, { 
+                masterProblemId: problemId, 
+                tagId: link.tagId 
+            } );
+            await this.dataSource.manager.decrement( TagEntity, { id: link.tagId }, 'usageCount', 1 );
+        }
+        
+        // Add new tags
         const newTagIds = tagIds.filter( id => !existingTagIds.has( id ) );
-
         for ( const tagId of newTagIds ) {
             const link = this.dataSource.manager.create( MasterProblemTagEntity, {
                 masterProblemId: problemId,
                 tagId
             } );
             await this.dataSource.manager.save( link );
-
             await this.dataSource.manager.increment( TagEntity, { id: tagId }, 'usageCount', 1 );
         }
 
-        return toMessageResponse( 'Tags attached to problem successfully' );
+        return toMessageResponse( 'Tags updated successfully' );
     }
 
     @Delete( 'master-problem/:problemId/:tagId' )
@@ -224,19 +235,30 @@ export class TagsController {
         } );
 
         const existingTagIds = new Set( existingLinks.map( link => link.tagId ) );
+        const newTagIdsSet = new Set( tagIds );
+        
+        // Remove tags that are no longer selected
+        const tagsToRemove = existingLinks.filter( link => !newTagIdsSet.has( link.tagId ) );
+        for ( const link of tagsToRemove ) {
+            await this.dataSource.manager.delete( UserProblemTagEntity, { 
+                userProblemId: problemId, 
+                tagId: link.tagId 
+            } );
+            await this.dataSource.manager.decrement( TagEntity, { id: link.tagId }, 'usageCount', 1 );
+        }
+        
+        // Add new tags
         const newTagIds = tagIds.filter( id => !existingTagIds.has( id ) );
-
         for ( const tagId of newTagIds ) {
             const link = this.dataSource.manager.create( UserProblemTagEntity, {
                 userProblemId: problemId,
                 tagId
             } );
             await this.dataSource.manager.save( link );
-
             await this.dataSource.manager.increment( TagEntity, { id: tagId }, 'usageCount', 1 );
         }
 
-        return toMessageResponse( 'Tags attached to user problem successfully' );
+        return toMessageResponse( 'Tags updated successfully' );
     }
 
     @Delete( 'user-problem/:problemId/:tagId' )
@@ -313,8 +335,20 @@ export class TagsController {
         } );
 
         const existingTagIds = new Set( existingLinks.map( link => link.tagId ) );
+        const newTagIdsSet = new Set( tagIds );
+        
+        // Remove tags that are no longer selected
+        const tagsToRemove = existingLinks.filter( link => !newTagIdsSet.has( link.tagId ) );
+        for ( const link of tagsToRemove ) {
+            await this.dataSource.manager.delete( UserModuleTagEntity, { 
+                userModuleId: moduleId, 
+                tagId: link.tagId 
+            } );
+            await this.dataSource.manager.decrement( TagEntity, { id: link.tagId }, 'usageCount', 1 );
+        }
+        
+        // Add new tags
         const newTagIds = tagIds.filter( id => !existingTagIds.has( id ) );
-
         for ( const tagId of newTagIds ) {
             const link = this.dataSource.manager.create( UserModuleTagEntity, {
                 userModuleId: moduleId,
@@ -324,7 +358,7 @@ export class TagsController {
             await this.dataSource.manager.increment( TagEntity, { id: tagId }, 'usageCount', 1 );
         }
 
-        return toMessageResponse( 'Tags attached to module successfully' );
+        return toMessageResponse( 'Tags updated successfully' );
     }
 
     @Delete( 'user-module/:moduleId/:tagId' )
@@ -386,8 +420,20 @@ export class TagsController {
         } );
 
         const existingTagIds = new Set( existingLinks.map( link => link.tagId ) );
+        const newTagIdsSet = new Set( tagIds );
+        
+        // Remove tags that are no longer selected
+        const tagsToRemove = existingLinks.filter( link => !newTagIdsSet.has( link.tagId ) );
+        for ( const link of tagsToRemove ) {
+            await this.dataSource.manager.delete( UserTopicTagEntity, { 
+                userTopicId: topicId, 
+                tagId: link.tagId 
+            } );
+            await this.dataSource.manager.decrement( TagEntity, { id: link.tagId }, 'usageCount', 1 );
+        }
+        
+        // Add new tags
         const newTagIds = tagIds.filter( id => !existingTagIds.has( id ) );
-
         for ( const tagId of newTagIds ) {
             const link = this.dataSource.manager.create( UserTopicTagEntity, {
                 userTopicId: topicId,
@@ -397,7 +443,7 @@ export class TagsController {
             await this.dataSource.manager.increment( TagEntity, { id: tagId }, 'usageCount', 1 );
         }
 
-        return toMessageResponse( 'Tags attached to topic successfully' );
+        return toMessageResponse( 'Tags updated successfully' );
     }
 
     @Delete( 'user-topic/:topicId/:tagId' )
@@ -459,8 +505,20 @@ export class TagsController {
         } );
 
         const existingTagIds = new Set( existingLinks.map( link => link.tagId ) );
+        const newTagIdsSet = new Set( tagIds );
+        
+        // Remove tags that are no longer selected
+        const tagsToRemove = existingLinks.filter( link => !newTagIdsSet.has( link.tagId ) );
+        for ( const link of tagsToRemove ) {
+            await this.dataSource.manager.delete( StudySessionTagEntity, { 
+                studySessionId: sessionId, 
+                tagId: link.tagId 
+            } );
+            await this.dataSource.manager.decrement( TagEntity, { id: link.tagId }, 'usageCount', 1 );
+        }
+        
+        // Add new tags
         const newTagIds = tagIds.filter( id => !existingTagIds.has( id ) );
-
         for ( const tagId of newTagIds ) {
             const link = this.dataSource.manager.create( StudySessionTagEntity, {
                 studySessionId: sessionId,
@@ -470,7 +528,7 @@ export class TagsController {
             await this.dataSource.manager.increment( TagEntity, { id: tagId }, 'usageCount', 1 );
         }
 
-        return toMessageResponse( 'Tags attached to study session successfully' );
+        return toMessageResponse( 'Tags updated successfully' );
     }
 
     @Delete( 'study-session/:sessionId/:tagId' )

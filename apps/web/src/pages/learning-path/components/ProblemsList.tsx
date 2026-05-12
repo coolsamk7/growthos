@@ -25,9 +25,11 @@ import { ProblemCard } from './ProblemCard';
 
 interface ProblemsListProps {
     topicId: string;
+    userLearningPathId: string;
+    userModuleId: string;
 }
 
-export function ProblemsList( { topicId }: ProblemsListProps ) {
+export function ProblemsList( { topicId, userModuleId, userLearningPathId }: ProblemsListProps ) {
     const [ problems, setProblems ] = useState<UserProblem[]>( [] );
     const [ loading, setLoading ] = useState( true );
     const [ dialogOpen, setDialogOpen ] = useState( false );
@@ -227,6 +229,8 @@ export function ProblemsList( { topicId }: ProblemsListProps ) {
                                 key={problem.id}
                                 problem={problem}
                                 topicId={topicId}
+                                userLearningPathId={userLearningPathId}
+                                userModuleId={userModuleId}
                                 isExpanded={expandedProblems.has( problem.id )}
                                 onToggle={() => toggleProblem( problem.id )}
                                 onStatusChange={( newStatus ) =>
