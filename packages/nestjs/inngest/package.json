@@ -1,0 +1,28 @@
+{
+    "name": "@growthos/nestjs-inngest",
+    "version": "1.0.0",
+    "private": true,
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.mjs",
+            "default": "./dist/index.js"
+        }
+    },
+    "scripts": {
+        "dev": "yarn build --watch",
+        "build": "tsup",
+        "clean": "rimraf ./dist"
+    },
+    "dependencies": {
+        "@golevelup/nestjs-discovery": "^7.0.0",
+        "inngest": "^4.4.0"
+    },
+    "devDependencies": {
+        "@swc/core": "^1.14.0"
+    },
+    "peerDependencies": {
+        "@nestjs/common": "*",
+        "reflect-metadata": "*"
+    }
+}
