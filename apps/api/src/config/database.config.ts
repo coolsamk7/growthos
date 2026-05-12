@@ -13,6 +13,6 @@ export const databaseConfig = registerAs( 'database.config', (): TypeOrmModuleOp
         password: env.DATABASE_PASSWORD,
         autoLoadEntities: true,
         synchronize: true,
-        logging: false // Enable logging to see what's happening
+        logging: false, // Enable logging to see what's happening
     };
 } );

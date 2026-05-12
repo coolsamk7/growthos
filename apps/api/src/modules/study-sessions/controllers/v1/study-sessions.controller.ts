@@ -99,7 +99,7 @@ export class StudySessionsController {
     async getActiveSession( @AuthenticatedUser() currentUser: any ) {
         const item = await this.dataSource.manager.findOne( StudySessionEntity, {
             where: { userId: currentUser.id, isActive: true },
-            relations: [ 'userLearningPath', 'userModule', 'userTopic', 'userProblem', 'tags' ]
+            relations: [ 'userLearningPath', 'userModule', 'userTopic', 'userProblem', 'studySessionTags' ]
         } );
         
         if ( !item ) {
@@ -321,68 +321,4 @@ export class StudySessionsController {
         await this.dataSource.manager.softDelete( StudySessionEntity, { id } );
         return toMessageResponse( 'Deleted successfully' );
     }
-
-    // NOTE: Old tag system - use /v1/tags/study-session/:sessionId endpoints instead
-    /*
-    @Post( ':id/tags' )
-    @HttpCode( HttpStatus.OK )
-    @UseGuards( AbilitiesGuard )
-    @CheckAbilities( { action: Action.UPDATE, subject: Subject.STUDY_SESSION } )
-    @ApiParam( { name: 'id', type: String } )
-    @ApiBody( { schema: AddTagsRequest } )
-    async addTags( 
-        @Param( 'id' ) id: string, 
-        @Body() body: Static<typeof AddTagsRequest>,
-        @AuthenticatedUser() currentUser: any 
-    ) {
-        const session = await this.dataSource.manager.findOne( StudySessionEntity, {
-            where: { id, userId: currentUser.id },
-            relations: [ 'tags' ]
-        } );
-
-        if ( !session ) {
-            throw new NotFoundException( { message: 'Session not found' } );
-        }
-
-        // Find the tags
-        const tags = await this.dataSource.manager.find( SessionTagEntity, {
-            where: { id: In( body.tagIds ), userId: currentUser.id }
-        } );
-
-        // Add tags (avoid duplicates)
-        const existingTagIds = new Set( session.tags?.map( t => t.id ) || [] );
-        const newTags = tags.filter( t => !existingTagIds.has( t.id ) );
-        
-        session.tags = [ ...( session.tags || [] ), ...newTags ];
-        await this.dataSource.manager.save( session );
-
-        return toApiResponse( 'Tags added successfully', serializeEntity( session ) );
-    }
-
-    @Delete( ':id/tags/:tagId' )
-    @HttpCode( HttpStatus.OK )
-    @UseGuards( AbilitiesGuard )
-    @CheckAbilities( { action: Action.UPDATE, subject: Subject.STUDY_SESSION } )
-    @ApiParam( { name: 'id', type: String } )
-    @ApiParam( { name: 'tagId', type: String } )
-    async removeTag( 
-        @Param( 'id' ) id: string,
-        @Param( 'tagId' ) tagId: string,
-        @AuthenticatedUser() currentUser: any 
-    ) {
-        const session = await this.dataSource.manager.findOne( StudySessionEntity, {
-            where: { id, userId: currentUser.id },
-            relations: [ 'tags' ]
-        } );
-
-        if ( !session ) {
-            throw new NotFoundException( { message: 'Session not found' } );
-        }
-
-        session.tags = session.tags?.filter( t => t.id !== tagId ) || [];
-        await this.dataSource.manager.save( session );
-
-        return toApiResponse( 'Tag removed successfully', serializeEntity( session ) );
-    }
-    */
 }
