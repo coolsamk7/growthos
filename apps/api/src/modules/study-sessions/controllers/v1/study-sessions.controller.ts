@@ -200,7 +200,7 @@ export class StudySessionsController {
             skip, 
             take: limitNum, 
             order: { createdAt: 'DESC' },
-            relations: [ 'userLearningPath', 'userModule', 'userTopic', 'userProblem', 'tags' ]
+            relations: [ 'userLearningPath', 'userModule', 'userTopic', 'userProblem' ]
         } );
         return toApiListResponse( items.map( i => serializeEntity( i ) ), total, pageNum, limitNum );
     }

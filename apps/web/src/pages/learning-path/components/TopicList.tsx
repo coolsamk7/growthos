@@ -173,6 +173,7 @@ export function TopicList( { userLearningPathId, userModuleId }: TopicListProps 
                             <TopicCard
                                 key={topic.id}
                                 topic={topic}
+                                userModuleId={userModuleId}
                                 userLearningPathId={userLearningPathId}
                                 isExpanded={expandedTopics.has( topic.id )}
                                 statusInfo={statusConfig[topic.status]}

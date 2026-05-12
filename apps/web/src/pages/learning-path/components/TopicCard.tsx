@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Trash2, Circle, PlayCircle, CheckCircle2, Award, ChevronDown, ChevronRight, Tags as TagsIcon } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Trash2, Circle, PlayCircle, CheckCircle2, Award, ChevronDown, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -16,11 +16,12 @@ import { NotesList } from './NotesList';
 import { ProblemsList } from './ProblemsList';
 import { ResourcesList } from './ResourcesList';
 import { useItemTags, useTags, useAttachTags } from '@/hooks/useTags';
-import { Tag, TagSelector } from '@/components/common';
+import { InlineTagEditor } from '@/components/common';
 
 interface TopicCardProps {
     topic: UserTopic;
     userLearningPathId: string;
+    userModuleId: string;
     isExpanded: boolean;
     statusInfo: { icon: any; color: string; label: string };
     onToggle: () => void;
@@ -31,13 +32,13 @@ interface TopicCardProps {
 export function TopicCard( {
     topic,
     userLearningPathId,
+    userModuleId,
     isExpanded,
     statusInfo,
     onToggle,
     onStatusChange,
     onDelete,
 }: TopicCardProps ) {
-    const [ isEditingTags, setIsEditingTags ] = useState( false );
     const { toast } = useToast();
 
     // Tag management
@@ -47,7 +48,7 @@ export function TopicCard( {
     const [ selectedTags, setSelectedTags ] = useState<any[]>( [] );
 
     // Sync selected tags
-    useState( () => {
+    useEffect( () => {
         setSelectedTags(
             topicTags.map( ( t ) => ( {
                 id: t.id,
@@ -58,15 +59,11 @@ export function TopicCard( {
         );
     }, [ topicTags ] );
 
-    const handleSaveTags = async () => {
+    const handleSaveTags = async ( tagIds: string[] ) => {
         try {
-            await attachTags( topic.id, selectedTags.map( ( t ) => t.id ) );
-            toast( {
-                title: 'Success',
-                description: 'Tags updated successfully',
-            } );
+            console.log( 'TopicCard handleSaveTags called with:', tagIds );
+            await attachTags( topic.id, tagIds );
             refetchTags();
-            setIsEditingTags( false );
         } catch ( error: any ) {
             toast( {
                 variant: 'destructive',
@@ -97,12 +94,26 @@ export function TopicCard( {
                 <StatusIcon className={`size-4 ${statusInfo.color}`} />
 
                 <div className="flex-1 min-w-0">
-                    <p className="font-medium text-sm truncate">{topic.name}</p>
+                    <div className="flex items-center gap-2 mb-1">
+                        <p className="font-medium text-sm">{topic.name}</p>
+                    </div>
                     {topic.description && (
-                        <p className="text-xs text-muted-foreground truncate">
+                        <p className="text-xs text-muted-foreground truncate mb-1">
                             {topic.description}
                         </p>
                     )}
+                    <InlineTagEditor
+                        tags={allTags.map( ( t ) => ( {
+                            id: t.id,
+                            name: t.name,
+                            color: t.color,
+                            category: t.category,
+                        } ) )}
+                        selectedTags={selectedTags}
+                        onTagsChange={setSelectedTags}
+                        onSave={handleSaveTags}
+                        saving={attaching}
+                    />
                 </div>
 
                 <div className="flex items-center gap-2">
@@ -122,6 +133,7 @@ export function TopicCard( {
                         title={topic.name}
                         userLearningPathId={userLearningPathId}
                         userTopicId={topic.id}
+                        userModuleId={userModuleId}
                         onSessionComplete={() => {
                             toast( {
                                 title: 'Session completed!',
@@ -155,68 +167,9 @@ export function TopicCard( {
 
             {isExpanded && (
                 <div className="border-t bg-muted/20 p-4 space-y-4">
-                    {/* Tags Section */}
-                    <div className="rounded-lg border bg-card p-3">
-                        <div className="flex items-center justify-between mb-2">
-                            <div className="flex items-center gap-2">
-                                <TagsIcon className="h-4 w-4 text-muted-foreground" />
-                                <h5 className="text-xs font-medium">Tags</h5>
-                            </div>
-                            <Button
-                                size="sm"
-                                variant="ghost"
-                                className="h-7 text-xs"
-                                onClick={() => setIsEditingTags( !isEditingTags )}
-                            >
-                                {isEditingTags ? 'Cancel' : 'Edit'}
-                            </Button>
-                        </div>
-
-                        {isEditingTags ? (
-                            <div className="space-y-2">
-                                <TagSelector
-                                    tags={allTags.map( ( t ) => ( {
-                                        id: t.id,
-                                        name: t.name,
-                                        color: t.color,
-                                        category: t.category,
-                                    } ) )}
-                                    selectedTags={selectedTags}
-                                    onTagsChange={setSelectedTags}
-                                    placeholder="Select tags for this topic..."
-                                />
-                                <Button
-                                    size="sm"
-                                    onClick={handleSaveTags}
-                                    disabled={attaching}
-                                    className="h-7 text-xs"
-                                >
-                                    {attaching ? 'Saving...' : 'Save'}
-                                </Button>
-                            </div>
-                        ) : (
-                            <div className="flex gap-1.5 flex-wrap">
-                                {topicTags.length === 0 ? (
-                                    <span className="text-xs text-muted-foreground">
-                                        No tags
-                                    </span>
-                                ) : (
-                                    topicTags.map( ( tag ) => (
-                                        <Tag
-                                            key={tag.id}
-                                            name={tag.name}
-                                            color={tag.color}
-                                            className="text-xs"
-                                        />
-                                    ) )
-                                )}
-                            </div>
-                        )}
-                    </div>
-
                     <ResourcesList entityType="topic" entityId={topic.id} />
                     <NotesList topicId={topic.id} />
-                    <ProblemsList topicId={topic.id} />
+                    <ProblemsList topicId={topic.id} userLearningPathId={userLearningPathId} userModuleId={userModuleId} />
                 </div>
             )}
         </div>
