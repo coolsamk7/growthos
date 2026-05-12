@@ -1742,6 +1742,7 @@ __metadata:
   linkType: soft
 
 "@growthos/nestjs-inngest@workspace:^, @growthos/nestjs-inngest@workspace:packages/nestjs/inngest":
+"@growthos/nestjs-inngest@workspace:packages/nestjs/inngest":
   version: 0.0.0-use.local
   resolution: "@growthos/nestjs-inngest@workspace:packages/nestjs/inngest"
   dependencies:
@@ -1750,6 +1751,9 @@ __metadata:
     inngest: "npm:^4.4.0"
   peerDependencies:
     "@nestjs/common": "*"
+  peerDependencies:
+    "@nestjs/common": "*"
+    inngest: ^4.4.0
     reflect-metadata: "*"
   languageName: unknown
   linkType: soft

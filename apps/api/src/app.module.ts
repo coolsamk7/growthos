@@ -61,6 +61,7 @@ import { AppAuthGuard } from './guards/app.guard';
         InngestModule.forRoot( {
             appId: 'growthos', baseUrl: ""
         } ),
+        } ), 
         AuthModule,
         UserProfileModule,
         LearningPathModule,
