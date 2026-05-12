@@ -58,10 +58,6 @@ import { AppAuthGuard } from './guards/app.guard';
                 return configService.getOrThrow( 'database.config' );
             },
         } ),
-        InngestModule.forRoot( {
-            appId: 'growthos', baseUrl: ""
-        } ),
-        } ), 
         AuthModule,
         UserProfileModule,
         LearningPathModule,

@@ -17,16 +17,6 @@ import { MailService } from './mail/mail.service';
                 return configService.getOrThrow( 'logger.config' );
             },
         } ),
-        BullModule.forRootAsync( {
-            imports: [ ConfigModule ],
-            inject: [ ConfigService ],
-            useFactory: ( configService: ConfigService ) => ( {
-                connection: configService.get( 'queue.redis' ),
-            } ),
-        } ),
-        BullModule.registerQueue( {
-            name: 'mail',
-        } ),
     ],
     providers: [ MailService ],
 } )
