@@ -3,6 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { InngestModule } from '@growthos/nestjs-inngest'
 import { databaseConfig, jwtConfig, loggerConfig, otpConfig, queueConfig, redisConfig } from './config';
 import { LoggerModule } from 'nestjs-pino';
 import { AuthModule } from './modules/auth';
@@ -56,7 +57,10 @@ import { AppAuthGuard } from './guards/app.guard';
             async useFactory( configService: ConfigService ) {
                 return configService.getOrThrow( 'database.config' );
             },
-        } ), 
+        } ),
+        InngestModule.forRoot( {
+            appId: 'growthos', baseUrl: ""
+        } ),
         AuthModule,
         UserProfileModule,
         LearningPathModule,

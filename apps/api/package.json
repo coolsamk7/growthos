@@ -23,6 +23,7 @@
     },
     "dependencies": {
         "@growthos/nestjs-database": "workspace:^",
+        "@growthos/nestjs-inngest": "workspace:^",
         "@nestjs/common": "^11.1.8",
         "@nestjs/config": "^4.0.2",
         "@nestjs/core": "^11.1.8",

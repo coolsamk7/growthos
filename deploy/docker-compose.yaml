@@ -24,6 +24,24 @@ services:
             - "6379:6379"
         volumes:
             - redis_data:/data
+
+    inngest:
+        image: inngest/inngest:latest
+        container_name: inngest
+
+        ports:
+            - "8288:8288"
+
+        environment:
+            INNGEST_DEV: "1"
+            INNGEST_PORT: "8288"
+            INNGEST_EVENT_KEY: 91f3fbc0b3c7d18b0d77e57fd82d5f6a8f1d2f4a89c7b3d6
+
+        command: >
+            inngest dev
+            -u http://host.docker.internal:3100/api/inngest
+
+        restart: unless-stopped
 volumes:
     postgres_data:
     redis_data:
