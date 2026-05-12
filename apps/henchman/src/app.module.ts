@@ -3,7 +3,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { mailConfig, queueConfig, loggerConfig } from './config';
 import { LoggerModule } from 'nestjs-pino';
 import { MailService } from './mail/mail.service';
-import { MailQueueConsumer } from './consumers/mail-queue.consumer';
 
 @Module( {
     imports: [
@@ -19,6 +18,6 @@ import { MailQueueConsumer } from './consumers/mail-queue.consumer';
             },
         } ),
     ],
-    providers: [ MailService, MailQueueConsumer ],
+    providers: [ MailService ],
 } )
 export class AppModule {}

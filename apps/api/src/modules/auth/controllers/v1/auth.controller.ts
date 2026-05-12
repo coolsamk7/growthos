@@ -7,8 +7,7 @@ import type { Static } from 'typebox';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource, IsNull } from 'typeorm';
 import { UserEntity, RefreshTokenEntity } from '@growthos/nestjs-database/entities';
-import {  OtpService, QueueProducerService, TokenService } from 'src/services';
-import { MailQueueProducerService } from 'src/modules/queue/mail-queue-producer.service';
+import {  OtpService, TokenService } from 'src/services';
 import { AuthenticatedUser } from 'src/decorators';
 import { JwtService } from '@nestjs/jwt';
 import { AuthGuard } from '@nestjs/passport';
@@ -22,7 +21,6 @@ export class AuthController {
     constructor(
         @InjectDataSource() private readonly dataSource: DataSource,
         private readonly otpService: OtpService,
-        private readonly mailQueue: MailQueueProducerService,
         private readonly tokenService: TokenService,
         private readonly jwtService: JwtService
     ) {}
@@ -166,7 +164,6 @@ export class AuthController {
             await this.otpService.storeOtp( sessionId, otp );
 
             
-            this.mailQueue.addToMailQueue( 'sendOTP', { code: otp, email: existingUser.email, userId: existingUser.id } );
             
             return {
                 message: 'Verification email resent. Please verify your email with the OTP sent.',
@@ -192,7 +189,6 @@ export class AuthController {
         // Generate and store OTP in Redis
         const otp = this.otpService.generateOtp();
         await this.otpService.storeOtp( sessionId, otp );
-        this.mailQueue.addToMailQueue( 'sendOTP', { code: otp, email: savedUser.email, userId: savedUser.id } ) 
 
         return {
             message: 'User created successfully. Please verify your email with the OTP sent.',
@@ -248,7 +244,6 @@ export class AuthController {
         const otp = this.otpService.generateOtp();
         await this.otpService.storeOtp( sessionId, otp );
 
-        this.mailQueue.addToMailQueue( 'sendOTP', { code: otp, email: user.email, userId: user.id } );
 
         return { message: 'OTP resent successfully. Please check your email.', data: {
             email: user.email,
@@ -272,13 +267,7 @@ export class AuthController {
         await this.otpService.storePasswordResetOtp( sessionId, otp );
 
         // Send OTP via email
-        this.mailQueue.addToMailQueue( 'sendPasswordResetOTP', { 
-            code: otp, 
-            email: user.email, 
-            userId: user.id 
-        } );
-
-        return { message: 'Verification code sent successfully', data: { sessionId: sessionId, email: user.email } };
+                return { message: 'Verification code sent successfully', data: { sessionId: sessionId, email: user.email } };
     }
 
     @Public()
@@ -302,12 +291,7 @@ export class AuthController {
         await this.dataSource.manager.save( user );
 
         // Send password reset confirmation email
-        this.mailQueue.addToMailQueue( 'sendPasswordChangeNotification', {
-            email: user.email,
-            firstName: user.firstName,
-            userId: user.id
-        } );
-
+        
         return { message: 'Password has been reset successfully.' };
     }
 
@@ -334,12 +318,7 @@ export class AuthController {
         await this.dataSource.manager.save( user );
 
         // Send password change notification email
-        this.mailQueue.addToMailQueue( 'sendPasswordChangeNotification', {
-            email: user.email,
-            firstName: user.firstName,
-            userId: user.id
-        } );
-
+        
         return { message: 'Password has been changed successfully.' };
     }
 }

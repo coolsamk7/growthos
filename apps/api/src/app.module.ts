@@ -21,13 +21,7 @@ import { NotesModule } from './modules/notes';
 import { ResourcesModule } from './modules/resources';
 import { StreaksModule } from './modules/streaks';
 import { StudySessionsModule } from './modules/study-sessions';
-// import { SessionTagsModule } from './modules/session-tags/session-tags.module';  // OLD - replaced by TagsModule
 import { ProblemAttemptsModule } from './modules/problem-attempts';
-import { QueueModule } from './modules/queue'; 
-import { BullModule } from '@nestjs/bullmq'
-import { BullBoardModule } from '@bull-board/nestjs'
-import { ExpressAdapter } from '@bull-board/express';
-import { BullMQAdapter } from '@bull-board/api/bullMQAdapter';
 import { JwtStrategy } from './strategies';
 import { APP_GUARD } from '@nestjs/core';
 import { AppAuthGuard } from './guards/app.guard';
@@ -62,25 +56,7 @@ import { AppAuthGuard } from './guards/app.guard';
             async useFactory( configService: ConfigService ) {
                 return configService.getOrThrow( 'database.config' );
             },
-        } ),
-        BullModule.forRootAsync( {
-            imports: [ ConfigModule ],
-            inject: [ ConfigService ],
-            useFactory: ( configService: ConfigService ) => {
-                return configService.getOrThrow( 'queue' ) 
-            }
-        } ),
-        BullModule.registerQueue( {
-            name: 'mail'
-        } ),
-        BullBoardModule.forRoot( {
-            route: '/admin/queues',
-            adapter: ExpressAdapter,
-        } ),
-        BullBoardModule.forFeature( {
-            name: 'mail',
-            adapter: BullMQAdapter,
-        } ),
+        } ), 
         AuthModule,
         UserProfileModule,
         LearningPathModule,
@@ -99,7 +75,6 @@ import { AppAuthGuard } from './guards/app.guard';
         StudySessionsModule,
         // SessionTagsModule,  // OLD - replaced by TagsModule
         ProblemAttemptsModule,
-        QueueModule
     ],
     providers: [
         JwtStrategy,
