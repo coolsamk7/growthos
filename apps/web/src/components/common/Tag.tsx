@@ -26,7 +26,10 @@ export function Tag( { name, color, removable, onRemove, className }: TagProps )
             {removable && onRemove && (
                 <button
                     type="button"
-                    onClick={onRemove}
+                    onClick={( e ) => {
+                        e.stopPropagation();
+                        onRemove();
+                    }}
                     className="ml-0.5 hover:opacity-70 transition-opacity"
                 >
                     <X className="h-3 w-3" />

@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { ChevronDown, ChevronRight, Edit2, Trash2, Star, StarOff, ExternalLink, Tags as TagsIcon } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { ChevronDown, ChevronRight, Edit2, Trash2, Star, StarOff, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -14,7 +14,7 @@ import { useToast } from '@/hooks/use-toast';
 import { TimerDialog } from '@/components/common/TimerDialog';
 import { ResourcesList } from './ResourcesList';
 import { useItemTags, useTags, useAttachTags } from '@/hooks/useTags';
-import { Tag, TagSelector } from '@/components/common';
+import { InlineTagEditor } from '@/components/common';
 
 const difficultyColors: Record<ProblemDifficulty, string> = {
     EASY: 'bg-green-500/10 text-green-700 dark:text-green-400',
@@ -25,6 +25,8 @@ const difficultyColors: Record<ProblemDifficulty, string> = {
 interface ProblemCardProps {
     problem: UserProblem;
     topicId: string;
+    userLearningPathId: string;
+    userModuleId: string;
     isExpanded: boolean;
     onToggle: () => void;
     onStatusChange: ( status: ProblemStatus ) => void;
@@ -34,16 +36,17 @@ interface ProblemCardProps {
 }
 
 export function ProblemCard( {
-    problem,
+    problem,   
     topicId,
     isExpanded,
+    userLearningPathId,
+    userModuleId,
     onToggle,
     onStatusChange,
     onToggleStar,
     onEdit,
     onDelete,
 }: ProblemCardProps ) {
-    const [ isEditingTags, setIsEditingTags ] = useState( false );
     const { toast } = useToast();
 
     // Tag management
@@ -53,7 +56,7 @@ export function ProblemCard( {
     const [ selectedTags, setSelectedTags ] = useState<any[]>( [] );
 
     // Sync selected tags
-    useState( () => {
+    useEffect( () => {
         setSelectedTags(
             problemTags.map( ( t ) => ( {
                 id: t.id,
@@ -64,15 +67,11 @@ export function ProblemCard( {
         );
     }, [ problemTags ] );
 
-    const handleSaveTags = async () => {
+    const handleSaveTags = async ( tagIds: string[] ) => {
         try {
-            await attachTags( problem.id, selectedTags.map( ( t ) => t.id ) );
-            toast( {
-                title: 'Success',
-                description: 'Tags updated successfully',
-            } );
+            console.log( 'ProblemCard handleSaveTags called with:', tagIds );
+            await attachTags( problem.id, tagIds );
             refetchTags();
-            setIsEditingTags( false );
         } catch ( error: any ) {
             toast( {
                 variant: 'destructive',
@@ -116,7 +115,7 @@ export function ProblemCard( {
                             </a>
                         )}
                     </div>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 mb-1">
                         <Badge
                             variant="secondary"
                             className={`text-xs ${difficultyColors[problem.difficulty]}`}
@@ -125,11 +124,25 @@ export function ProblemCard( {
                         </Badge>
                         <span className="text-xs text-muted-foreground">{problem.source}</span>
                     </div>
+                    <InlineTagEditor
+                        tags={allTags.map( ( t ) => ( {
+                            id: t.id,
+                            name: t.name,
+                            color: t.color,
+                            category: t.category,
+                        } ) )}
+                        selectedTags={selectedTags}
+                        onTagsChange={setSelectedTags}
+                        onSave={handleSaveTags}
+                        saving={attaching}
+                    />
                 </div>
                 <div className="flex items-center gap-1">
                     <TimerDialog
                         title={problem.title}
                         userTopicId={topicId}
+                        userModuleId={userModuleId}
+                        userLearningPathId={userLearningPathId}
                         userProblemId={problem.id}
                         onSessionComplete={() => {
                             toast( {
@@ -167,58 +180,6 @@ export function ProblemCard( {
 
             {isExpanded && (
                 <div className="border-t bg-muted/20 p-3 space-y-3">
-                    {/* Tags Section */}
-                    <div className="rounded-lg border bg-card p-2">
-                        <div className="flex items-center justify-between mb-2">
-                            <div className="flex items-center gap-2">
-                                <TagsIcon className="h-3 w-3 text-muted-foreground" />
-                                <h6 className="text-xs font-medium">Tags</h6>
-                            </div>
-                            <Button
-                                size="sm"
-                                variant="ghost"
-                                className="h-6 text-xs px-2"
-                                onClick={() => setIsEditingTags( !isEditingTags )}
-                            >
-                                {isEditingTags ? 'Cancel' : 'Edit'}
-                            </Button>
-                        </div>
-
-                        {isEditingTags ? (
-                            <div className="space-y-2">
-                                <TagSelector
-                                    tags={allTags.map( ( t ) => ( {
-                                        id: t.id,
-                                        name: t.name,
-                                        color: t.color,
-                                        category: t.category,
-                                    } ) )}
-                                    selectedTags={selectedTags}
-                                    onTagsChange={setSelectedTags}
-                                    placeholder="Select tags..."
-                                />
-                                <Button
-                                    size="sm"
-                                    onClick={handleSaveTags}
-                                    disabled={attaching}
-                                    className="h-6 text-xs"
-                                >
-                                    {attaching ? 'Saving...' : 'Save'}
-                                </Button>
-                            </div>
-                        ) : (
-                            <div className="flex gap-1 flex-wrap">
-                                {problemTags.length === 0 ? (
-                                    <span className="text-xs text-muted-foreground">No tags</span>
-                                ) : (
-                                    problemTags.map( ( tag ) => (
-                                        <Tag key={tag.id} name={tag.name} color={tag.color} className="text-xs" />
-                                    ) )
-                                )}
-                            </div>
-                        )}
-                    </div>
-
                     <ResourcesList entityType="problem" entityId={problem.id} />
                 </div>
             )}
